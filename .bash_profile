@@ -21,6 +21,11 @@ shopt -s histappend;
 # Autocorrect typos in path names when using `cd`
 shopt -s cdspell;
 
+# Prefer US English and use UTF-8
+export LC_ALL="en_US.UTF-8"
+export LANG="en_US"
+
+
 # Setup a red prompt for root and a green one for normal users.
 NORMAL="\[\e[0m\]"
 RED="\[\e[0;31m\]"
@@ -31,9 +36,3 @@ else
   PS1="$NORMAL\w $GREEN\$ $NORMAL"
 fi
 
-
-# create a dir and cd to it by taking an argument
-take () {
-	mkdir $1
-	cd $1
-}
