@@ -17,7 +17,7 @@ NORMAL="\[\e[0m\]"
 RED="\[\e[1;31m\]"
 GREEN="\[\e[1;32m\]"
 if [[ $EUID == 0 ]] ; then
-  PS1="$NORMAL\w $RED# $NORMAL"
+  PS1="$NORMAL\w $RED\$ $NORMAL"
 else
   PS1="$NORMAL\w $GREEN\$ $NORMAL"
 fi
