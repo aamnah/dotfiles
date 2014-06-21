@@ -8,3 +8,11 @@ alias temp='cd ~/Temp'
 # Updates
 alias agi='sudo apt-get install'  
 alias update='sudo apt-get update'
+
+
+
+# create a dir and cd to it by taking an argument
+take () {
+	mkdir $1
+	cd $1
+}
