@@ -8,5 +8,3 @@ Shell Environment
 - .bash_profile
 - .bashrc
 - .aliases
-- 
-
