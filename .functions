@@ -1,0 +1,5 @@
+# create a dir and cd to it by taking an argument
+take () {
+	mkdir $1
+	cd $1
+}
