@@ -21,7 +21,7 @@ alias temp='cd ~/Temp'
 alias agi='sudo apt-get install'  
 alias update='sudo apt-get update'
 
-# Setup a red prompt for root and a green one for users.
+# Setup a red prompt for root and a green one for normal users.
 NORMAL="\[\e[0m\]"
 RED="\[\e[0;31m\]"
 GREEN="\[\e[0;32m\]"
