@@ -1,11 +1,20 @@
-# Diecroties
+## Diecroties
 alias desk='cd ~/Desktop'
 alias sandbox='cd ~/Sandbox'
 alias down='cd ~/Downloads'
 alias temp='cd ~/Temp'
 
+## Programs
+alias slt='open -a "Sublime Text"'
+# also/or do this:
+# ln -s "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" ~/bin/subl
 
-# Updates
+
+## Shortcuts
+# Empty the Trash on all mounted volumes and the main HDD
+alias emptytrash="sudo rm -rfv /Volumes/*/.Trashes; rm -rfv ~/.Trash"
+
+## Updates
 alias agi='sudo apt-get install'  
 alias update='sudo apt-get update'
 
