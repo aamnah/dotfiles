@@ -1,0 +1,11 @@
+# Diecroties
+alias ~='cd ~'
+alias desk='cd ~/Desktop'
+alias sandbox='cd ~/Sandbox'
+alias down='cd ~/Downloads'
+alias temp='cd ~/Temp'
+
+
+# Updates
+alias agi='sudo apt-get install'  
+alias update='sudo apt-get update'
