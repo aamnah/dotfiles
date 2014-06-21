@@ -12,15 +12,14 @@ PS1="\w > "
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
-# Aliases
-alias ~='cd ~'
-alias desk='cd ~/Desktop'
-alias sandbox='cd ~/Sandbox'
-alias down='cd ~/Downloads'
-alias temp='cd ~/Temp'
+# Case-insensitive globbing (used in pathname expansion)
+shopt -s nocaseglob;
 
-alias agi='sudo apt-get install'  
-alias update='sudo apt-get update'
+# Append to the Bash history file, rather than overwriting it
+shopt -s histappend;
+
+# Autocorrect typos in path names when using `cd`
+shopt -s cdspell;
 
 # Setup a red prompt for root and a green one for normal users.
 NORMAL="\[\e[0m\]"
