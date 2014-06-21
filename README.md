@@ -1,4 +1,12 @@
-dotfiles
+.Files
 ========
 
-dotfiles
+Overview of Files:
+---
+
+Shell Environment
+- .bash_profile
+- .bashrc
+- .aliases
+- 
+
