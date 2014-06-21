@@ -33,9 +33,3 @@ alias afk="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resource
 
 # Reload the shell (i.e. invoke as a login shell)
 alias reload="exec $SHELL -l"
-
-# create a dir and cd to it by taking an argument
-take () {
-	mkdir $1
-	cd $1
-}
