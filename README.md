@@ -1,8 +1,7 @@
 .Files
 ========
 
-Overview of Files:
-----
+####Overview of Files:
 
 Shell Environment
 - .bash_profile
