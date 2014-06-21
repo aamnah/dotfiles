@@ -1,5 +1,4 @@
 # Diecroties
-alias ~='cd ~'
 alias desk='cd ~/Desktop'
 alias sandbox='cd ~/Sandbox'
 alias down='cd ~/Downloads'
