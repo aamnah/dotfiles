@@ -7,9 +7,9 @@
 # System wide environment variables and startup programs are in /etc/profile.
 # System wide aliases and functions are in /etc/bashrc.
 
-# Load ~/.extra, ~/.bash_prompt, ~/.exports, ~/.aliases and ~/.functions
+# Load ~/.extra, ~/.bash_prompt, ~/.exports, ~/.aliases, ~/.functions and ~/.colors
 # ~/.extra can be used for settings you don’t want to commit
-for file in ~/.{extra,bash_prompt,exports,aliases,functions}; do
+for file in ~/.{extra,bash_prompt,exports,aliases,functions,colors}; do
 	[ -r "$file" ] && source "$file"
 done
 unset file
