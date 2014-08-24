@@ -1,16 +1,20 @@
-## Diecroties
+# take a look at http://alias.sh/
+# for some really cool aliases
+
+## DIRs
 alias desk='cd ~/Desktop'
 alias sandbox='cd ~/Sandbox'
 alias dl='cd ~/Downloads'
 alias tmp='cd ~/Temp'
 
-## Programs
+## PROGRAMS
 alias slt='open -a "Sublime Text"'
 # also/or do this:
 # ln -s "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" ~/bin/subl
 
-## Updates
-alias agi='sudo apt-get install'  
+# Quick install
+alias agi='sudo apt-get install -y' 
+# Quick update
 alias update='sudo apt-get update'
 
 # IP addresses
@@ -36,3 +40,17 @@ alias reload="exec $SHELL -l"
 
 # Always list the tree command in color coding
 alias tree="tree -C"
+
+# Smart listings
+alias ls="ls -lahG"
+# -a for all, -h for human readable, -G for color coding
+
+#DISK USAGE
+# List top ten largest files/directories in current directory
+alias ducks='du -cks *|sort -rn|head -11'
+# Find the biggest in a folder
+alias ds='du -ks *|sort -n'
+
+#Memory
+# What's gobbling the memory?
+alias wotgobblemem='ps -o time,ppid,pid,nice,pcpu,pmem,user,comm -A | sort -n -k 6 | tail -15'
