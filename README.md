@@ -13,7 +13,7 @@ Six basic colors (blue, cyan, green, magenta, red, yellow) have been set in `.ba
 
 `echo -e "\n${color_cyan}Current date :$color_off " ; date` 
 
-will output `Current date :` in cyan color and then output `date` on the next line.
+will echo `Current date :` in cyan color and then output `date` on the next line.
 
 .aliases
 ---
@@ -36,4 +36,4 @@ Wrap the code you want to color in the appropriate tags. There is an opening tag
 
 `echo -e "\n${Yellow}Current date :$Color_Off " ; date`
 
-will output `Current date :` in yellow color and then output `date` on the next line.
+will echo `Current date :` in yellow color and then output `date` on the next line.
