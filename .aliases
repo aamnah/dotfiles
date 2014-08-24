@@ -42,8 +42,9 @@ alias reload="exec $SHELL -l"
 alias tree="tree -C"
 
 # Smart listings
-alias ls="ls -lahG"
-# -a for all, -h for human readable, -G for color coding
+alias ls="ls -lahG" ## -a for all, -h for human readable, -G for color coding
+alias lf='ls -Gl | grep ^d' ## Only list directories
+alias lsd='ls -Gal | grep ^d' ## Only list directories, including hidden ones
 
 #DISK USAGE
 # List top ten largest files/directories in current directory
