@@ -33,15 +33,18 @@
     }
     
 #   ii:  display useful host related informaton
+#   (notes: color_codes need to be defined in .bash_profile 
+#   and $HOST needs to be defined)
 #   -------------------------------------------------------------------
+
     ii() {
-        echo -e "\n You are logged on ${RED}$HOST"
-        echo -e "\n Additionnal information:$NC " ; uname -a
-        echo -e "\n ${RED}Users logged on:$NC " ; w -h
-        echo -e "\n ${RED}Current date :$NC " ; date
-        echo -e "\n ${RED}Machine stats :$NC " ; uptime
-        echo -e "\n ${RED}Current network location :$NC " ; scselect
-        echo -e "\n ${RED}Public facing IP Address :$NC " ;myip
-        #echo -e "\n ${RED}DNS Configuration:$NC " ; scutil --dns
+        echo -e "\nYou are logged on ${color_red} $HOST"
+        echo -e "\nAdditional information:$color_off " ; uname -a
+        echo -e "\n${color_blue}Users logged on:$color_off " ; w -h
+        echo -e "\n${color_yellow}Current date :$color_off " ; date
+        echo -e "\n${color_pink}Machine stats :$color_off " ; uptime
+        echo -e "\n${color_cyan}Current network location :$color_off " ; scselect
+        echo -e "\n${color_green}Public facing IP Address :$color_off " ;myip
+        #echo -e "\n${color_blue}DNS Configuration:$color_off " ; scutil --dns
         echo
     }
