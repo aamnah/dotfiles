@@ -44,5 +44,11 @@ export LC_ALL="en_US.UTF-8"
 export LANG="en_US"
 
 
+# COLOR CODING
+# Enable color coding for tree and ls and define colors
+export CLICOLOR=1
+export LSCOLORS="gxBxhxDxfxhxhxhxhxcxcx"
+# Tell grep to highlight matches
+export GREP_OPTIONS='--color=auto'
 
 
