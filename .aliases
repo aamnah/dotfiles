@@ -42,7 +42,7 @@ alias reload="exec $SHELL -l"
 alias tree="tree -C"
 
 # Smart listings
-alias ls="ls -lahG" ## -a for all, -h for human readable, -G for color coding, -l for detailed
+alias lsl="ls -lahG" ## -a for all, -h for human readable, -G for color coding, -l for detailed
 alias lf='ls -Gl | grep ^d' ## Only list directories
 alias lsd='ls -Gal | grep ^d' ## Only list directories, including hidden ones
 
