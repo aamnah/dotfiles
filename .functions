@@ -48,3 +48,11 @@
         #echo -e "\n${color_blue}DNS Configuration:$color_off " ; scutil --dns
         echo
     }
+
+
+#   authme: Copy public key to remote machine (dependency-less)
+#   -------------------------------------------------------------------
+function authme() {
+  ssh "$1" 'mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys' \
+    < ~/.ssh/id_dsa.pub
+}
