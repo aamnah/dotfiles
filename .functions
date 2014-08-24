@@ -1,3 +1,6 @@
+# by Aamnah <hello@aamnah.com> @AamnahAkram
+# some functions taken from Nate Landau's .bash_profile https://gist.github.com/natelandau/10654137
+
 #   take:  create a dir and cd to it by taking an argument
 #   ---------------------------------------------------------
     take () {
@@ -26,4 +29,18 @@
          else
              echo "'$1' is not a valid file"
          fi
+    }
+    
+#   ii:  display useful host related informaton
+#   -------------------------------------------------------------------
+    ii() {
+        echo -e "\nYou are logged on ${RED}$HOST"
+        echo -e "\nAdditionnal information:$NC " ; uname -a
+        echo -e "\n${RED}Users logged on:$NC " ; w -h
+        echo -e "\n${RED}Current date :$NC " ; date
+        echo -e "\n${RED}Machine stats :$NC " ; uptime
+        echo -e "\n${RED}Current network location :$NC " ; scselect
+        echo -e "\n${RED}Public facing IP Address :$NC " ;myip
+        #echo -e "\n${RED}DNS Configuration:$NC " ; scutil --dns
+        echo
     }
