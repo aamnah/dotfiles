@@ -9,7 +9,7 @@ While these are Mac specific (for example, the LSCOLORS is different as compared
 ---
 
 ####Colors
-Six basic colors (blue, cyan, green, magenta, red, yellow) have been set in `.bash_profile` for easy use. You can use these anywhere in the terminal by wrapping the code in appropriate color tags. There is an opening tag in the format of `$color_name` and a closing tag `color_off` at the end. For example:
+Six basic colors (blue, cyan, green, magenta, red, yellow) have been set in `.bash_profile` for easy use. You can use these anywhere in the terminal by wrapping the code in appropriate color tags. There is an opening tag in the format of `$color_name` and a closing tag `$color_off` at the end. For example:
 
 `echo -e "\n${color_cyan}Current date :$color_off " ; date` 
 
@@ -32,7 +32,7 @@ This file has ANSI color codes saved into human readable variables. The variable
 While `.bash_profile` has six color variables added, `.colors` is a more elaborate version with eight colors and their bold, underlined, background, high intensity, bold high intensity and high intensity version.
 
 ####Usage:
-Wrap the code you want to color in the appropriate tags. There is an opening tag in the format of `$Name` and a closing tag `Color_Off` at the end.  For example
+Wrap the code you want to color in the appropriate tags. There is an opening tag in the format of `$Name` and a closing tag `$Color_Off` at the end.  For example
 
 `echo -e "\n${Yellow}Current date :$Color_Off " ; date`
 
