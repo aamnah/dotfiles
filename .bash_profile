@@ -3,7 +3,7 @@
 
 # Personal environment variables and startup programs.
 
-# Personal aliases and functions should go in ~/.bashrc.  
+# Personal aliases and functions should go in ~/.bashrc.
 # System wide environment variables and startup programs are in /etc/profile.
 # System wide aliases and functions are in /etc/bashrc.
 
@@ -14,10 +14,23 @@ for file in ~/.{extra,bash_prompt,exports,aliases,functions}; do
 done
 unset file
 
+# setup local path
+export PATH=/usr/local/bin:$PATH
+
+
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
 
 PS1="\w > "
+
+# COLORS
+color_pink="\033[95m" #pink
+color_blue="\033[94m" #blue
+color_cyan="\033[0;36m" #cyan
+color_green='\033[92m' #green
+color_yellow='\033[93m' #yellow
+color_red='\033[91m' #red
+color_off='\033[0m'
 
 # Setup a red prompt for root and a green one for normal users.
 NORMAL="\[\e[0m\]"
@@ -43,7 +56,6 @@ shopt -s cdspell;
 export LC_ALL="en_US.UTF-8"
 export LANG="en_US"
 
-
 # COLOR CODING
 # Enable color coding for tree and ls and define colors
 export CLICOLOR=1
@@ -51,4 +63,5 @@ export LSCOLORS="gxBxhxDxfxhxhxhxhxcxcx"
 # Tell grep to highlight matches
 export GREP_OPTIONS='--color=auto'
 
-
+# Run GRC with every new shell
+source "`brew --prefix grc`/etc/grc.bashrc"
