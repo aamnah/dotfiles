@@ -16,8 +16,11 @@ alias slt='open -a "Sublime Text"'
 alias agi='sudo apt-get install -y' 
 # Quick update
 alias update='sudo apt-get update'
+# Quick upgrade
+alias upgrade='apt-get update && apt-get upgrade && apt-get clean'
 
 # IP addresses
+alias myip='curl ip.appspot.com'
 alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
 alias localip="ipconfig getifaddr en0"
 alias ips="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[0-9]\+\)\|[a-fA-F0-9:]\+\)' | awk '{ sub(/inet6? (addr:)? ?/, \"\"); print }'"
@@ -46,12 +49,21 @@ alias lsl="ls -lahG" ## -a for all, -h for human readable, -G for color coding, 
 alias lf='ls -Gl | grep ^d' ## Only list directories
 alias lsd='ls -Gal | grep ^d' ## Only list directories, including hidden ones
 
-#DISK USAGE
+# DISK USAGE
 # List top ten largest files/directories in current directory
 alias ducks='du -cks *|sort -rn|head -11'
 # Find the biggest in a folder
 alias ds='du -ks *|sort -n'
 
-#Memory
+# MEMORY
 # What's gobbling the memory?
 alias wotgobblemem='ps -o time,ppid,pid,nice,pcpu,pmem,user,comm -A | sort -n -k 6 | tail -15'
+
+
+# SECURITY
+# identify and search for active network connections
+spy () { lsof -i -P +c 0 +M | grep -i "$1" }
+# Show active network listeners
+alias netlisteners='lsof -i -P | grep LISTEN'
+# sniff GET and POST traffic over http v2
+sniff () { sudo ngrep -d ${1} -t '^(GET|POST) ' 'tcp and port 80'; }
