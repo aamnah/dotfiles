@@ -13,7 +13,7 @@ Six basic colors (blue, cyan, green, magenta, red, yellow) have been set in `.ba
 
 `echo -e "\n${color_cyan}Current date :$color_off " ; date` 
 
-will echo `Current date :` in cyan color and then output `date` on the next line.
+will echo `Current date :` in cyan color and then output `date` in default color on the next line.
 
 .aliases
 ---
@@ -29,11 +29,11 @@ Shortcuts for directories, programs, system processes and commands.
 ---
 This file has ANSI color codes saved into human readable variables. The variable names and codes have been taken from [here](https://wiki.archlinux.org/index.php/Color_Bash_Prompt#List_of_colors_for_prompt_and_Bash) and have been kept the same for universal recognition.
 
-While `.bash_profile` has six color variables added, `.colors` is a more elaborate version with eight colors and their bold, underlined, background, high intensity, bold high intensity and high intensity version.
+While `.bash_profile` has six color variables added, `.colors` is a more elaborate version with eight colors and their bold, underlined, background, high intensity, bold high intensity and high intensity background versions.
 
 ####Usage:
 Wrap the code you want to color in the appropriate tags. There is an opening tag in the format of `$Name` and a closing tag `$Color_Off` at the end.  For example
 
 `echo -e "\n${Yellow}Current date :$Color_Off " ; date`
 
-will echo `Current date :` in yellow color and then output `date` on the next line.
+will echo `Current date :` in yellow color and then output `date` in default color on the next line.
