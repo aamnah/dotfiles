@@ -1,5 +1,5 @@
 # by Aamnah <hello@aamnah.com> @AamnahAkram
-# some functions taken from Nate Landau's .bash_profile https://gist.github.com/natelandau/10654137
+# some functions taken from Nate Landau's .bash_profile http://natelandau.com/my-mac-osx-bash_profile/
 
 #   take:  create a dir and cd to it by taking an argument
 #   ---------------------------------------------------------
