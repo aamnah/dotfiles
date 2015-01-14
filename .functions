@@ -9,7 +9,7 @@
 	cd $1
     }
 
-#   extract:  Extract most know archives with one command
+#   extract:  Extract most known archives with one command
 #   ---------------------------------------------------------
     extract () {
         if [ -f $1 ] ; then
@@ -52,7 +52,22 @@
 
 #   authme: Copy public key to remote machine (dependency-less)
 #   -------------------------------------------------------------------
-function authme() {
-  ssh "$1" 'mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys' \
-    < ~/.ssh/id_dsa.pub
-}
+    function authme() {
+      ssh "$1" 'mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys' \
+        < ~/.ssh/id_dsa.pub
+    }
+
+#   getwebsite:  wget a whole website
+  # Download an entire website
+  # -p parameter tells wget to include all files, including images.
+  # -e robots=off you don't want wget to obey by the robots.txt file
+  # -U mozilla as your browsers identity.
+  # --random-wait to let wget chose a random number of seconds to wait, avoid get into black list.
+  # Other Useful wget Parameters:
+  # --limit-rate=20k limits the rate at which it downloads files.
+  # -b continues wget after logging out.
+  # -o $HOME/wget_log.txt logs the output
+#   ---------------------------------------------------------
+    getwebsite () {
+      wget --random-wait -r -p -e robots=off -U mozilla $1
+    }
