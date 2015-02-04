@@ -1,12 +1,12 @@
 # by Aamnah <hello@aamnah.com> @AamnahAkram
-# some functions taken from Nate Landau's .bash_profile 
+# some functions taken from Nate Landau's .bash_profile
 # http://natelandau.com/my-mac-osx-bash_profile/
 
 #   take:  create a dir and cd to it by taking an argument
 #   ---------------------------------------------------------
     take () {
-	mkdir $1
-	cd $1
+	    mkdir $1
+	    cd $1
     }
 
 #   extract:  Extract most known archives with one command
@@ -31,15 +31,15 @@
              echo "'$1' is not a valid file"
          fi
     }
-    
+
 #   ii:  display useful host related informaton
-#   (notes: color_codes need to be defined in .bash_profile 
+#   (notes: color_codes need to be defined in .bash_profile
 #   and $HOST needs to be defined)
 #   -------------------------------------------------------------------
 
     ii() {
-        echo -e "\nYou are logged on ${color_red} $HOST"
-        echo -e "\nAdditional information:$color_off " ; uname -a
+        echo -e "\nYou are logged on ${Red} $HOST"
+        echo -e "\nAdditional information:$Color_Off " ; uname -a
         echo -e "\n${color_blue}Users logged on:$color_off " ; w -h
         echo -e "\n${color_yellow}Current date :$color_off " ; date
         echo -e "\n${color_pink}Machine stats :$color_off " ; uptime
@@ -48,7 +48,6 @@
         #echo -e "\n${color_blue}DNS Configuration:$color_off " ; scutil --dns
         echo
     }
-
 
 #   authme: Copy public key to remote machine (dependency-less)
 #   -------------------------------------------------------------------
@@ -71,3 +70,15 @@
     getwebsite () {
       wget --random-wait -r -p -e robots=off -U mozilla $1
     }
+
+#   spy: identify and search for active network connections
+#   ---------------------------------------------------------
+    spy () {
+      lsof -i -P +c 0 +M | grep -i "$1"
+    }
+
+#  sniff: GET and POST traffic over http v2
+#  ---------------------------------------------------------
+   sniff () {
+    sudo ngrep -d ${1} -t '^(GET|POST) ' 'tcp and port 80';
+   }
