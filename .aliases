@@ -12,55 +12,58 @@ alias slt='open -a "Sublime Text"'
 # also/or do this:
 # ln -s "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" ~/bin/subl
 
-# Quick install
-alias agi='sudo apt-get install -y' 
+## Quick install
+alias agi='sudo apt-get install -y'
 # Quick update
 alias update='sudo apt-get update'
 # Quick upgrade
 alias upgrade='apt-get update && apt-get upgrade && apt-get clean'
 
-# IP addresses
+## IP addresses
 alias myip='curl ip.appspot.com' #alias myip='curl ifconfig.me'
 alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
 alias localip="ipconfig getifaddr en0"
 alias ips="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[0-9]\+\)\|[a-fA-F0-9:]\+\)' | awk '{ sub(/inet6? (addr:)? ?/, \"\"); print }'"
 
-# Empty the Trash on all mounted volumes and the main HDD
+## Empty the Trash on all mounted volumes and the main HDD
 alias emptytrash="sudo rm -rfv /Volumes/*/.Trashes; rm -rfv ~/.Trash"
 
-# Recursively delete `.DS_Store` files
+## Recursively delete `.DS_Store` files
 alias cleanup="find . -type f -name '*.DS_Store' -ls -delete"
 
-# Kill all the tabs in Chrome to free up memory
+## Kill all the tabs in Chrome to free up memory
 # [C] explained: http://www.commandlinefu.com/commands/view/402/exclude-grep-from-your-grepped-output-of-ps-alias-included-in-description
 alias chromekill="ps ux | grep '[C]hrome Helper --type=renderer' | grep -v extension-process | tr -s ' ' | cut -d ' ' -f2 | xargs kill"
 
-# Lock the screen (when going AFK)
+## Lock the screen (when going AFK)
 alias afk="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
 
-# Reload the shell (i.e. invoke as a login shell)
+## Reload the shell (i.e. invoke as a login shell)
 alias reload="exec $SHELL -l"
 
-# Always list the tree command in color coding
+## Always list the tree command in color coding
 alias tree="tree -C"
 
-# Smart listings
+## Smart listings
 alias lsl="ls -lahG" ## -a for all, -h for human readable, -G for color coding, -l for detailed
 alias lf='ls -Gl | grep ^d' ## Only list directories
 alias lsd='ls -Gal | grep ^d' ## Only list directories, including hidden ones
 
-# DISK USAGE
+## DISK USAGE
 # List top ten largest files/directories in current directory
 alias ducks='du -cks *|sort -rn|head -11'
 # Find the biggest in a folder
 alias ds='du -ks *|sort -n'
 
-# MEMORY
+## MEMORY
 # What's gobbling the memory?
 alias wotgobblemem='ps -o time,ppid,pid,nice,pcpu,pmem,user,comm -A | sort -n -k 6 | tail -15'
 
+## DNS
+alias flushdns='sudo dscacheutil -flushcache'
+alias flush='sudo dscacheutil -flushcache'
 
-# SECURITY
+## SECURITY
 # identify and search for active network connections
 spy () { lsof -i -P +c 0 +M | grep -i "$1" }
 # Show active network listeners
