@@ -24,12 +24,12 @@ export PATH=/usr/local/bin:$PATH
 PS1="\w > "
 
 # COLORS
-color_pink="\033[95m" #pink
 color_blue="\033[94m" #blue
 color_cyan="\033[0;36m" #cyan
 color_green='\033[92m' #green
-color_yellow='\033[93m' #yellow
+color_magenta="\033[95m" #magenta
 color_red='\033[91m' #red
+color_yellow='\033[93m' #yellow
 color_off='\033[0m'
 
 # Setup a red prompt for root and a green one for normal users.
@@ -66,8 +66,8 @@ export GREP_OPTIONS='--color=auto'
 # Run GRC with every new shell
 source "`brew --prefix grc`/etc/grc.bashrc"
 
-# Set the WORKON_HOME variable for virtualenvwrapper 
+# Set the WORKON_HOME variable for virtualenvwrapper
 export WORKON_HOME="~/.virtualenvs"
 
-# Source the virtualenvwrapper shell script to be able to run commands 
+# Source the virtualenvwrapper shell script to be able to run commands
 source /usr/local/bin/virtualenvwrapper.sh
