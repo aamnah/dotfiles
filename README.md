@@ -99,4 +99,4 @@ default color on the next line.
 
 Resources
 ---
-- Take a look at [http://alias.sh/](http://alias.sh/) for some really cool aliases
+- Take a look at [http://www.commandlinefu.com/commands/browse/sort-by-votes](http://www.commandlinefu.com/commands/browse/sort-by-votes) for some really cool aliases
