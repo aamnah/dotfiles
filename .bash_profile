@@ -65,3 +65,9 @@ export GREP_OPTIONS='--color=auto'
 
 # Run GRC with every new shell
 source "`brew --prefix grc`/etc/grc.bashrc"
+
+# Set the WORKON_HOME variable for virtualenvwrapper 
+export WORKON_HOME="~/.virtualenvs"
+
+# Source the virtualenvwrapper shell script to be able to run commands 
+source /usr/local/bin/virtualenvwrapper.sh
