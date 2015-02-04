@@ -49,6 +49,12 @@ alias lsl="ls -lahG" ## -a for all, -h for human readable, -G for color coding, 
 alias lf='ls -Gl | grep ^d' ## Only list directories
 alias lsd='ls -Gal | grep ^d' ## Only list directories, including hidden ones
 
+# SUDO
+alias fuck='sudo $(history -p \!\!)'
+alias dang='sudo $(history -p \!\!)'
+alias please='sudo $(history -p \!\!)'
+alias pls='sudo $(history -p \!\!)'
+
 ## DISK USAGE
 # List top ten largest files/directories in current directory
 alias ducks='du -cks *|sort -rn|head -11'
@@ -60,13 +66,11 @@ alias ds='du -ks *|sort -n'
 alias wotgobblemem='ps -o time,ppid,pid,nice,pcpu,pmem,user,comm -A | sort -n -k 6 | tail -15'
 
 ## DNS
+# Flush DNS cache
 alias flushdns='sudo dscacheutil -flushcache'
 alias flush='sudo dscacheutil -flushcache'
 
 ## SECURITY
-# identify and search for active network connections
-spy () { lsof -i -P +c 0 +M | grep -i "$1" }
+# spy() and sniff() have been added to .functions
 # Show active network listeners
 alias netlisteners='lsof -i -P | grep LISTEN'
-# sniff GET and POST traffic over http v2
-sniff () { sudo ngrep -d ${1} -t '^(GET|POST) ' 'tcp and port 80'; }
