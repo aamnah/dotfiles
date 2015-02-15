@@ -82,3 +82,10 @@
    sniff () {
     sudo ngrep -d ${1} -t '^(GET|POST) ' 'tcp and port 80';
    }
+   
+#   bell: Ring the system bell after finishing a long script/compile
+  # use 'xset b [vol [pitch [duration]]]' to get the bell to sound the way you want.
+#   ---------------------------------------------------------
+     bell () {
+      ${1} && echo -e '\a' || (echo -e '\a'; sleep 1; echo -e '\a')
+     }
