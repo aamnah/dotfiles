@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Dotfiles by aamnah</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Dotfiles</h1>
+          <h2>.files and OSX defaults</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/aamnah/dotfiles/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/aamnah/dotfiles/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/aamnah/dotfiles" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>
+<a id="files" class="anchor" href="#files" aria-hidden="true"><span class="octicon octicon-link"></span></a>.Files</h1>
+
+<p>These files are an accumulation of bash aliases, shortcuts and functions that i have collected over the years.</p>
+
+<p>While these are Mac specific (for example, the LSCOLORS is different as compared to the GNU LS_COLORS), they can easily be ported for use on Linux.</p>
+
+<h2>
+<a id="bash_profile" class="anchor" href="#bash_profile" aria-hidden="true"><span class="octicon octicon-link"></span></a>.bash_profile</h2>
+
+<h4>
+<a id="colors" class="anchor" href="#colors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Colors</h4>
+
+<p>Six basic colors (blue, cyan, green, magenta, red, yellow) have been set in <code>.bash_profile</code> for easy use. You can use these anywhere in the terminal by wrapping the code in appropriate color tags. There is an opening tag in the format of <code>$color_name</code> and a closing tag <code>$color_off</code> at the end. For example:</p>
+
+<p><code>echo -e "\n${color_cyan}Current date :$color_off " ; date</code></p>
+
+<p>will echo <code>Current date :</code> in cyan color and then output <code>date</code> in
+default color on the next line.</p>
+
+<h2>
+<a id="functions" class="anchor" href="#functions" aria-hidden="true"><span class="octicon octicon-link"></span></a>.functions</h2>
+
+<ul>
+<li>
+<code>take ()</code> create a dir and cd to it by taking a name</li>
+<li>
+<code>extract ()</code> Extract most know archives with one command</li>
+<li>
+<code>ii ()</code> display useful host related informaton</li>
+<li>
+<code>getwebsite()</code> wget a whole website</li>
+<li>
+<code>spy()</code> identify and search for active network connections</li>
+<li>
+<code>sniff()</code> sniff GET and POST traffic over http v2</li>
+</ul>
+
+<h2>
+<a id="aliases" class="anchor" href="#aliases" aria-hidden="true"><span class="octicon octicon-link"></span></a>.aliases</h2>
+
+<p>Shortcuts for directories, programs, system processes and commands.</p>
+
+<h4>
+<a id="directories" class="anchor" href="#directories" aria-hidden="true"><span class="octicon octicon-link"></span></a>Directories</h4>
+
+<ul>
+<li>
+<code>desk</code> go to Desktop</li>
+<li>
+<code>dl</code> go to Downloads</li>
+<li>
+<code>sandbox</code> go to ~/Sandbox</li>
+<li>
+<code>tmp</code> go to ~/Temp</li>
+</ul>
+
+<h4>
+<a id="installs" class="anchor" href="#installs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installs</h4>
+
+<ul>
+<li>
+<code>agi</code> Apt-Get Install -y</li>
+<li>
+<code>update</code> Apt-Get Update</li>
+<li>
+<code>upgrade</code> Apt-Get Update+Upgrade+Clean</li>
+</ul>
+
+<h4>
+<a id="misc" class="anchor" href="#misc" aria-hidden="true"><span class="octicon octicon-link"></span></a>Misc.</h4>
+
+<ul>
+<li>
+<code>slt</code> open file with Sublime Text</li>
+<li>
+<code>emptytrash</code> Empty the Trash on all mounted volumes and the main HDD</li>
+<li>
+<code>cleanup</code> Recursively delete <em>.DS_Store</em> files</li>
+<li>
+<code>chromekill</code> Kill all the tabs in Chrome to free up memory</li>
+<li>
+<code>afk</code> Lock the screen (when going AFK)</li>
+<li>
+<code>reload</code> Reload the shell (i.e. invoke as a login shell)</li>
+<li>
+<code>tree</code> Always list the tree command in color coding</li>
+</ul>
+
+<h4>
+<a id="smart-listings" class="anchor" href="#smart-listings" aria-hidden="true"><span class="octicon octicon-link"></span></a>Smart Listings</h4>
+
+<ul>
+<li>
+<code>lsl</code> List all (-a) files and directories in a detailed (-l), human readable (-h), color coded (-G) way.</li>
+<li>
+<code>lf</code> Only list directories</li>
+<li>
+<code>lsd</code> Only list directories, including hidden ones</li>
+</ul>
+
+<h4>
+<a id="sudo" class="anchor" href="#sudo" aria-hidden="true"><span class="octicon octicon-link"></span></a>Sudo</h4>
+
+<ul>
+<li>
+<code>fuck</code>, <code>dang</code>, <code>please</code>, <code>pls</code> repeat the last command with sudo, basically <code>sudo !!</code> equivalents</li>
+</ul>
+
+<h4>
+<a id="disk-usage" class="anchor" href="#disk-usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Disk Usage</h4>
+
+<ul>
+<li>
+<code>ducks</code> List top ten largest files/directories in current directory</li>
+<li>
+<code>ds</code> Find the biggest in a folder</li>
+</ul>
+
+<h4>
+<a id="memory" class="anchor" href="#memory" aria-hidden="true"><span class="octicon octicon-link"></span></a>Memory</h4>
+
+<ul>
+<li>
+<code>wotgobblemem</code> What's gobbling the memory?</li>
+</ul>
+
+<h4>
+<a id="dns" class="anchor" href="#dns" aria-hidden="true"><span class="octicon octicon-link"></span></a>DNS</h4>
+
+<ul>
+<li>
+<code>flush</code>, <code>flushdns</code> Flush DNS cache</li>
+</ul>
+
+<h4>
+<a id="ips" class="anchor" href="#ips" aria-hidden="true"><span class="octicon octicon-link"></span></a>IPs</h4>
+
+<ul>
+<li>
+<code>ip</code>, <code>myip</code> Show Public IP address</li>
+<li>
+<code>localip</code> Show local IP</li>
+<li><code>ips</code></li>
+</ul>
+
+<h4>
+<a id="security" class="anchor" href="#security" aria-hidden="true"><span class="octicon octicon-link"></span></a>Security</h4>
+
+<ul>
+<li>
+<code>netlisteners</code> Show active network listeners</li>
+</ul>
+
+<h2>
+<a id="colors-1" class="anchor" href="#colors-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>.colors</h2>
+
+<p>This file has ANSI color codes saved into human readable variables. The
+variable names and codes have been taken from
+<a href="https://wiki.archlinux.org/index.php/Color_Bash_Prompt#List_of_colors_for_prompt_and_Bash">here</a>
+and have been kept the same for universal recognition.</p>
+
+<p>While <code>.bash_profile</code> has six color variables added, <code>.colors</code> is a more
+elaborate version with eight colors and their bold, underlined,
+background, high intensity, bold high intensity and high intensity
+background versions.</p>
+
+<h4>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage:</h4>
+
+<p>Wrap the code you want to color in the appropriate tags. There is an
+opening tag in the format of <code>$Name</code> and a closing tag <code>$Color_Off</code> at
+the end.  For example</p>
+
+<p><code>echo -e "\n${Yellow}Current date :$Color_Off " ; date</code></p>
+
+<p>will echo <code>Current date :</code> in yellow color and then output <code>date</code> in
+default color on the next line.</p>
+
+<h2>
+<a id="resources" class="anchor" href="#resources" aria-hidden="true"><span class="octicon octicon-link"></span></a>Resources</h2>
+
+<ul>
+<li>Take a look at <a href="http://www.commandlinefu.com/commands/browse/sort-by-votes">http://www.commandlinefu.com/commands/browse/sort-by-votes</a> for some really cool aliases</li>
+</ul>
+        </section>
+
+        <footer>
+          Dotfiles is maintained by <a href="https://github.com/aamnah">aamnah</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
