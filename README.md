@@ -129,7 +129,7 @@ You can also use multiple color tags in one statement like so:
 - `jpost()` create a new Jekyll post in the pre-defined directory with YAML template. Takes `-o` flag for opening files in Sublime Text after they are created.
 - `ocext()` create opencart module/extension skeleton
 - `dash()` Initiate a Dash search from within Terminal
-- `bbkey()` Lets you `add`, load`, `list`, `try` and `check` Bitbucket Key
+- `bbkey()` Lets you `add`, `load`, `list`, `try` and `check` Bitbucket Key
 
 Resources
 ---
