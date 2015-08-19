@@ -2,8 +2,9 @@
 # for some really cool aliases
 
 ## DIRs
+alias ..='cd ..'
 alias desk='cd ~/Desktop'
-alias sandbox='cd ~/Sandbox'
+alias sand='cd ~/Sandbox'
 alias dl='cd ~/Downloads'
 alias tmp='cd ~/Temp'
 
@@ -11,6 +12,7 @@ alias tmp='cd ~/Temp'
 alias slt='open -a "Sublime Text"'
 # also/or do this:
 # ln -s "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" ~/bin/subl
+alias chrome='open -a "Google Chrome"'
 
 ## Quick install
 alias agi='sudo apt-get install -y'
@@ -24,6 +26,9 @@ alias myip='curl ip.appspot.com' #alias myip='curl ifconfig.me'
 alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
 alias localip="ipconfig getifaddr en0"
 alias ips="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[0-9]\+\)\|[a-fA-F0-9:]\+\)' | awk '{ sub(/inet6? (addr:)? ?/, \"\"); print }'"
+
+## Make directory and all the directories within
+alias mkd='mkdir -p'
 
 ## Empty the Trash on all mounted volumes and the main HDD
 alias emptytrash="sudo rm -rfv /Volumes/*/.Trashes; rm -rfv ~/.Trash"
@@ -69,6 +74,7 @@ alias wotgobblemem='ps -o time,ppid,pid,nice,pcpu,pmem,user,comm -A | sort -n -k
 # Flush DNS cache
 alias flushdns='sudo dscacheutil -flushcache'
 alias flush='sudo dscacheutil -flushcache'
+alias dig='dig +nocmd any +noall +answer'
 
 ## SECURITY
 # spy() and sniff() have been added to .functions
