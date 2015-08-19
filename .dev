@@ -1,0 +1,447 @@
+## ALIASES
+#################
+
+# Add a GPL v3 license file to your project
+alias gpl='wget -O LICENSE.txt http://www.gnu.org/licenses/gpl-3.0.txt'
+
+# GIT
+# ---
+# https://gist.github.com/mwhite/6887990
+alias rao='remote add origin'
+alias ca='!git add . && git commit -am' # add and commit all code
+alias pushup='push -u origin --all'
+#Commit
+alias gitc='git commit -m'
+# Status
+alias gits='git status -s'
+alias gitss='git status'
+# Logs
+# http://durdn.com/blog/2012/11/22/must-have-git-aliases-advanced-examples/
+alias gitl='git log --oneline --decorate'
+alias gitll='git log --pretty=format:"%C(yellow)%h\ %ad%Cred%d\ %Creset%s " --decorate --date=relative'
+alias gitls='git log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short'
+
+## FUNCTIONS
+#################
+
+# dash()
+# -------------
+# Initiate a Dash search from within Terminal by executing "open dash://{query}".
+# Keyword example: "open dash://php:{query}".
+dash() {
+  QUERY=$1
+  open dash://${QUERY}
+}
+
+# jekyll do()
+# -----------
+# build jekyll, run some grunts and deploy on Amazon S3
+jekylldo() {
+  cd ~/Sandbox/jekyll/ && jekyll build && grunt build && grunt deploy
+}
+
+# gruntfile() Create gruntfile.js with starter code
+# -------------------------------------------------
+gruntfile() {
+  # check if `gruntfile.js` exists.
+  # -e = file exists
+  if [ -e "gruntfile.js" ] ; then
+    # note that echo must have -e to execute as a command
+    # and echo statement MUST be in "". it doesn't work with ''
+    echo -e "${color_red} gruntfile.js already exists ${color_off}"
+
+    if [ -e "Gruntfile.js" ] ; then
+      # note that echo must have -e to execute as a command
+      # and echo statement MUST be in "". it doesn't work with ''
+      echo -e "${color_red} Gruntfile.js already exists ${color_off}"
+    fi
+
+  else
+  echo -e "
+module.exports = function(grunt) {
+  grunt.initConfig({
+    pkg: grunt.file.readJSON('package.json'),
+
+    // CONFIG
+
+    });
+
+    // PLUGINS
+    grunt.loadNpmTasks('');
+
+    // TASKS
+    grunt.registerTask('default', ['', '']);
+};
+  " >> gruntfile.js
+
+  echo -e "${color_green} Gruntfile has been created ${color_off}"
+  fi
+}
+
+# ocmod()
+# -------
+ocmod() {
+  touch $1.ocmod.xml
+  echo -e "<?xml version=\"1.0\" encoding=\"utf-8\"?>
+<modification>
+  <name>Name</name>
+  <version>1.0</version>
+  <author>Aamnah</author>
+  <link>http://aamnah.com</link>
+  <code>code</code>
+  <file path=\"path\">
+    <operation>
+      <search><![CDATA[
+
+      ]]></search>
+      <add position=\"replace\"><![CDATA[
+
+      ]]></add>
+    </operation>
+  </file>
+</modification>
+" >> $1.ocmod.xml
+}
+
+# vqmod()
+# -------
+vqmod() {
+touch $1.xml
+echo -e "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<modification>
+  <id>Name</id>
+  <version>1.0</version>
+  <vqmver>2.X</vqmver>
+  <author><div>Aamnah.com</div></author>
+  <file name=\"path\">
+    <operation info=\"info\">
+      <search position=\"replace\"><![CDATA[
+
+      ]]></search>
+      <add><![CDATA[
+
+      ]]></add>
+    </operation>
+  </file>
+</modification>
+" >> $1.xml
+}
+
+# install()
+# --------
+# install common software (wordpress, opencart)
+
+# install() {
+#   show_usage() {
+#     echo "Usage: $0 script_name (oc = opencart, wp = wordpress, bs = bootstrap)"
+#     exit 1
+#   }
+#   # if the total number of arguments supplied ($#) is not equal to (-ne) 1, then show usage.
+#   if [ $# -ne 1 ] then
+#     show_usage()
+#   else
+#     # if directory exists (-d)
+#     if [ -d $1 ] then
+#       echo "$1 already exists."
+#     else
+#       if [ '$1' == 'wp' || '$1' == 'wordpress']
+#         curl -L https://gist.githubusercontent.com/aamnah/aa48749844fffbd42633/raw/install-wp.sh | bash
+#       elif [ $1 == 'oc' || $ == 'opencart' ]
+#         curl -L http://script-location | bash
+#       fi
+#     fi
+#   fi
+# }
+
+install() {
+  show_usage() {
+    echo "Usage: install wp (wp = wordpress, oc = opencart, bs = bootstrap)"
+  }
+
+  opencart() {
+    checkVersion() {
+      # check if version provided is a valid OpenCart release
+      version_list=("2.0.1.1" "2.0.1.0" "2.0.0.0" "1.5.6.4" "1.5.6.3" "1.5.6.2" "1.5.6.1" "1.5.6" "1.5.5.1" "1.5.4.1" "1.5.4")
+
+      match=0
+      for v in "${version_list[@]}"
+      do
+        if [[ $v = "$VERSION" ]]; then
+          match=1
+          break
+        fi
+      done
+    }
+
+  # Ask for version
+  echo -e "${Cyan} What version should i install? (for example: ${BCyan}1.5.6.4${Cyan} or ${BCyan}2.0.1.1${Cyan})${Color_Off}"
+  read VERSION
+
+  checkVersion
+
+  if [[ $match = 0 ]]; then
+    echo -e "${Red} Not a valid OpenCart version. Exiting.. ${Color_Off}"
+    return 0
+  fi
+
+  if [[ $match = 1 ]]; then
+    # Download files for that version from Github
+    echo -e "${Cyan} Downloading files.. ${Color_Off}"
+    wget -O opencart-$VERSION.zip https://codeload.github.com/opencart/opencart/zip/$VERSION
+
+    echo -e "${Cyan} Extracting.. ${Color_Off}"
+    tar zxvf opencart-$VERSION.zip
+
+    echo -e "${Cyan} Cleaning up.. ${Color_Off}"
+    mv opencart-$VERSION/* .
+    rm -rf opencart-$VERSION.zip opencart-$VERSION
+    mv upload/* .
+    mv upload/.htaccess.txt ./.htaccess
+    rmdir upload
+
+    echo -e "${Green} Opencart was successfully copied. Please run the install script to finish installation. \n
+            http://yourdomain.com/install \n ${Color_Off}"
+    return 1
+  fi
+  }
+
+  if [ $1 == 'wp' ] || [ $1 == 'wordpress' ]; then
+    curl -L https://gist.githubusercontent.com/aamnah/aa48749844fffbd42633/raw/install-wp.sh | bash
+  elif [ $1 == 'oc' ] || [ $1 == 'opencart' ]; then
+    opencart
+  else
+    show_usage
+  fi
+}
+
+# ocext()
+# ---------------------
+# create opencart module/extension skeleton
+ocext() {
+  show_usage() {
+    echo -e "Usage: ocext NAME \nFor example: ocext advanced_sales_reports \nReplace spaces in NAME with underscores"
+  }
+
+  if [ $# -ne 1 ]; then
+    show_usage
+
+  else
+    # Admin
+    mkdir -p admin/controller/extension/$1       && touch admin/controller/extension/$1/$1.php
+    mkdir -p admin/language/english/extension/$1 && touch admin/language/english/extension/$1/$1.php
+    mkdir -p admin/model/extension/$1            && touch admin/model/extension/$1/$1.php
+    mkdir -p admin/view/template/extension/$1    && touch admin/view/template/extension/$1/$1.tpl
+
+    # Catalog
+    mkdir -p catalog/controller/extension/$1       && touch catalog/controller/extension/$1.php
+    mkdir -p catalog/language/english/extension/$1 && touch catalog/language/english/extension/$1.php
+    mkdir -p catalog/model/extension/$1            && touch catalog/model/extension/$1.php
+    mkdir -p catalog/view/template/extension/$1    && touch catalog/view/template/extension/$1.tpl
+
+    # TEMPLATE
+    # Admin > Controller
+    echo "<?php
+  class ControllerExtensionABC extends Controller {
+  private \$error = array();
+
+    // Index
+    public function index() {}
+
+    // Insert
+    public function insert() {}
+
+    // Update
+    public function update() {}
+
+    // Delete
+    public function delete() {}
+
+    // List
+    public function getList() {}
+
+    // Form
+    public function getForm() {}
+
+    // Validate Form
+    public function validateForm() {}
+
+    // Validate Delete
+    public function validateDelete() {}
+
+    // Install
+    public function install() {}
+
+    // Uninstall
+    public function uninstall() {}
+  }
+?>" >> admin/controller/extension/$1/$1.php
+    # Admin > Language
+    echo "<?php
+// Heading
+\$_['heading_title'] = \"ABC\";
+
+// Text
+\$_['text_success'] = \"Success: You have modified a ABC!\";
+
+// Entry
+
+// Column
+
+// Error
+\$_['error_permission']  = \"Warning: You do not have permission to modify ABC!\";
+
+// ABC
+
+?>" >> admin/language/english/extension/$1/$1.php
+    # Admin > Model
+    echo "<?php
+  class ModelExtensionABC extends Model {
+
+//////////////
+// This is an extension TEMPLATE by Aamnah.com
+// Find and replace ABC with extension name (camel case) - to define extension name
+// Find and replace EFG with extension name (lower case) - to install/uninstall extension
+// Find and replace abc_table with your database table name
+//////////////
+
+    // Install
+    public function install() {
+      // Create database
+      \$this->db->query(\"CREATE TABLE IF NOT EXISTS \`\" . DB_PREFIX . \"\`abc_table (
+        \`id\` INT(11) DEFAULT NOT NULL AUTO_INCREMENT,
+        PRIMARY KEY (\`id\`)
+      )DEFAULT CHARSET=utf8\");
+
+      // Additional databases (optional)
+
+      // Update settings to show installed
+      \$this->db->query(\"INSERT INTO \`\" . DB_PREFIX . \"setting\` (\`setting_id\`, \`store_id\`, \`group\`, \`key\`, \`value\`, \`serialized\`) VALUES(NULL, '0', 'EFG_installer', 'EFG_installed', '1', '0')\");
+    }
+
+    // Uninstall
+    public function uninstall() {}
+      // Update settings to show uninstalled
+      \$this->db->query(\"DELETE FROM \`\" . DB_PREFIX . \"setting\` WHERE \`group\`='EFG_installer'\");
+
+    // Add
+    public function addABC() {}
+      \$this->db->query(\"\");
+
+    // Edit
+    public function editABC() {}
+      \$this->db->query(\"\");
+
+    // Delete
+    public function deleteABC(\$id) {
+      \$this->db->query(\"DELETE FROM\" . DB_PREFIX . \"abc_table WHERE id = '\" . int(\$id) . \"'\");
+    }
+
+    // Get ABC
+    public function getABC(\$id) {
+      \$query = \$this->db->query(\"SELECT DISTINCT * FROM\" . DB_PREFIX . \"abc_table WHERE id = '\" . (int)\$id . \"'\");
+
+      return \$query->row;
+    }
+
+    // Get Total ABC
+    public function getTotalABC() {
+      \$query = \$this->db->query(\"SELECT COUNT(*) AS total FROM\" . DB_PREFIX . \"abc_table\");
+
+      return \$query->row['total'];
+    }
+
+    // Get ABC List
+    public function getABCList(\$data = array()) {
+      if(\$data) {
+        \$sql = \"SELECT * FROM\" . DB_PREFIX . \"abc_table\";
+
+        \$sort_data = array(
+          'name',
+          'code',
+          'sort_order'
+        );
+
+        if (isset(\$data['sort']) && in_array(\$data['sort'], \$sort_data)) {
+          \$sql .= \" ORDER BY \" . \$data['sort'];
+        } else {
+          \$sql .= \" ORDER BY name\";
+        }
+
+        if (isset(\$data['order']) && (\$data['order'] == 'DESC')) {
+          \$sql .= \" DESC\";
+        } else {
+          \$sql .= \" ASC\";
+        }
+
+        if (isset(\$data['start']) || isset(\$data['limit'])) {
+          if (\$data['start'] < 0) {
+            \$data['start'] = 0;
+          }
+
+          if (\$data['limit'] < 1) {
+            \$data['limit'] = 20;
+          }
+
+        \$sql .= \" LIMIT \" . (int)\$data['start'] . \",\" . (int)\$data['limit'];
+      }
+
+      \$query = \$this->db->query(\$sql);
+
+      return \$query->rows;
+    }
+  }
+?>" >> admin/model/extension/$1/$1.php
+    # Admin > View
+    echo "" >> admin/view/template/extension/$1/$1.tpl
+
+    # Catalog > Controller
+    echo "" >> catalog/controller/extension/$1/$1.php
+    # Catalog > Language
+    echo "" >> catalog/language/english/extension/$1/$1.php
+    # Catalog > Model
+    echo "" >> catalog/model/extension/$1/$1.php
+    # Catalog > View
+    echo "" >> catalog/view/template/extension/$1/$1.tpl
+  fi
+}
+
+# Check / Load Bitbucket SSH Keys
+bbkey() {
+  show_usage() {
+    echo -e "Usage:
+use ${Yellow}check${Color_Off} to see if ssh-agent is running
+use ${Yellow}add${Color_Off} to add ssh-key
+use ${Yellow}load${Color_Off} to load ssh-key
+use ${Yellow}try${Color_Off} to attempt to create a connection to Bitbucket
+use ${Yellow}list${Color_Off} to list keys"
+  }
+
+  if [ $# -ne 1 ]; then
+    echo -e "${BWhite}bbkey${Color_Off} takes one argument. Usage:"
+    show_usage
+    return 0
+
+  else
+
+    if [ "$1" == "check" ]; then
+      ps -e | grep [s]sh-agent
+
+    elif [ "$1" == "load" ]; then
+      ssh-agent
+      ssh-add ~/.ssh/bitbucket
+
+    elif [ "$1" == "add" ]; then
+      ssh-add ~/.ssh/bitbucket
+
+    elif [ "$1" == "try" ]; then
+      ssh -T git@bitbucket.org
+
+    elif [ "$1" == "list" ]; then
+       ssh-add -l
+
+    else
+      show_usage
+
+    fi
+  fi
+}
