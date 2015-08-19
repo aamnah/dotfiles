@@ -3,7 +3,7 @@
 # https://wiki.archlinux.org/index.php/Color_Bash_Prompt#List_of_colors_for_prompt_and_Bash
 # i have replaced \e with \033
 
-# for the sake of cleanliness, i have created a separate color codes file 
+# for the sake of cleanliness, i have created a separate color codes file
 # instead of adding everything to .bash_profile
 # since this is a separate file, it needs to be sourced via .bash_profile
 # just add it like you have added .aliases and .functions
