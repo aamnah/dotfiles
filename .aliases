@@ -13,6 +13,8 @@ alias slt='open -a "Sublime Text"'
 # also/or do this:
 # ln -s "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" ~/bin/subl
 alias chrome='open -a "Google Chrome"'
+alias tf=torrentflix
+alias t='/Users/aamnah/Dropbox/todo/todo.sh -d /Users/aamnah/Dropbox/todo/todo.cfg' #alias
 
 ## Quick install
 alias agi='sudo apt-get install -y'
