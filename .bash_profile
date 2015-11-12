@@ -71,3 +71,10 @@ export WORKON_HOME="~/.virtualenvs"
 
 # Source the virtualenvwrapper shell script to be able to run commands
 source /usr/local/bin/virtualenvwrapper.sh
+
+### todo.txt
+PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/aamnah/Dropbox/todo/:/Users/aamnah/$
+source /Users/aamnah/Dropbox/todo/todo_completion #auto-completion
+complete -F _todo t #auto-completion for alias
+export TODOTXT_DEFAULT_ACTION=ls #default action
+export TODOTXT_SORT_COMMAND='env LC_COLLATE=C sort -k 2,2 -k 1,1n' #sort by priority, then b$
