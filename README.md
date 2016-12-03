@@ -117,6 +117,8 @@ There are seven available types of colors: Regular, Bold, Underline, Background,
 You can also use multiple color tags in one statement like so:
 
     ${Green} WordPress was sucessfully copied! Don't forget to edit ${BGreen}wp-config.php ${Green}to add Database details ${Color_Off}
+    
+![Colors screenshot](https://raw.githubusercontent.com/aamnah/dotfiles/master/screenshots/cli_colors.png)
 
 .dev
 ---
