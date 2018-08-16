@@ -1,3 +1,9 @@
+" Author: Aamnah
+" Link: https://aamnah.com
+" Version: 0.0.1
+
+
+
 " Encoding -------------------------------------------------------------
 
 set encoding=utf-8
