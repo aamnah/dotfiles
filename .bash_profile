@@ -20,8 +20,8 @@ export PATH=/usr/local/bin:$PATH
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
-
-PS1="\w > "
+# PROMPT
+PS1="\w \$ "
 
 # COLORS
 color_blue="\033[94m" #blue
@@ -41,7 +41,6 @@ if [[ $EUID == 0 ]] ; then
 else
   PS1="$NORMAL\w $GREEN\$ $NORMAL"
 fi
-
 
 # Case-insensitive globbing (used in pathname expansion)
 shopt -s nocaseglob;
