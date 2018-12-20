@@ -1,7 +1,14 @@
+" ~/.vimrc
+
 " Author: Aamnah
 " Link: https://aamnah.com
-" Version: 0.0.1
+" Version: 0.0.2
 
+" Basics -------------------------------------------------------------
+
+set number			" enable line numbers
+set ruler				" show line and column numbers at bottom right of screen
+syntax on				" enable syntax highlighting 
 
 
 " Encoding -------------------------------------------------------------
