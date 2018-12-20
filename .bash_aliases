@@ -1,36 +1,41 @@
+# ~/.bash_profile
+
+# Author: Aamnah <hello@aamnah.com> @AamnahAkram
+# Link: https://aamnah.com
+# Version: 0.0.2
+# lastmod: 2018-12-20
+
 # take a look at http://alias.sh/
 # for some really cool aliases
+# http://www.commandlinefu.com/commands/
 
 ## DIRs
+#############
 alias ..='cd ..'
 alias desk='cd ~/Desktop'
-alias sand='cd ~/Sandbox'
 alias dl='cd ~/Downloads'
-alias tmp='cd ~/Temp'
 
-## PROGRAMS
-alias slt='open -a "Sublime Text"'
-# also/or do this:
-# ln -s "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" ~/bin/subl
-alias chrome='open -a "Google Chrome"'
-alias tf=torrentflix
-alias t='/Users/aamnah/Dropbox/todo/todo.sh -d /Users/aamnah/Dropbox/todo/todo.cfg' #alias
+# COMMANDS
+#############
+alias ls='ls -hFG'
+alias ll='ls -alhFG' # -a for all, -l for detailed, -h for human readable, F for trailing /, -G for colors
+alias lsd='ls -Gal | grep ^d' # Only list directories, including hidden ones
 
-## Quick install
-alias agi='sudo apt-get install -y'
-# Quick update
-alias update='sudo apt-get update'
-# Quick upgrade
-alias upgrade='apt-get update && apt-get upgrade && apt-get clean'
+# Always list the tree command in color coding
+alias tree='tree -C'
 
+# grep --color=auto displays colored output unless output piped to a different command
+# grep --color=always always colors output, even adding control sequences to other piped commands
+# more: https://linuxcommando.blogspot.com/2007/10/grep-with-color-output.html
+alias grep='grep --color=auto' 
+
+
+# MISC.
+#############
 ## IP addresses
-alias myip='curl ip.appspot.com' #alias myip='curl ifconfig.me'
+alias myip='curl ifconfig.me'
 alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
 alias localip="ipconfig getifaddr en0"
-alias ips="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[0-9]\+\)\|[a-fA-F0-9:]\+\)' | awk '{ sub(/inet6? (addr:)? ?/, \"\"); print }'"
-
-## Make directory and all the directories within
-alias mkd='mkdir -p'
 
 ## Empty the Trash on all mounted volumes and the main HDD
 alias emptytrash="sudo rm -rfv /Volumes/*/.Trashes; rm -rfv ~/.Trash"
@@ -48,37 +53,34 @@ alias afk="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resource
 ## Reload the shell (i.e. invoke as a login shell)
 alias reload="exec $SHELL -l"
 
-## Always list the tree command in color coding
-alias tree="tree -C"
-
-## Smart listings
-alias lsl="ls -lahG" ## -a for all, -h for human readable, -G for color coding, -l for detailed
-alias lf='ls -Gl | grep ^d' ## Only list directories
-alias lsd='ls -Gal | grep ^d' ## Only list directories, including hidden ones
-
 # SUDO
-alias fuck='sudo $(history -p \!\!)'
 alias dang='sudo $(history -p \!\!)'
-alias please='sudo $(history -p \!\!)'
-alias pls='sudo $(history -p \!\!)'
+
 
 ## DISK USAGE
+#############
 # List top ten largest files/directories in current directory
 alias ducks='du -cks *|sort -rn|head -11'
+
 # Find the biggest in a folder
 alias ds='du -ks *|sort -n'
 
+
 ## MEMORY
+#############
 # What's gobbling the memory?
 alias wotgobblemem='ps -o time,ppid,pid,nice,pcpu,pmem,user,comm -A | sort -n -k 6 | tail -15'
 
+
 ## DNS
+#############
 # Flush DNS cache
 alias flushdns='sudo dscacheutil -flushcache'
-alias flush='sudo dscacheutil -flushcache'
-alias dig='dig +nocmd any +noall +answer'
+
 
 ## SECURITY
-# spy() and sniff() have been added to .functions
+#############
 # Show active network listeners
 alias netlisteners='lsof -i -P | grep LISTEN'
+
+# spy() and sniff() have been added to .functions
