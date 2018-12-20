@@ -1,5 +1,10 @@
 # ~/.inputrc
 
+# Author: Aamnah
+# Link: https://aamnah.com
+# Version: 0.0.1
+# lastmod: 2018-12-20
+
 # Case-insensitive Tab completion
 set completion-ignore-case on
 
