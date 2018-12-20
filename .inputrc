@@ -1,0 +1,7 @@
+# ~/.inputrc
+
+# Case-insensitive Tab completion
+set completion-ignore-case on
+
+# Show suggestions and matches without having to press Tab twice
+set show-all-if-ambiguous on
