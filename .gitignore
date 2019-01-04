@@ -1,6 +1,5 @@
 # ~/.gitignore
 
-echo -e "
 # Folder view configuration files
 .DS_Store
 Desktop.ini
@@ -40,3 +39,4 @@ Temporary Items
 venv
 node_modules
 .sass-cache
+.vscode
