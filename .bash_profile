@@ -27,6 +27,9 @@ for file in ~/.{aliases, bash_aliases, colors, bash_colors }; do
 done
 unset file
 
+# Add Timestamps to Bash histry `history`
+echo 'export HISTTIMEFORMAT="%c "'
+
 # SHELL OPTIONAL BEHAVIOUR
 # https://www.gnu.org/software/bash/manual/html_node/The-Shopt-Builtin.html
 # Case-insensitive globbing (used in pathname expansion)
