@@ -60,7 +60,11 @@ alias dang='sudo $(history -p \!\!)'
 ## DISK USAGE
 #############
 # List top ten largest files/directories in current directory
-alias ducks='du -cks *|sort -rn|head -11'
+# alias ducks='du -cks *|sort -rn|head -11'
+# du -cks : -c for grand total , -k for 1-Kbyte blocks, -s for displaying entries for each file
+# sort -rn : -r for reverse order, -n for numeric sort
+# head -11 : display first 11 lines
+alias ducks='du -chs * | sort -rh | head -11' # same as above but human-readable
 
 # Find the biggest in a folder
 alias ds='du -ks *|sort -n'
