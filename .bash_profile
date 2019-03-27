@@ -14,11 +14,24 @@
 # PROMPT
 # non-printable sequences need to be wrapped with \[...\] in order to let Bash calculate the correct length of the prompt.
 # more: https://unix.stackexchange.com/questions/28827/why-is-my-bash-prompt-getting-bugged-when-i-browse-the-history
+parse_git_branch() {
+  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+}
+
 RED='\[\e[91m\]'
 GREEN='\[\e[92m\]'
+BLUE='\[\e[94m\]'
+YELLOW='\[\e[93m\]'
 NORMAL='\[\e[0m\]'
 
-PS1="\n\w ${GREEN}\$ ${NORMAL}\n"
+#PS1="\n${BLUE}\w${YELLOW}\$(parse_git_branch) ${GREEN}\$ ${NORMAL}\n"
+if [[ $EUID -ne 0 ]]; then
+	# user is not root, show green $
+	PS1="\n${BLUE}\w${YELLOW}\$(parse_git_branch) ${GREEN}\$ ${NORMAL}\n"
+else
+	# user is root, show red #
+	PS1="\n${BLUE}\w${YELLOW}\$(parse_git_branch) ${RED}\$ ${NORMAL}\n"
+fi
 
 # SOURCE OTHER FILES
 # source other bash conf files like ~/.aliases etc
