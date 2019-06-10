@@ -1,0 +1,24 @@
+# ~/.nanorc
+
+# https://www.nano-editor.org/dist/v2.4/nanorc.5.html 
+
+set linenumbers
+set autoindent
+set softwrap
+set tabstospaces
+set tabsize 2
+set mouse
+set boldtext
+
+# set titlecolor fgcolor,bgcolor
+# Valid color names for foreground and background are: white, black, red, blue, green, yellow, magenta, and cyan. 
+
+# color combination to use for the titlebar.
+set titlecolor magenta
+set statuscolor magenta
+
+# color combination to use for the shortcut key combos in the two help lines at the bottom
+set keycolor yellow
+
+# function descriptions in the two help lines at the bottom of the screen 
+set functioncolor cyan
