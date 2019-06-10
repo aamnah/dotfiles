@@ -11,7 +11,9 @@ set mouse
 set boldtext
 
 # set titlecolor fgcolor,bgcolor
-# Valid color names for foreground and background are: white, black, red, blue, green, yellow, magenta, and cyan. 
+# Valid names for the foreground and background colors are: white, black, blue, green, red, cyan, yellow, magenta, and normal -- 
+# where normal means the default foreground or background color. 
+# The name of the foreground color may be prefixed with bright. And either "fgcolor" or ",bgcolor" may be left out.
 
 # color combination to use for the titlebar.
 set titlecolor magenta
