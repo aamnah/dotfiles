@@ -22,3 +22,6 @@ set keycolor yellow
 
 # function descriptions in the two help lines at the bottom of the screen 
 set functioncolor cyan
+
+# colors for line numbers
+set numbercolor magenta
