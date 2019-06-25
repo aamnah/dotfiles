@@ -1,6 +1,9 @@
 # ~/.nanorc
-
 # https://www.nano-editor.org/dist/v2.9/nanorc.5.html 
+
+# If you get 'Unknown flag' errors then you're probably on macOS which uses an older version of nano (2.0.6)
+# You can install the latest version (4.3) with Homebrew
+# https://tldrdevnotes.com/misc/nano-upgrade-macos/
 
 set linenumbers
 set autoindent
