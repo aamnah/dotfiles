@@ -31,6 +31,9 @@ alias tree='tree -C'
 # more: https://linuxcommando.blogspot.com/2007/10/grep-with-color-output.html
 alias grep='grep --color=auto' 
 
+# youtube-dl
+alias ydl='youtube-dl'
+
 
 # MISC.
 #############
