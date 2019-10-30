@@ -17,9 +17,11 @@ alias dl='cd ~/Downloads'
 
 # COMMANDS
 #############
-alias ls='ls -hFG'
-alias ll='ls -alhFG' # -a for all, -l for detailed, -h for human readable, F for trailing /, -G for colors
+alias ls='ls -hF'
+alias ll='ls -alhF --color' # -a for all, -l for detailed, -h for human readable, F for trailing /, --color for color coding
 alias lsd='ls -Gal | grep ^d' # Only list directories, including hidden ones
+alias la='ls -A'
+alias l='ls -aFx --color' # -x for line based listing instead of columns
 
 # Always list the tree command in color coding
 alias tree='tree -C'
