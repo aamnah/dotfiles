@@ -3,7 +3,7 @@
 # Author: Aamnah <hello@aamnah.com> @AamnahAkram
 # Link: https://aamnah.com
 # Version: 0.0.3
-# lastmod: 2018-12-20
+# lastmod: 2019-11-06
 
 # Personal environment variables and startup programs.
 
@@ -33,15 +33,28 @@ else
 	PS1="\n${BLUE}\w${YELLOW}\$(parse_git_branch) ${RED}\$ ${NORMAL}\n"
 fi
 
+# Alias and other definitions
 # SOURCE OTHER FILES
 # source other bash conf files like ~/.aliases etc
-for file in ~/.{aliases, bash_aliases, colors, bash_colors }; do
+# You may want to put all your additions into a separate file like
+# ~/.bash_aliases, instead of adding them here directly.
+# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+for file in ~/.{aliases, bash_aliases, colors, bash_colors }; do
   [ -r "$file" ] && source "$file"
 done
 unset file
 
+# BASH HISTORY
 # Add Timestamps to Bash histry `history`
-echo 'export HISTTIMEFORMAT="%c "'
+export HISTTIMEFORMAT="%c "
+
+# don't put duplicate lines or lines starting with space in the history.
+# See bash(1) for more options
+HISTCONTROL=ignoreboth
+
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+HISTSIZE=1000
+HISTFILESIZE=2000
 
 # SHELL OPTIONAL BEHAVIOUR
 # https://www.gnu.org/software/bash/manual/html_node/The-Shopt-Builtin.html
@@ -53,6 +66,10 @@ shopt -s histappend;
 
 # Autocorrect minor typos in path names when using `cd`
 shopt -s cdspell;
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
 
 # Prefer US English and use UTF-8
 export LC_ALL="en_US.UTF-8"
