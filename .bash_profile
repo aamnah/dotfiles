@@ -33,6 +33,19 @@ else
 	PS1="\n${BLUE}\w${YELLOW}\$(parse_git_branch) ${RED}\$ ${NORMAL}\n"
 fi
 
+
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=always'
+    alias dir='dir --color=always'
+    alias vdir='vdir --color=always'
+
+    alias grep='grep --color=always'
+    alias fgrep='fgrep --color=always'
+    alias egrep='egrep --color=always'
+fi
+
 # Alias and other definitions
 # SOURCE OTHER FILES
 # source other bash conf files like ~/.aliases etc
