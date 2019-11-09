@@ -79,6 +79,3 @@ export LANG="en_US"
 # Enable color coding for tree and ls and define colors
 export CLICOLOR=1
 #export LSCOLORS="gxBxhxDxfxhxhxhxhxcxcx"
-
-# Tell grep to highlight matches
-export GREP_OPTIONS='--color=auto'
