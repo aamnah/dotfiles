@@ -29,7 +29,9 @@ alias tree='tree -C'
 # grep --color=auto displays colored output unless output piped to a different command
 # grep --color=always always colors output, even adding control sequences to other piped commands
 # more: https://linuxcommando.blogspot.com/2007/10/grep-with-color-output.html
-alias grep='grep --color=auto' 
+alias grep='grep --color=always' 
+alias egrep='egrep --color=always' 
+alias fgrep='fgrep --color=always' 
 
 # youtube-dl
 alias ydl='youtube-dl'
