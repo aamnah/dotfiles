@@ -1,9 +1,9 @@
-# ~/.bash_profile
+# ~/.bash_aliases
 
 # Author: Aamnah <hello@aamnah.com> @AamnahAkram
 # Link: https://aamnah.com
-# Version: 0.0.2
-# lastmod: 2018-12-20
+# Version: 0.0.3
+# lastmod: 2019-11-25
 
 # take a look at http://alias.sh/
 # for some really cool aliases
