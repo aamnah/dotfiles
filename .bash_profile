@@ -2,8 +2,8 @@
 
 # Author: Aamnah <hello@aamnah.com> @AamnahAkram
 # Link: https://aamnah.com
-# Version: 0.0.3
-# lastmod: 2019-11-06
+# Version: 0.0.4
+# lastmod: 2019-11-25
 
 # Personal environment variables and startup programs.
 
@@ -53,7 +53,7 @@ fi
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
 for file in ~/.{aliases, bash_aliases, colors, bash_colors }; do
-  [ -r "$file" ] && source "$file"
+  [ -f "$file" ] && source "$file"
 done
 unset file
 
