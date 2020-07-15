@@ -13,6 +13,12 @@ Shortcuts for directories, programs, system processes and commands.
 #### Directories
 - `desk` go to Desktop
 - `dl` go to Downloads
+- `proj` go to the folder where all projects are (variable)
+- `sites` go to the folder where all sites are (variable)
+
+#### Commands and tools
+- `ydl` shortcut for `youtube-dl`
+- `gath` starts ssh-agent and loads SSH key (variable). used for Git purposes
 
 #### Misc.
 - `emptytrash` Empty the Trash on all mounted volumes and the main HDD
