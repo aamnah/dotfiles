@@ -2,8 +2,8 @@
 
 # Author: Aamnah <hello@aamnah.com> @AamnahAkram
 # Link: https://aamnah.com
-# Version: 0.0.3
-# lastmod: 2019-11-25
+# Version: 0.3
+# lastmod: 2020-07-15
 
 # take a look at http://alias.sh/
 # for some really cool aliases
@@ -14,6 +14,14 @@
 alias ..='cd ..'
 alias desk='cd ~/Desktop'
 alias dl='cd ~/Downloads'
+
+SITES_FOLDER='/media/aamnah/Files/Sites'
+PROJECTS_FOLDER='/media/aamnah/Files/Projects'
+
+alias proj="cd ${PROJECTS_FOLDER}"
+alias sites="cd ${SITES_FOLDER}"
+
+alias blog="cd ${SITES_FOLDER}/blog.aamnah.com && code . && gatsby develop"
 
 # COMMANDS
 #############
@@ -35,6 +43,10 @@ alias fgrep='fgrep --color=always'
 
 # youtube-dl
 alias ydl='youtube-dl'
+
+# load SSH agent and add SSH key
+SSH_KEY='/media/aamnah/Files/.ssh/id_rsa'
+alias gath="eval $(ssh-agent) && ssh-add ${SSH_KEY}"
 
 
 # MISC.
