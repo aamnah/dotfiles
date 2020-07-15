@@ -1,9 +1,10 @@
 # ~/.bash_profile
+# ~/.bashrc
 
 # Author: Aamnah <hello@aamnah.com> @AamnahAkram
 # Link: https://aamnah.com
-# Version: 0.0.4
-# lastmod: 2019-11-25
+# Version: 0.5
+# lastmod: 2020-07-15
 
 # Personal environment variables and startup programs.
 
@@ -92,3 +93,15 @@ export LANG="en_US"
 # Enable color coding for tree and ls and define colors
 export CLICOLOR=1
 #export LSCOLORS="gxBxhxDxfxhxhxhxhxcxcx"
+
+# PATHS
+# -----------------------------------------------------------------------
+# Genymotion
+export PATH="$PATH:/home/$USER/genymotion"
+
+# Android
+export ANDROID_HOME=$HOME/Android/Sdk
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/tools
+export PATH=$PATH:$ANDROID_HOME/tools/bin
+export PATH=$PATH:$ANDROID_HOME/platform-tools
