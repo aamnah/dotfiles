@@ -1,5 +1,5 @@
 # ~/.nanorc
-# https://www.nano-editor.org/dist/v2.9/nanorc.5.html 
+# https://www.nano-editor.org/dist/v2.9/nanorc.5.html
 
 # If you get 'Unknown flag' errors then you're probably on macOS which uses an older version of nano (2.0.6)
 # You can install the latest version (4.3) with Homebrew
@@ -14,19 +14,19 @@ set mouse
 set boldtext
 
 # set titlecolor fgcolor,bgcolor
-# Valid names for the foreground and background colors are: white, black, blue, green, red, cyan, yellow, magenta, and normal -- 
-# where normal means the default foreground or background color. 
+# Valid names for the foreground and background colors are: white, black, blue, green, red, cyan, yellow, magenta, and normal --
+# where normal means the default foreground or background color.
 # The name of the foreground color may be prefixed with bright. And either "fgcolor" or ",bgcolor" may be left out.
 
 # color combination to use for the titlebar.
-set titlecolor magenta
-set statuscolor magenta
+set titlecolor black,white
+set statuscolor black,white
 
 # color combination to use for the shortcut key combos in the two help lines at the bottom
-set keycolor yellow
+set keycolor black,white
 
-# function descriptions in the two help lines at the bottom of the screen 
-set functioncolor cyan
+# function descriptions in the two help lines at the bottom of the screen
+set functioncolor white
 
 # colors for line numbers
-set numbercolor magenta
+set numbercolor black,white
