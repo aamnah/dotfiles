@@ -42,4 +42,8 @@ node_modules
 .vscode
 
 # Others
-.cache
+## .cache, .Cache .parcel-cache
+.[cC]ache
+.*-[cC]ache
+**/.[cC]ache
+**/.*-[cC]ache
