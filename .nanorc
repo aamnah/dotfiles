@@ -1,32 +1,42 @@
 # ~/.nanorc
-# https://www.nano-editor.org/dist/v2.9/nanorc.5.html
+# https://www.nano-editor.org/dist/latest/nanorc.5.html
+
+# Author: Aamnah
+# Lastmod: 2026-04-14
 
 # If you get 'Unknown flag' errors then you're probably on macOS which uses an older version of nano (2.0.6)
-# You can install the latest version (4.3) with Homebrew
-# https://tldrdevnotes.com/misc/nano-upgrade-macos/
+# You can install the latest version with Homebrew: brew install nano
 
 set linenumbers
-set autoindent
-set softwrap
+set tabsize 4
 set tabstospaces
-set tabsize 2
-set mouse
-set boldtext
+set autoindent           # new lines will keep previous line's indent
+set mouse                # click to move cursor, select with drag
+set constantshow         # always show cursor position in status bar
+set historylog           # remember search/replace history
+set positionlog          # reopen files at last cursor position
+set smarthome            # Home jumps to first non-whitespace, then col 0
+set softwrap             # wrap long lines visually without inserting breaks
+set indicator            # scrollbar-like indicator on the right
+include "/usr/share/nano/*.nanorc"   # syntax highlighting
 
-# set titlecolor fgcolor,bgcolor
-# Valid names for the foreground and background colors are: white, black, blue, green, red, cyan, yellow, magenta, and normal --
+# COLORS
+# Valid names for the foreground and background colors are:
+# Legacy palette: normal, white, black, blue, green, red, cyan, yellow, magenta
+# Extended palette (since 6.0+): normal, pink, purple, mauve, lagoon, mint, lime, peach orange, latte, rosy, beet, plum, sea, sky, slate, teal, sage, brown, ocher, sand, tawny, brick, crimson, grey/gray
 # where normal means the default foreground or background color.
 # The name of the foreground color may be prefixed with bright. And either "fgcolor" or ",bgcolor" may be left out.
 
-# color combination to use for the titlebar.
-set titlecolor black,white
-set statuscolor black,white
-
-# color combination to use for the shortcut key combos in the two help lines at the bottom
-set keycolor black,white
-
-# function descriptions in the two help lines at the bottom of the screen
-set functioncolor white
-
-# colors for line numbers
-set numbercolor black,white
+# Interface elements — format: set <element> <fg>,<bg>
+# set titlecolor fgcolor,bgcolor
+set titlecolor     white,black
+set statuscolor    black,lightyellow
+set errorcolor     white,red
+set selectedcolor  black,grey
+set stripecolor    normal,slate         # column guide (if set)
+set numbercolor    gray,normal          # line numbers — dim grey
+set keycolor       cyan,normal          # shortcut key combos in the two help lines at the bottom
+set functioncolor  green,normal         # function descriptions in the two help lines at the bottom of the screen
+set promptcolor    white,black
+set scrollercolor  slate,normal
+set minicolor      white,black
