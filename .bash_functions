@@ -9,7 +9,7 @@
 # Compatibility: Debian, Ubuntu, Armbian, macOS
 #-----------------------------------------------------------------------
 
-# ~/.functions
+# ~/.bash_functions
 # Some functions adapted from Nate Landau's .bash_profile
 # http://natelandau.com/my-mac-osx-bash_profile/
 
