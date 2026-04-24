@@ -5,37 +5,43 @@
 #       Version: 0.5
 #          Date: 2020-07-15
 #       Lastmod: 2026-04-24
-#   Description: Bash login — prompt, history, shopt, color, paths
+#   Description: bash startup — prompt, history, shopt, color, paths, aliases
 # Compatibility: Debian, Ubuntu, Armbian, macOS
 #-----------------------------------------------------------------------
-
-# ~/.bash_profile (also usable as ~/.bashrc)
-# Personal environment variables and startup programs.
-
-# Personal aliases and functions should go in ~/.bashrc.
-# System wide environment variables and startup programs are in /etc/profile.
-# System wide aliases and functions are in /etc/bashrc.
+#
+# Sourced for LOGIN shells. Doubles as ~/.bashrc (interactive) here —
+# many personal setups consolidate both into one file.
+# bash splits startup into ~/.bash_profile (login) and ~/.bashrc (interactive);
+# unlike zsh, bash has no equivalent of ~/.zshenv that runs for every invocation.
+# zsh equivalents: ~/.zprofile (login) + ~/.zshrc (interactive)
+# System-wide equivalents: /etc/profile (login), /etc/bashrc (interactive)
+#
 
 # PROMPT
-# non-printable sequences need to be wrapped with \[...\] in order to let Bash calculate the correct length of the prompt.
+# Prefer starship (cross-shell, configured via ~/.config/starship.toml).
+# Fallback: manual git-aware PS1 — used on minimal boxes (VPS/Docker) where starship isn't installed.
+# Non-printable sequences in PS1 must be wrapped with \[...\] so Bash measures prompt width correctly.
 # more: https://unix.stackexchange.com/questions/28827/why-is-my-bash-prompt-getting-bugged-when-i-browse-the-history
-parse_git_branch() {
-  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
-}
-
-RED='\[\e[91m\]'
-GREEN='\[\e[92m\]'
-BLUE='\[\e[94m\]'
-YELLOW='\[\e[93m\]'
-NORMAL='\[\e[0m\]'
-
-#PS1="\n${BLUE}\w${YELLOW}\$(parse_git_branch) ${GREEN}\$ ${NORMAL}\n"
-if [[ $EUID -ne 0 ]]; then
-	# user is not root, show green $
-	PS1="\n${BLUE}\w${YELLOW}\$(parse_git_branch) ${GREEN}\$ ${NORMAL}\n"
+if command -v starship >/dev/null 2>&1; then
+	eval "$(starship init bash)"
 else
-	# user is root, show red #
-	PS1="\n${BLUE}\w${YELLOW}\$(parse_git_branch) ${RED}\$ ${NORMAL}\n"
+	parse_git_branch() {
+	  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+	}
+
+	RED='\[\e[91m\]'
+	GREEN='\[\e[92m\]'
+	BLUE='\[\e[94m\]'
+	YELLOW='\[\e[93m\]'
+	NORMAL='\[\e[0m\]'
+
+	if [[ $EUID -ne 0 ]]; then
+		# user is not root, show green $
+		PS1="\n${BLUE}\w${YELLOW}\$(parse_git_branch) ${GREEN}\$ ${NORMAL}\n"
+	else
+		# user is root, show red #
+		PS1="\n${BLUE}\w${YELLOW}\$(parse_git_branch) ${RED}\$ ${NORMAL}\n"
+	fi
 fi
 
 
@@ -100,8 +106,6 @@ export CLICOLOR=1
 
 # PATHS
 # -----------------------------------------------------------------------
-# Genymotion
-export PATH="$PATH:/home/$USER/genymotion"
 
 # Android
 export ANDROID_HOME=$HOME/Android/Sdk
