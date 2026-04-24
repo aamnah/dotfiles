@@ -1,10 +1,19 @@
-.Files
-========
+## .Files
 
 These files are an accumulation of bash aliases, shortcuts and functions that i have collected over the years.
 
 While these are Mac specific (for example, the LSCOLORS is different as compared to the GNU LS_COLORS), they can easily be ported for use on Linux.
 
+
+## Config files
+
+`.nanorc`
+
+Default nano:
+![Default config](./screenshots/nanorc-default.png)
+
+Custom config:
+![Custom config](./screenshots/nanorc-custom.png)
 
 .bash_aliases
 ---
