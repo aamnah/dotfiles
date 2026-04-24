@@ -1,8 +1,15 @@
+#-----------------------------------------------------------------------
+#        Author: Aamnah
+#          Link: https://aamnah.com
+#       Version: 0.1.0
+#          Date: 2026-04-14
+#       Lastmod: 2026-04-24
+#   Description: Nano config with Lasik-themed colors
+# Compatibility: Debian, Ubuntu, Armbian, macOS
+#-----------------------------------------------------------------------
+
 # ~/.nanorc
 # https://www.nano-editor.org/dist/latest/nanorc.5.html
-
-# Author: Aamnah
-# Lastmod: 2026-04-14
 
 # If you get 'Unknown flag' errors then you're probably on macOS which uses an older version of nano (2.0.6)
 # You can install the latest version with Homebrew: brew install nano

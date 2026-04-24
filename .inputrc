@@ -1,9 +1,14 @@
-# ~/.inputrc
+#-----------------------------------------------------------------------
+#        Author: Aamnah
+#          Link: https://aamnah.com
+#       Version: 0.0.1
+#          Date: 2018-12-20
+#       Lastmod: 2026-04-24
+#   Description: Readline config — case-insensitive tab completion
+# Compatibility: Debian, Ubuntu, Armbian, macOS
+#-----------------------------------------------------------------------
 
-# Author: Aamnah
-# Link: https://aamnah.com
-# Version: 0.0.1
-# lastmod: 2018-12-20
+# ~/.inputrc
 
 # Case-insensitive Tab completion
 set completion-ignore-case on

@@ -1,13 +1,16 @@
+#!/bin/bash
+#-----------------------------------------------------------------------
+#        Author: Aamnah
+#          Link: https://aamnah.com
+#       Version: 0.3
+#          Date: 2020-07-15
+#       Lastmod: 2026-04-24
+#   Description: Bash aliases — dirs, listings, grep, IPs, trash, DNS
+# Compatibility: Debian, Ubuntu, Armbian, macOS
+#-----------------------------------------------------------------------
+
 # ~/.bash_aliases
-
-# Author: Aamnah <hello@aamnah.com> @AamnahAkram
-# Link: https://aamnah.com
-# Version: 0.3
-# lastmod: 2020-07-15
-
-# take a look at http://alias.sh/
-# for some really cool aliases
-# http://www.commandlinefu.com/commands/
+# More ideas: http://alias.sh/  and  http://www.commandlinefu.com/commands/
 
 ## DIRs
 #############

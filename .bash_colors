@@ -1,14 +1,16 @@
+#!/bin/bash
+#-----------------------------------------------------------------------
+#        Author: Aamnah
+#          Link: https://aamnah.com
+#       Version: 0.0.2
+#          Date: 2018-12-20
+#       Lastmod: 2026-04-24
+#   Description: ANSI color codes as named bash variables
+# Compatibility: Debian, Ubuntu, Armbian, macOS
+#-----------------------------------------------------------------------
+
 # ~/.bash_colors
-
-# Author: Aamnah <hello@aamnah.com> @AamnahAkram
-# Link: https://aamnah.com
-# Version: 0.0.2
-# lastmod: 2018-12-20
-
-# for the sake of cleanliness, i have created a separate color codes file
-# instead of adding everything to .bash_profile
-# since this is a separate file, it needs to be sourced via .bash_profile
-# just add it like you have added .aliases and .functions
+# Source this from .bash_profile, same as .bash_aliases and .functions.
 
 # the fact that these color variables are going to be sourced from the .bash_profile means
 # that all scripts will have access to these without having to add these inside every individual script

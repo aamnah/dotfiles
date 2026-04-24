@@ -1,5 +1,16 @@
-# by Aamnah <hello@aamnah.com> @AamnahAkram
-# some functions taken from Nate Landau's .bash_profile
+#!/bin/bash
+#-----------------------------------------------------------------------
+#        Author: Aamnah
+#          Link: https://aamnah.com
+#       Version: 0.1.0
+#          Date: 2014-06-21
+#       Lastmod: 2026-04-24
+#   Description: Custom bash functions — extract, take, fopen, ii, sniff
+# Compatibility: Debian, Ubuntu, Armbian, macOS
+#-----------------------------------------------------------------------
+
+# ~/.functions
+# Some functions adapted from Nate Landau's .bash_profile
 # http://natelandau.com/my-mac-osx-bash_profile/
 
 #   take:  create a dir and cd to it by taking an argument

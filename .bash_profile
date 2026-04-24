@@ -1,11 +1,15 @@
-# ~/.bash_profile
-# ~/.bashrc
+#!/bin/bash
+#-----------------------------------------------------------------------
+#        Author: Aamnah
+#          Link: https://aamnah.com
+#       Version: 0.5
+#          Date: 2020-07-15
+#       Lastmod: 2026-04-24
+#   Description: Bash login — prompt, history, shopt, color, paths
+# Compatibility: Debian, Ubuntu, Armbian, macOS
+#-----------------------------------------------------------------------
 
-# Author: Aamnah <hello@aamnah.com> @AamnahAkram
-# Link: https://aamnah.com
-# Version: 0.5
-# lastmod: 2020-07-15
-
+# ~/.bash_profile (also usable as ~/.bashrc)
 # Personal environment variables and startup programs.
 
 # Personal aliases and functions should go in ~/.bashrc.
