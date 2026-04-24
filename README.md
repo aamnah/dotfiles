@@ -1,8 +1,25 @@
 ## .Files
 
-These files are an accumulation of bash aliases, shortcuts and functions that i have collected over the years.
+These files are an accumulation of bash and zsh aliases, shortcuts and functions that i have collected over the years.
 
-While these are Mac specific (for example, the LSCOLORS is different as compared to the GNU LS_COLORS), they can easily be ported for use on Linux.
+Many of the entries (`emptytrash`, `localip`, `chromekill`, `afk`) are Mac-specific in their underlying commands; they're being ported to Linux as needed.
+
+
+## Install
+
+Clone and run:
+
+```sh
+git clone https://github.com/aamnah/dotfiles && cd dotfiles && ./install.sh
+```
+
+Or run remotely without cloning (fetches each file from `raw.githubusercontent.com`):
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/aamnah/dotfiles/master/install.sh | bash -s -- --remote
+```
+
+`install.sh` backs up any existing target as `<file>.bak.<timestamp>` before overwriting, and installs starship if it's missing. It does **not** change your login shell — see the Shell section below for `chsh`.
 
 
 ## Shell
@@ -51,16 +68,6 @@ Default nano:
 
 Custom config:
 ![Custom config](./screenshots/nanorc-custom.png)
-
-### zshell
-
-- `.zshenv` — runs for every zsh invocation (login, interactive, script). `PATH` belongs here. 
-- `.zprofile` — login shells only (like `.bash_profile`).    
-- `.zshrc` — interactive shells only (like `.bashrc`). 
-- `.zlogin` — login, after `.zshrc`. 
-- `.zlogout` — on logout.   
-
-
 
 .bash_aliases
 ---
@@ -120,10 +127,15 @@ Shortcuts for directories, programs, system processes and commands.
 
 ### custom prompt with Starship
 
-Cross-shell prompt configured by `.config/starship.toml`. Same config drives bash and zsh, so the prompt looks identical in both. The included config is a port of the OMZ "candy" theme:
+Cross-shell prompt configured by `.config/starship.toml`. Same config drives bash and zsh, so the prompt looks identical in both. Two-line layout adapted from Kali Linux's default zsh prompt:
 
-    user@host [HH:MM:SS] [~/path] [branch] *
-    -> %
+    ┌──[~/path] (branch) status
+    └─$
+
+- `┌──[`, `]`, `└─` — green
+- path and `$` — blue
+- `$` flips to red on non-zero exit (visual feedback for the last command)
+- git branch + status modules render after the path when in a repo
 
 `install.sh` installs the starship binary if it's missing — `brew install starship` on macOS, the official installer (`curl -sS https://starship.rs/install.sh | sh`) elsewhere — then drops `starship.toml` into `~/.config/`. To install manually:
 
@@ -146,9 +158,21 @@ echo 'eval "$(starship init zsh)"'  >> ~/.zshrc
 - `sniff()` sniff GET and POST traffic over http v2
 - `bell()` Ring the system bell after finishing a script/compile
 
-## .dev
+## .zsh_aliases
 
-- `gplv3` Add a GPL license file to your project
+zsh-side aliases (parity audit with `.bash_aliases` pending). Currently includes ssh shortcuts (`n` for hermes), tmux helpers (`kkk`), project-dir cd shortcuts (`proj`, `sites`, `notes`, `lasik`), and JAMK course shortcuts.
+
+## .zsh_functions
+
+- `t()` — load a `tmuxp.yaml` layout from the current dir, falling back to `~/.tmuxp/default.yaml`, falling back to a plain `tmux new` session named after the cwd. Auto-injects `session_name` and `start_directory` if the config lacks them.
+
+## .config/
+
+Editor and terminal configs that live under XDG-style paths:
+
+- `.config/kitty/kitty.conf` — kitty terminal config
+- `.config/nvim/init.lua` — Neovim config (tabs/indents, line numbers)
+- `.config/starship.toml` — Starship prompt (see above)
 
 ## Resources
 
