@@ -227,9 +227,37 @@ install_nvim() {
     echo "installed: $dest"
 }
 
+install_zsh() {
+    local files=(.zshrc .zshenv .zprofile .zsh_aliases .zsh_functions)
+
+    if ! command -v zsh >/dev/null 2>&1; then
+        if [[ "$SYSTEM" == macos-* ]]; then
+            : # zsh ships by default on macOS Catalina and later
+        else
+            echo "warning: zsh not found. Install with your package manager (e.g. apt install zsh)" >&2
+            echo "         then run: chsh -s \"\$(which zsh)\" \"\$USER\"" >&2
+        fi
+    fi
+
+    for f in "${files[@]}"; do
+        local src; src="$(fetch_source "$f")"
+        local dest="$HOME/$f"
+
+        if [[ ! -f "$src" ]]; then
+            echo "error: $src not found" >&2
+            continue
+        fi
+
+        backup_if_exists "$dest"
+        cp "$src" "$dest"
+        echo "installed: $dest"
+    done
+}
+
 detect_system
 install_nano
 install_tmux
 install_kitty
 install_nvim
 install_starship
+install_zsh

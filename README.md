@@ -109,41 +109,6 @@ Shortcuts for directories, programs, system processes and commands.
 #### Security
 - `netlisteners` Show active network listeners
 
-## .bash_colors
-
-This file has ANSI color codes saved into human readable variables. The
-variable names and codes have been taken from
-[here](https://misc.flogisoft.com/bash/tip_colors_and_formatting)
-and have been kept the same for universal recognition.
-
-`.bash_colors` has variables with eight colors and their bold, underlined,
-and background versions.
-
-#### Usage:
-Six basic colors (blue, cyan, green, magenta, red, yellow) have been set in `.bash_colors` for easy use. 
-You can use these anywhere in the terminal once the `~/.bash_colors` file has been sourced inside `~/.bash_profile`
-
-Wrap the code you want to color in the appropriate tags. There is an
-opening tag in the format of `$NAME` and a closing tag `$COLORRESET` at
-the end.  For example
-
-`echo -e "\n${YELLOW}Current date :${COLORRESET} " ; date`
-
-will echo `Current date :` in yellow color and then output `date` in
-default color on the next line.
-
-There are four available types of colors: Regular, Bold, Underline, and Background.
-
-    BLACK='\033[0;30m'        # Regular Black
-    BBLACK='\033[1;30m'       # Bold Black
-    UBLACK='\033[4;30m'       # Underline Black 
-    ONBLACK='\033[40m'       # Background Black 
-
-You can also use multiple color tags in one statement like so:
-
-    ${GREEN} WordPress was sucessfully copied! Don't forget to edit ${BGREEN}wp-config.php ${GREEN}to add Database details ${COLORRESET}
-    
-![Colors screenshot](https://raw.githubusercontent.com/aamnah/dotfiles/master/screenshots/cli_colors.png)
 
 
 ### bash
@@ -171,7 +136,7 @@ echo 'eval "$(starship init bash)"' >> ~/.bash_profile
 echo 'eval "$(starship init zsh)"'  >> ~/.zshrc
 ```
 
-## .functions
+## .bash_functions
 
 - `take()` create a dir and cd to it by taking a name
 - `extract()` Extract most know archives with one command

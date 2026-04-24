@@ -14,7 +14,6 @@
 
 ## DIRs
 # ---------------------------------------------------------------
-alias ..='cd ..'
 alias desk='cd ~/Desktop'
 alias dl='cd ~/Downloads'
 
@@ -62,6 +61,7 @@ alias cleanup="find . -type f -name '*.DS_Store' -ls -delete"
 alias chromekill="ps ux | grep '[C]hrome Helper --type=renderer' | grep -v extension-process | tr -s ' ' | cut -d ' ' -f2 | xargs kill"
 
 ## Lock the screen (when going AFK)
+# Keyboard shortcut is Meta+L on linux
 alias afk="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
 
 ## Reload the shell (i.e. invoke as a login shell)
@@ -101,4 +101,4 @@ alias flushdns='sudo dscacheutil -flushcache'
 # Show active network listeners
 alias netlisteners='lsof -i -P | grep LISTEN'
 
-# spy() and sniff() have been added to .functions
+# spy() and sniff() have been added to .bash_functions

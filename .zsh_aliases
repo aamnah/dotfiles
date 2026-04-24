@@ -1,0 +1,51 @@
+#!/usr/bin/env zsh
+#-----------------------------------------------------------------------
+#        Author: Aamnah
+#          Link: https://aamnah.com
+#       Version: 0.1.0
+#          Date: 2026-04-24
+#       Lastmod: 2026-04-24
+#   Description: zsh aliases — ssh shortcuts, project dirs, tools, JAMK courses
+# Compatibility: Debian, Ubuntu, Armbian, macOS
+#-----------------------------------------------------------------------
+#
+# bash equivalent: ~/.bash_aliases (still drifted — parity audit pending)
+#
+
+alias desk='cd ~/Desktop'
+alias dl="cd ~/Downloads"
+alias n="ssh hermes"
+alias aivot="cd /media/amna/Files/MEGA/aivot"
+alias a="cd /media/amna/Files/MEGA/aivot && tmuxp load tmuxp.yaml"
+alias niwa="cd /media/amna/Files/MEGA/niwa && tmuxp load tmuxp.yaml"
+alias c="claude"
+alias ll="ls -alFh"
+alias kkk="tmux kill-session"
+
+SITES_DIR="/mnt/amna/Media/Sites"
+PROJECTS_DIR="/mnt/amna/Media/Projects"
+NOTES_DIR="${SITES_DIR}/notes"
+JAMK_DIR="/mnt/amna/Media/jamk"
+
+alias sites="cd ${SITES_DIR}"
+alias proj="cd ${PROJECTS_DIR}"
+alias notes="cd ${NOTES_DIR} && code ."
+alias lasik="cd ${PROJECTS_DIR}/lasik-vscode-theme && code ."
+
+
+# JAMK Courses
+alias jamk="cd ${JAMK_DIR}/sem6"
+
+# Sem 5
+alias android="cd ${JAMK_DIR}/sem5/ttc8460-android-application-development/ && code ."
+alias mobile="cd ${JAMK_DIR}/sem5/ttc8450-mobile-application-development/ && code ."
+alias rnd="cd ${JAMK_DIR}/sem5/zzpp0620-research-and-development/ && code ."
+
+# internship
+alias wimma="cd ${JAMK_DIR}/wimma-capstone && code ."
+
+# Sem 6
+alias phys="cd ${JAMK_DIR}/sem6/tt00cd68-phys3-electromagnetism-and-waves/ && code ."
+alias was="cd ${JAMK_DIR}/sem6/ttc6500-web-application-security/ && code ."
+alias nom="cd ${JAMK_DIR}/sem6/tzlm7030-optimization-network-models/ && code ."
+alias math="cd ${JAMK_DIR}/sem6/tzlm3300-math3-derivative-and-integral/ && code ."

@@ -1,50 +1,47 @@
 # Starship prompt config
 # Docs: https://starship.rs/config/
-# Port of OMZ "candy" theme:
-#   user@host [HH:MM:SS] [~/path] [branch] *
-#   -> %
+# Adapted from Kali Linux's default zsh prompt:
+#   ┌──(user㉿host)-[~/path]-(branch)
+#   └─$
+# └─$ turns red on non-zero exit status (Kali behaviour).
 
 add_newline = true
 
-format = """$username$hostname $time $directory $git_branch$git_status
-[->](blue) $character """
+format = """[┌──\\[](green)$directory[\\]](green)$git_branch$git_status
+$character"""
 
 [username]
 show_always = true
-style_user = "bold green"
-style_root = "bold green"
+style_user = "green"
+style_root = "red"
 format = "[$user]($style)"
 
 [hostname]
 ssh_only = false
-style = "bold green"
-format = "[@$hostname]($style)"
-
-[time]
-disabled = false
-style = "blue"
-format = "[\\[$time\\]]($style)"
-time_format = "%T"
+style = "green"
+format = "[$hostname]($style)"
 
 [directory]
-style = "white"
-truncation_length = 3
+style = "blue"
 truncate_to_repo = false
-format = "[\\[$path\\]]($style)"
+truncation_length = 3
+format = "[$path]($style)"
 
 [git_branch]
 symbol = ""
-style = "green"
-format = "[\\[$branch\\]]($style)"
+format = "[ \\(](blue)[$branch](green)[\\)](blue)"
 
 [git_status]
-style = "red"
+style = "yellow"
 format = "[$all_status$ahead_behind]($style)"
 modified = " *"
 staged = " +"
 untracked = " ?"
 conflicted = " !"
 
+[time]
+disabled = true
+
 [character]
-success_symbol = "[%](bold blue)"
-error_symbol = "[%](bold red)"
+success_symbol = "[└─](green)[\\$ ](blue)"
+error_symbol = "[└─](green)[\\$ ](red)"

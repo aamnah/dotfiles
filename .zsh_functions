@@ -1,0 +1,69 @@
+#!/usr/bin/env zsh
+#-----------------------------------------------------------------------
+#        Author: Aamnah
+#          Link: https://aamnah.com
+#       Version: 0.1.0
+#          Date: 2026-04-24
+#       Lastmod: 2026-04-24
+#   Description: zsh functions — tmuxp loader and shell helpers
+# Compatibility: Debian, Ubuntu, Armbian, macOS
+#-----------------------------------------------------------------------
+#
+# bash equivalent: ~/.bash_functions (still drifted — parity audit pending)
+#
+
+# Load tmux layout file in the current dir with tmuxp
+# if no layout file exists then start tmux
+t() {
+  local CONFIG_FILE=""
+  local PROJECT_CONFIG="tmuxp.yaml"
+  local DEFAULT_CONFIG="$HOME/.tmuxp/default.yaml"
+  local NAME="${PWD##*/}" # strip everything up to the last /, giving just the current folder name
+
+  # tmux session names can't contain . or :. If your folders might have those, sanitize:
+  NAME="${NAME//[.:]/_}"
+
+  # 1. Load appropriate config file
+	if [[ -f $PROJECT_CONFIG ]]; then
+    CONFIG_FILE=$PROJECT_CONFIG
+    echo -e "$PROJECT_CONFIG exists for current project. Loading layout"
+	elif [[ -f $DEFAULT_CONFIG ]]; then
+    CONFIG_FILE=$DEFAULT_CONFIG
+    echo -e "$PROJECT_CONFIG does not exist. Loading default layout at $DEFAULT_CONFIG"
+	fi
+
+  # if config file is non-existent or empty, start tmux without specifying layout
+  if [[ -z $CONFIG_FILE ]]; then
+		echo -e "Layout config does not exist. Starting tmux"
+		sleep 1
+		tmux new -s "$NAME"
+    return
+	fi
+
+  # 2. Set session name and directory
+  if grep -qE '^session_name[[:space:]]*:' "$CONFIG_FILE"; then
+  # if session_name value exists, load the config
+    # ^session_name - only matches a real top-level key (and not inside a comment or stray nested key)
+    # [[:space:]] instead of \s - portable across BSD/GNU grep
+    tmuxp load "$CONFIG_FILE"
+  else
+  # if the config file does not have a value for session_name
+  # use current dir as the default value
+    # Create a temporary file and append the session_name (based on current dir) to it
+    # (because passing session name with -s was not working)
+    local tmp
+    tmp=$(mktemp --suffix=.yaml)
+    # { echo "session_name: $NAME"; cat "$CONFIG_FILE"; } > "$tmp"
+    # tmuxp resolves relative paths (and the default pane directory) relative to the config file,
+    # which is now /tmp because of mktemp.. inject start_directory as well to fix that
+    {
+      cat "$CONFIG_FILE"
+      echo "session_name: $NAME"
+      if ! grep -qE '^start_directory[[:space:]]*:' "$CONFIG_FILE"; then;
+        echo "start_directory: $PWD";
+      fi
+    } > "$tmp"
+    tmuxp load "$tmp"
+    rm -f "$tmp"
+  fi
+}

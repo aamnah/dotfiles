@@ -63,7 +63,8 @@ fi
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
-for file in ~/.{aliases, bash_aliases, colors, bash_colors }; do
+# NOTE: bash brace expansion is broken by spaces between commas — keep this list tight.
+for file in ~/.{bash_aliases,bash_functions}; do
   [ -f "$file" ] && source "$file"
 done
 unset file

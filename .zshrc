@@ -1,135 +1,51 @@
+#!/usr/bin/env zsh
 #-----------------------------------------------------------------------
 #        Author: Aamnah
 #          Link: https://aamnah.com
-#       Version: 0.1.0
+#       Version: 0.2.0
 #          Date: 2026-04-24
 #       Lastmod: 2026-04-24
-#   Description: zsh interactive config — aliases, prompt, completion, keybindings
+#   Description: zsh interactive config — prompt, completion, aliases, functions
 # Compatibility: Debian, Ubuntu, Armbian, macOS
 #-----------------------------------------------------------------------
 #
 # Sourced for INTERACTIVE shells (every new terminal tab, login or otherwise).
 # Use for: aliases, functions, prompt, completion, keybindings — anything used at the prompt.
+# PATH and env vars belong in ~/.zshenv (sourced for every zsh invocation).
 # bash equivalent: ~/.bashrc
 #
 
-# Add deno completions to search path
-if [[ ":$FPATH:" != *":/home/amna/.zsh/completions:"* ]]; then export FPATH="/home/amna/.zsh/completions:$FPATH"; fi
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
+# Deno completions search path
+if [[ ":$FPATH:" != *":$HOME/.zsh/completions:"* ]]; then
+    export FPATH="$HOME/.zsh/completions:$FPATH"
+fi
 
-# Path to your Oh My Zsh installation.
-export ZSH="$HOME/.oh-my-zsh"
-
-# Set name of the theme to load --- if set to "random", it will
-# load a random theme each time Oh My Zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="candy"
-
-# Set list of themes to pick from when loading at random
-# Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in $ZSH/themes/
-# If set to an empty array, this variable will have no effect.
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
-
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
-
-# Uncomment the following line to use hyphen-insensitive completion.
-# Case-sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
-
-# Uncomment one of the following lines to change the auto-update behavior
-# zstyle ':omz:update' mode disabled  # disable automatic updates
-# zstyle ':omz:update' mode auto      # update automatically without asking
-# zstyle ':omz:update' mode reminder  # just remind me to update when it's time
-
-# Uncomment the following line to change how often to auto-update (in days).
-# zstyle ':omz:update' frequency 13
-
-# Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS="true"
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-# You can also set it to another string to have that shown instead of the default red dots.
-# e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
-# Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
-# COMPLETION_WAITING_DOTS="true"
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# You can set one of the optional three formats:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
-
-# Which plugins would you like to load?
-# Standard plugins can be found in $ZSH/plugins/
-# Custom plugins may be added to $ZSH_CUSTOM/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
-
-source $ZSH/oh-my-zsh.sh
-
-# User configuration
-
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='nvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch $(uname -m)"
-
-# Set personal aliases, overriding those provided by Oh My Zsh libs,
-# plugins, and themes. Aliases can be placed here, though Oh My Zsh
-# users are encouraged to define aliases within a top-level file in
-# the $ZSH_CUSTOM folder, with .zsh extension. Examples:
-# - $ZSH_CUSTOM/aliases.zsh
-# - $ZSH_CUSTOM/macos.zsh
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-
-
-# PATH variables are in a separate file ~.zshenv
-# If you need $PATH in every zsh instance (e.g. when running scripts, cron jobs, GUI apps launching shells) — put it in .zshenv.
-# If you only need it when using the terminal interactively — put it in .zshrc.
-
-
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv zsh)"
-
-
-# tmux layout configurations with tmuxp
-# tmuxp can set session titles
+# tmuxp manages its own session titles
 export DISABLE_AUTO_TITLE='true'
-eval "$(starship init zsh)"
+
+# Homebrew / Linuxbrew shellenv (sets PATH/MANPATH/INFOPATH for brew-installed packages)
+for brewbin in /home/linuxbrew/.linuxbrew/bin/brew /opt/homebrew/bin/brew /usr/local/bin/brew; do
+    if [[ -x "$brewbin" ]]; then
+        eval "$($brewbin shellenv)"
+        break
+    fi
+done
+
+# Shell options (defaults that OMZ used to set)
+setopt AUTO_CD              # type a directory name (incl. "..") to cd into it
+setopt AUTO_PUSHD           # every cd pushes the previous dir on the stack — popd to go back
+setopt PUSHD_IGNORE_DUPS    # don't stack duplicate dirs
+setopt EXTENDED_HISTORY     # write timestamp + duration with each history entry
+setopt SHARE_HISTORY        # share command history across all running shells
+setopt HIST_IGNORE_DUPS     # don't record a line if it matches the previous one
+setopt HIST_IGNORE_SPACE    # don't record a line that starts with a space
+
+# Tab completion (OMZ used to init this for you)
+autoload -Uz compinit && compinit
+
+# Personal aliases and functions
+[[ -f "$HOME/.zsh_aliases" ]]   && source "$HOME/.zsh_aliases"
+[[ -f "$HOME/.zsh_functions" ]] && source "$HOME/.zsh_functions"
+
+# Starship prompt (cross-shell, configured via ~/.config/starship.toml)
+command -v starship >/dev/null 2>&1 && eval "$(starship init zsh)"
