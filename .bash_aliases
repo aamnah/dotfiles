@@ -13,7 +13,7 @@
 # More ideas: http://alias.sh/  and  http://www.commandlinefu.com/commands/
 
 ## DIRs
-#############
+# ---------------------------------------------------------------
 alias ..='cd ..'
 alias desk='cd ~/Desktop'
 alias dl='cd ~/Downloads'
@@ -27,7 +27,7 @@ alias sites="cd ${SITES_FOLDER}"
 alias blog="cd ${SITES_FOLDER}/blog.aamnah.com && code . && gatsby develop"
 
 # COMMANDS
-#############
+# ---------------------------------------------------------------
 alias ls='ls -hF'
 alias ll='ls -alhF --color' # -a for all, -l for detailed, -h for human readable, F for trailing /, --color for color coding
 alias lsd='ls -Gal | grep ^d' # Only list directories, including hidden ones
@@ -44,16 +44,8 @@ alias grep='grep --color=always'
 alias egrep='egrep --color=always' 
 alias fgrep='fgrep --color=always' 
 
-# youtube-dl
-alias ydl='youtube-dl'
-
-# load SSH agent and add SSH key
-SSH_KEY='/media/aamnah/Files/.ssh/id_rsa'
-alias gath="eval $(ssh-agent) && ssh-add ${SSH_KEY}"
-
-
 # MISC.
-#############
+# ---------------------------------------------------------------
 ## IP addresses
 alias myip='curl ifconfig.me'
 alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
@@ -80,7 +72,7 @@ alias dang='sudo $(history -p \!\!)'
 
 
 ## DISK USAGE
-#############
+# ---------------------------------------------------------------
 # List top ten largest files/directories in current directory
 # alias ducks='du -cks *|sort -rn|head -11'
 # du -cks : -c for grand total , -k for 1-Kbyte blocks, -s for displaying entries for each file
@@ -93,19 +85,19 @@ alias ds='du -ks *|sort -n'
 
 
 ## MEMORY
-#############
+# ---------------------------------------------------------------
 # What's gobbling the memory?
 alias wotgobblemem='ps -o time,ppid,pid,nice,pcpu,pmem,user,comm -A | sort -n -k 6 | tail -15'
 
 
 ## DNS
-#############
+# ---------------------------------------------------------------
 # Flush DNS cache
 alias flushdns='sudo dscacheutil -flushcache'
 
 
 ## SECURITY
-#############
+# ---------------------------------------------------------------
 # Show active network listeners
 alias netlisteners='lsof -i -P | grep LISTEN'
 
