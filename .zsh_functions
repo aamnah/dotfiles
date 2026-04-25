@@ -197,7 +197,7 @@ t() {
 
   # Find a layout: project-local first, then user default
   local PROJECT_CONFIG="tmuxp.yaml"
-  local DEFAULT_CONFIG="$HOME/.tmuxp/default.yaml"
+  local DEFAULT_CONFIG="$HOME/.config/tmuxp/default.yaml"
   local CONFIG_FILE=""
 
   if [[ -f "$PROJECT_CONFIG" ]]; then
