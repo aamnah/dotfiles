@@ -1,0 +1,15 @@
+# install uv: curl -LsSf https://astral.sh/uv/install.sh | sh 
+# install tmuxp: uv tool install tmuxp
+# load layout: tmuxp load tmuxp.yaml
+windows:
+  - window_name: main
+    layout: d861,305x53,0,0{112x53,0,0,0,106x53,113,0,5,85x53,220,0[85x26,220,0,6,85x26,220,27,7]}
+    panes:
+      - shell_command: 
+        focus: true
+      - 
+      - shell-command:
+  #  You can run multiple commands like this
+  #    - export NODE_ENV=development
+  #    - nvm use lts
+      -
