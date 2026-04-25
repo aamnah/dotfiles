@@ -69,6 +69,16 @@ Default nano:
 Custom config:
 ![Custom config](./screenshots/nanorc-custom.png)
 
+## .config/
+
+Editor and terminal configs that live under XDG-style paths:
+
+- `.config/kitty/kitty.conf` — kitty terminal config
+- `.config/nvim/init.lua` — Neovim config (tabs/indents, line numbers)
+- `.config/starship.toml` — Starship prompt (see above)
+- `.config/tmux/tmux.conf` — tmux config; themes live alongside it as `.config/tmux/lasik.tmux`, `.config/tmux/catppuccin.tmux`, and `.config/tmux/reset.tmux`. A root `.tmux.conf` shim sources this XDG config for compatibility.
+
+
 ## .bash_aliases / .zsh_aliases
 
 Shortcuts for directories, programs, system processes and commands. Both files contain the same universal toolset, byte-identical at the source level. The only structural difference is `dang` (uses bash's `history -p` vs zsh's `fc -ln -1` since shell builtins differ).
@@ -178,14 +188,6 @@ Both files are kept in **full parity** — same functions, same behaviour. The o
 
 Removed in recent revisions: `extract()` (use the archive tool directly), `sniff()` (use `tcpdump` / `tshark`), `bell()` (terminal-bell-on-completion was unreliable across emulators — also why `enable_audio_bell` came out of `kitty.conf`).
 
-## .config/
-
-Editor and terminal configs that live under XDG-style paths:
-
-- `.config/kitty/kitty.conf` — kitty terminal config
-- `.config/nvim/init.lua` — Neovim config (tabs/indents, line numbers)
-- `.config/starship.toml` — Starship prompt (see above)
-
-## Resources
+## Links
 
 - Take a look at [Command Line Fu](http://www.commandlinefu.com/commands/browse/sort-by-votes) for some really cool commands
