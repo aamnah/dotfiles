@@ -134,13 +134,13 @@ install_nano() {
 }
 
 install_tmux() {
-    local src; src="$(fetch_source ".tmux.conf")"
-    local dest="$HOME/.tmux.conf"
-
-    if [[ ! -f "$src" ]]; then
-        echo "error: $src not found" >&2
-        return 1
-    fi
+    local files=(
+        ".tmux.conf"
+        ".tmux/tmux.conf"
+        ".tmux/reset.tmux"
+        ".tmux/lasik.tmux"
+        ".tmux/catppuccin.tmux"
+    )
 
     if ! command -v tmux >/dev/null 2>&1; then
         if [[ "$SYSTEM" == macos-* ]]; then
@@ -150,9 +150,32 @@ install_tmux() {
         fi
     fi
 
-    backup_if_exists "$dest"
-    cp "$src" "$dest"
-    echo "installed: $dest"
+    if [[ -e "$HOME/.tmux" && ! -d "$HOME/.tmux" ]]; then
+        echo "error: $HOME/.tmux exists but is not a directory" >&2
+        return 1
+    fi
+    mkdir -p "$HOME/.tmux"
+
+    for f in "${files[@]}"; do
+        local src; src="$(fetch_source "$f")"
+        local dest="$HOME/$f"
+
+        if [[ ! -f "$src" ]]; then
+            echo "error: $src not found" >&2
+            continue
+        fi
+
+        mkdir -p "$(dirname "$dest")"
+        backup_if_exists "$dest"
+        cp "$src" "$dest"
+        echo "installed: $dest"
+    done
+
+    if [[ ! -d "$HOME/.config/tmux/plugins/catppuccin/tmux" ]]; then
+        echo "warning: Catppuccin tmux plugin not found. Install it with:" >&2
+        echo "         mkdir -p ~/.config/tmux/plugins/catppuccin" >&2
+        echo "         git clone -b v2.3.0 https://github.com/catppuccin/tmux.git ~/.config/tmux/plugins/catppuccin/tmux" >&2
+    fi
 }
 
 install_kitty() {
