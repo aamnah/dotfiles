@@ -69,8 +69,7 @@ Default nano:
 Custom config:
 ![Custom config](./screenshots/nanorc-custom.png)
 
-.bash_aliases / .zsh_aliases
----
+## .bash_aliases / .zsh_aliases
 
 Shortcuts for directories, programs, system processes and commands. Both files contain the same universal toolset, byte-identical at the source level. The only structural difference is `dang` (uses bash's `history -p` vs zsh's `fc -ln -1` since shell builtins differ).
 
@@ -140,9 +139,12 @@ Cross-shell prompt configured by `.config/starship.toml`. Same config drives bas
     ┌──[~/path] (branch) status
     └─$
 
-- `┌──[`, `]`, `└─` — green
-- path and `$` — blue
-- `$` flips to red on non-zero exit (visual feedback for the last command)
+Colours come from a `[palettes.lasik]` palette that mirrors the [Lasik VSCode theme](https://github.com/aamnah/lasik-vscode-theme) — edit the hex values in one place and every module updates.
+
+- `┌──[`, `]`, `└─`, and the branch parens — `muted` (dark navy, intentionally low-contrast frame)
+- path and `$` — `blue`
+- branch name — `yellow`; git status — `peach`
+- `$` flips to `red` on non-zero exit (visual feedback for the last command)
 - git branch + status modules render after the path when in a repo
 
 `install.sh` installs the starship binary if it's missing — `brew install starship` on macOS, the official installer (`curl -sS https://starship.rs/install.sh | sh`) elsewhere — then drops `starship.toml` into `~/.config/`. To install manually:

@@ -4,21 +4,38 @@
 #   ┌──(user㉿host)-[~/path]-(branch)
 #   └─$
 # └─$ turns red on non-zero exit status (Kali behaviour).
+#
+# Palette mirrors the Lasik VSCode theme:
+# https://github.com/aamnah/lasik-vscode-theme
 
+# Top-level keys MUST come before any [section] table headers,
+# otherwise TOML scopes them into the previous section.
 add_newline = true
+palette = "lasik"
 
-format = """[┌──\\[](green)$directory[\\]](green)$git_branch$git_status
+format = """[┌──\\[](muted)$directory[\\]](muted)$git_branch$git_status
 $character"""
+
+[palettes.lasik]
+lavender = "#a8bcfc"  # signature accent
+blue     = "#4daafc"  # links / paths
+teal     = "#02bbcc"  # functions / healthy (green-analog)
+pink     = "#e95678"  # variables
+peach    = "#fab795"  # strings / warnings
+purple   = "#d993ff"  # keywords
+red      = "#f85149"  # errors
+muted    = "#2A324B"  # very dark navy — barely-there frame decoration
+yellow   = "#FFE2A3"
 
 [username]
 show_always = true
-style_user = "green"
+style_user = "teal"
 style_root = "red"
 format = "[$user]($style)"
 
 [hostname]
 ssh_only = false
-style = "green"
+style = "teal"
 format = "[$hostname]($style)"
 
 [directory]
@@ -29,10 +46,10 @@ format = "[$path]($style)"
 
 [git_branch]
 symbol = ""
-format = "[ \\(](blue)[$branch](green)[\\)](blue)"
+format = "[ \\(](muted)[$branch](yellow)[\\)](muted)"
 
 [git_status]
-style = "yellow"
+style = "peach"
 format = "[$all_status$ahead_behind]($style)"
 modified = " *"
 staged = " +"
@@ -43,5 +60,5 @@ conflicted = " !"
 disabled = true
 
 [character]
-success_symbol = "[└─](green)[\\$ ](blue)"
-error_symbol = "[└─](green)[\\$ ](red)"
+success_symbol = "[└─](muted)[\\$ ](blue)"
+error_symbol = "[└─](muted)[\\$ ](red)"
