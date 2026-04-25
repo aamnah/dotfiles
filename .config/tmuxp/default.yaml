@@ -13,3 +13,11 @@ windows:
   #    - export NODE_ENV=development
   #    - nvm use lts
       -
+
+
+# 3 vertical panes of equal size. last vertical pane is split once horizontally
+# ┌─────────┬─────────┬─────────┐
+# │         │         │    3    │
+# │    1    │    2    ├─────────┤
+# │         │         │    4    │
+# └─────────┴─────────┴─────────┘     
