@@ -133,13 +133,48 @@ install_nano() {
     echo "installed: $dest (syntax dir: $NANO_SHARE)"
 }
 
+install_git_repo() {
+    local name="$1"
+    local url="$2"
+    local dest="$3"
+    local branch="${4:-}"
+
+    if [[ -d "$dest/.git" ]]; then
+        echo "installed: $dest ($name already present)"
+        return 0
+    fi
+
+    if [[ -e "$dest" ]]; then
+        echo "warning: $name not installed — $dest exists but is not a git checkout" >&2
+        return 0
+    fi
+
+    if ! command -v git >/dev/null 2>&1; then
+        echo "warning: $name not installed — git not found. Install git, then run:" >&2
+        if [[ -n "$branch" ]]; then
+            echo "         git clone -b $branch $url $dest" >&2
+        else
+            echo "         git clone $url $dest" >&2
+        fi
+        return 0
+    fi
+
+    mkdir -p "$(dirname "$dest")"
+    echo "installing: $name -> $dest"
+    if [[ -n "$branch" ]]; then
+        git clone --depth 1 -b "$branch" "$url" "$dest"
+    else
+        git clone --depth 1 "$url" "$dest"
+    fi
+}
+
 install_tmux() {
     local files=(
         ".tmux.conf"
-        ".tmux/tmux.conf"
-        ".tmux/reset.tmux"
-        ".tmux/lasik.tmux"
-        ".tmux/catppuccin.tmux"
+        ".config/tmux/tmux.conf"
+        ".config/tmux/reset.tmux"
+        ".config/tmux/lasik.tmux"
+        ".config/tmux/catppuccin.tmux"
     )
 
     if ! command -v tmux >/dev/null 2>&1; then
@@ -150,11 +185,11 @@ install_tmux() {
         fi
     fi
 
-    if [[ -e "$HOME/.tmux" && ! -d "$HOME/.tmux" ]]; then
-        echo "error: $HOME/.tmux exists but is not a directory" >&2
+    if [[ -e "$HOME/.config/tmux" && ! -d "$HOME/.config/tmux" ]]; then
+        echo "error: $HOME/.config/tmux exists but is not a directory" >&2
         return 1
     fi
-    mkdir -p "$HOME/.tmux"
+    mkdir -p "$HOME/.config/tmux"
 
     for f in "${files[@]}"; do
         local src; src="$(fetch_source "$f")"
@@ -171,11 +206,16 @@ install_tmux() {
         echo "installed: $dest"
     done
 
-    if [[ ! -d "$HOME/.config/tmux/plugins/catppuccin/tmux" ]]; then
-        echo "warning: Catppuccin tmux plugin not found. Install it with:" >&2
-        echo "         mkdir -p ~/.config/tmux/plugins/catppuccin" >&2
-        echo "         git clone -b v2.3.0 https://github.com/catppuccin/tmux.git ~/.config/tmux/plugins/catppuccin/tmux" >&2
-    fi
+    install_git_repo \
+        "TPM" \
+        "https://github.com/tmux-plugins/tpm" \
+        "$HOME/.config/tmux/plugins/tpm"
+
+    install_git_repo \
+        "Catppuccin tmux plugin" \
+        "https://github.com/catppuccin/tmux.git" \
+        "$HOME/.config/tmux/plugins/catppuccin/tmux" \
+        "v2.3.0"
 }
 
 install_kitty() {

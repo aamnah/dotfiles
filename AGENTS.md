@@ -11,7 +11,7 @@ Personal dotfiles — shell, editor, and terminal configs intended to be deploye
 - Shell (bash): `.bash_profile`, `.bash_aliases`, `.bash_functions`, `.inputrc`
 - Shell (zsh): `.zshrc`, `.zshenv`, `.zprofile`, `.zsh_aliases`, `.zsh_functions`
 - Editors: `.nanorc`, `.vimrc`, `.config/nvim/init.lua`
-- Terminal / multiplexer: `.config/kitty/kitty.conf`, `.tmux.conf`
+- Terminal / multiplexer: `.config/kitty/kitty.conf`, `.config/tmux/tmux.conf` plus `.tmux.conf` shim
 - Prompt: `.config/starship.toml` (cross-shell; port of OMZ "candy" theme)
 - Misc: `.gitconfig`, `.yarnrc.yml`
 - Deployment: `install.sh`
@@ -46,6 +46,7 @@ Source resolution is centralized in `fetch_source <repo-relative-path>`. Local m
 
 ## Notes
 
+- Use Conventional Commits for commit messages (for example, `feat(tmux): add TPM plugin install`, `fix(shell): quote path expansion`).
 - Many aliases/functions in `.bash_aliases`, `.bash_functions`, and `.dev` are macOS-oriented (e.g. `emptytrash` targets `/Volumes/*/.Trashes`, `localip` uses `ipconfig getifaddr en0`). The README calls this out. Porting individual commands to Linux is expected and welcome, but don't assume a command works cross-platform without checking.
-- `.tmux.conf` is the "Lasik" theme (matches the author's VSCode theme). Color palette variables are defined at the top of the file — edit those rather than the individual `set -g` lines when adjusting colors.
+- `.config/tmux/lasik.tmux` is the "Lasik" theme (matches the author's VSCode theme). Color palette variables are defined near the top of the file — edit those rather than the individual `set -g` lines when adjusting colors.
 - `README.md` documents the user-facing aliases and functions. Keep it in sync when renaming or removing entries.

@@ -33,7 +33,7 @@ set t_Co=256 " Use 256 colors in Terminals that support them (xterm does)
 						 " so colorschemes that use them (e.g. Monokai) show as expected
 						 " Otherwise it'll only show 8 or 16 colors
 						 " If tmux is installed, add `set -g default-terminal "screen-256color"`
-						 " in `~/.tmux.conf` 
+						 " in `~/.config/tmux/tmux.conf` 
 syntax on 
 syntax enable
 colorscheme sublimemonokai

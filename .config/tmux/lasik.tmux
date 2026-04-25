@@ -8,10 +8,10 @@
 #   Description: Lasik Tmux Theme (matches Lasik VSCode theme)
 #         Theme: https://marketplace.visualstudio.com/items?itemName=AmnaAkram.lasik
 # Compatibility: Debian, Ubuntu, Armbian, macOS
-#          File: ~/.tmux/lasik.tmux
+#          File: ~/.config/tmux/lasik.tmux
 #-----------------------------------------------------------------------
 
-source-file ~/.tmux/reset.tmux
+source-file ~/.config/tmux/reset.tmux
 
 # There are examples in `/usr/share/doc/tmux/examples/`
 

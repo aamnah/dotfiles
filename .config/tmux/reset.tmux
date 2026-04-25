@@ -7,7 +7,7 @@
 #       Lastmod: 2024-04-25
 #   Description: Reset theme-controlled tmux options before loading a theme
 # Compatibility: Debian, Ubuntu, Armbian, macOS
-#          File: ~/.tmux/reset.tmux
+#          File: ~/.config/tmux/reset.tmux
 #-----------------------------------------------------------------------
 
 # Reset any stale styles from previously-tested themes before a new theme loads.

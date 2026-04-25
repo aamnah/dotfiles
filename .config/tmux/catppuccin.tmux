@@ -8,12 +8,12 @@
 #   Description: Catppuccin Tmux Theme
 #         Theme: https://github.com/catppuccin/tmux
 # Compatibility: Debian, Ubuntu, Armbian, macOS
-#          File: ~/.tmux/catppuccin.tmux
+#          File: ~/.config/tmux/catppuccin.tmux
 #-----------------------------------------------------------------------
 
-source-file ~/.tmux/reset.tmux
+source-file ~/.config/tmux/reset.tmux
 
-# Install Catppuccin:
+# Catppuccin is installed by install.sh. Manual install:
 # mkdir -p ~/.config/tmux/plugins/catppuccin
 # git clone -b v2.3.0 https://github.com/catppuccin/tmux.git ~/.config/tmux/plugins/catppuccin/tmux
 
