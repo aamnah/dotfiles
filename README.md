@@ -139,6 +139,8 @@ Cross-shell prompt configured by `.config/starship.toml`. Same config drives bas
     ┌──[~/path] (branch) status
     └─$
 
+![prompt display](./screenshots/prompt-starship.png)
+
 Colours come from a `[palettes.lasik]` palette that mirrors the [Lasik VSCode theme](https://github.com/aamnah/lasik-vscode-theme) — edit the hex values in one place and every module updates.
 
 - `┌──[`, `]`, `└─`, and the branch parens — `muted` (dark navy, intentionally low-contrast frame)
