@@ -156,19 +156,23 @@ echo 'eval "$(starship init bash)"' >> ~/.bash_profile
 echo 'eval "$(starship init zsh)"'  >> ~/.zshrc
 ```
 
-## .bash_functions
+## .bash_functions / .zsh_functions
 
-- `take()` create a dir and cd to it by taking a name
-- `extract()` Extract most know archives with one command
-- `ii()` display useful host related informaton
-- `getwebsite()` wget a whole website
-- `spy()` identify and search for active network connections
-- `sniff()` sniff GET and POST traffic over http v2
-- `bell()` Ring the system bell after finishing a script/compile
+Both files are kept in **full parity** — same functions, same behaviour. The only differences are the shebang and the file header. Pick whichever shell you're in; everything below works identically.
 
-## .zsh_functions
+- `take()` — create a dir (with parents if needed) and cd into it
+- `ii()` — compact MOTD-style host summary: timestamp, hostname + kernel + distro, local + public IP, uptime, load average, process count, memory and disk with coloured 10-char usage bars (white <60%, yellow 60–84%, red ≥85%), and logged-in users. Cross-platform (Linux + macOS), self-contained ANSI colours, gracefully degrades when commands or `/etc/os-release` aren't available.
 
-- `t()` — load a `tmuxp.yaml` layout from the current dir, falling back to `~/.tmuxp/default.yaml`, falling back to a plain `tmux new` session named after the cwd. Auto-injects `session_name` and `start_directory` if the config lacks them.
+  ![ii output](./screenshots/function-ii.png)
+
+- `getwebsite()` — wget a whole site for offline reading (`-r -p -k -np -l 5`, ignores robots.txt, randomised wait between requests). Static HTML only — for SPA / JS-heavy sites use `httrack` or `monolith`.
+- `spy()` — identify active network connections by port or process name (e.g. `spy 8080`, `spy chrome`). Wraps `lsof -i -P +c 0 +M` and pipes through `awk` so the column header is preserved while the body is filtered (naive `grep` would drop the header). Case-insensitive literal match — IPs like `127.0.0.1` work as-is. Without sudo, only your own processes are shown.
+
+  ![spy output](./screenshots/function-spy.png)
+
+- `t()` — load a `tmuxp.yaml` layout from the current dir, falling back to `~/.tmuxp/default.yaml`, falling back to a plain `tmux new` session named after the cwd. Auto-injects `session_name` and `start_directory` if the config lacks them. Sanitises session name (tmux disallows `.` and `:`) and falls back cleanly when `tmuxp` isn't installed.
+
+Removed in recent revisions: `extract()` (use the archive tool directly), `sniff()` (use `tcpdump` / `tshark`), `bell()` (terminal-bell-on-completion was unreliable across emulators — also why `enable_audio_bell` came out of `kitty.conf`).
 
 ## .config/
 
