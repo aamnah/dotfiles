@@ -2,50 +2,115 @@
 #-----------------------------------------------------------------------
 #        Author: Aamnah
 #          Link: https://aamnah.com
-#       Version: 0.1.0
+#       Version: 0.2.0
 #          Date: 2026-04-24
 #       Lastmod: 2026-04-24
-#   Description: zsh aliases — ssh shortcuts, project dirs, tools, JAMK courses
+#   Description: zsh aliases — universal toolset + personal/local shortcuts
 # Compatibility: Debian, Ubuntu, Armbian, macOS
 #-----------------------------------------------------------------------
 #
-# bash equivalent: ~/.bash_aliases (still drifted — parity audit pending)
-#
+# Parallels ~/.bash_aliases for the universal toolset (ls, grep, IPs, trash, DNS).
+# 
 
+# OS detection — used by aliases that differ between Linux (GNU) and macOS (BSD)
+case "$(uname -s)" in
+    Darwin) IS_MACOS=1 ;;
+    Linux)  IS_LINUX=1 ;;
+esac
+
+## DIRs (machine-specific — local paths)
+# ---------------------------------------------------------------
 alias desk='cd ~/Desktop'
-alias dl="cd ~/Downloads"
-alias n="ssh hermes"
-alias aivot="cd /media/amna/Files/MEGA/aivot"
-alias a="cd /media/amna/Files/MEGA/aivot && tmuxp load tmuxp.yaml"
-alias niwa="cd /media/amna/Files/MEGA/niwa && tmuxp load tmuxp.yaml"
+alias dl='cd ~/Downloads'
+
+# COMMANDS (universal — kept in sync with .bash_aliases)
+# ---------------------------------------------------------------
+# ls colorflag differs: GNU uses --color=, BSD (macOS) uses -G
+if [[ -n "$IS_MACOS" ]]; then
+    alias ls='ls -hFG'
+    alias ll='ls -alhFG'
+    alias l='ls -aFxG'
+else
+    alias ls='ls -hF --color=always'
+    alias ll='ls -alhF --color=always'
+    alias l='ls -aFx --color=always'
+fi
+
+# Only list directories (excluding . and ..) — portable across BSD/GNU
+alias lsd='ls -dl */ .[^.]*/ 2>/dev/null'
+
+alias la='ls -A'
+alias tree='tree -C'
+
+alias grep='grep --color=always'
+alias egrep='egrep --color=always'
+alias fgrep='fgrep --color=always'
+
+# Tools (universal — work on any box where the tool is installed)
 alias c="claude"
-alias ll="ls -alFh"
 alias kkk="tmux kill-session"
 
-SITES_DIR="/mnt/amna/Media/Sites"
-PROJECTS_DIR="/mnt/amna/Media/Projects"
-NOTES_DIR="${SITES_DIR}/notes"
-JAMK_DIR="/mnt/amna/Media/jamk"
 
-alias sites="cd ${SITES_DIR}"
-alias proj="cd ${PROJECTS_DIR}"
-alias notes="cd ${NOTES_DIR} && code ."
-alias lasik="cd ${PROJECTS_DIR}/lasik-vscode-theme && code ."
+# MISC.
+# ---------------------------------------------------------------
+## IP addresses
+alias myip='curl ifconfig.me'
+alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
+
+# localip differs: macOS uses ipconfig; Linux uses hostname -I
+if [[ -n "$IS_MACOS" ]]; then
+    alias localip='ipconfig getifaddr en0'
+else
+    alias localip="hostname -I | awk '{print \$1}'"
+fi
+
+## Empty the Trash
+if [[ -n "$IS_MACOS" ]]; then
+    alias emptytrash='sudo rm -rfv /Volumes/*/.Trashes; rm -rfv ~/.Trash'
+else
+    alias emptytrash='rm -rfv ~/.local/share/Trash/files/* ~/.local/share/Trash/info/* 2>/dev/null'
+fi
+
+## Recursively delete `.DS_Store` files
+alias cleanup="find . -type f -name '*.DS_Store' -ls -delete"
+
+## Kill Chrome renderer tabs to free up memory (preserves extensions)
+alias chromekill="ps ux | grep -E '[Cc]hrome( Helper)? --type=renderer' | grep -v extension-process | awk '{print \$2}' | xargs kill 2>/dev/null"
+
+## Lock the screen (when going AFK)
+if [[ -n "$IS_MACOS" ]]; then
+    alias afk='/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend'
+else
+    alias afk='loginctl lock-session 2>/dev/null || xdg-screensaver lock'
+fi
+
+## Reload the shell
+alias reload="exec $SHELL -l"
+
+# SUDO — zsh equivalent of bash's `sudo $(history -p !!)`
+alias dang='sudo $(fc -ln -1)'
 
 
-# JAMK Courses
-alias jamk="cd ${JAMK_DIR}/sem6"
+## DISK USAGE
+# ---------------------------------------------------------------
+alias ducks='du -chs * | sort -rh | head -11' # human-readable
+alias ds='du -ks * | sort -n'
 
-# Sem 5
-alias android="cd ${JAMK_DIR}/sem5/ttc8460-android-application-development/ && code ."
-alias mobile="cd ${JAMK_DIR}/sem5/ttc8450-mobile-application-development/ && code ."
-alias rnd="cd ${JAMK_DIR}/sem5/zzpp0620-research-and-development/ && code ."
 
-# internship
-alias wimma="cd ${JAMK_DIR}/wimma-capstone && code ."
+## MEMORY
+# ---------------------------------------------------------------
+alias wotgobblemem='ps -o time,ppid,pid,nice,pcpu,pmem,user,comm -A | sort -n -k 6 | tail -15'
 
-# Sem 6
-alias phys="cd ${JAMK_DIR}/sem6/tt00cd68-phys3-electromagnetism-and-waves/ && code ."
-alias was="cd ${JAMK_DIR}/sem6/ttc6500-web-application-security/ && code ."
-alias nom="cd ${JAMK_DIR}/sem6/tzlm7030-optimization-network-models/ && code ."
-alias math="cd ${JAMK_DIR}/sem6/tzlm3300-math3-derivative-and-integral/ && code ."
+
+## DNS
+# ---------------------------------------------------------------
+if [[ -n "$IS_MACOS" ]]; then
+    alias flushdns='sudo dscacheutil -flushcache && sudo killall -HUP mDNSResponder'
+else
+    alias flushdns='sudo resolvectl flush-caches 2>/dev/null || sudo systemd-resolve --flush-caches 2>/dev/null || echo "no known resolver to flush — check your distro"'
+fi
+
+
+## SECURITY
+# ---------------------------------------------------------------
+alias netlisteners='lsof -i -P | grep LISTEN'

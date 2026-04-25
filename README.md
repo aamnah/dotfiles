@@ -2,7 +2,7 @@
 
 These files are an accumulation of bash and zsh aliases, shortcuts and functions that i have collected over the years.
 
-Many of the entries (`emptytrash`, `localip`, `chromekill`, `afk`) are Mac-specific in their underlying commands; they're being ported to Linux as needed.
+Cross-platform: aliases that wrap commands with Linux/macOS differences (GNU vs BSD flags, trash paths, DNS flush, screen lock) detect the OS at source-time and pick the right invocation. Same alias name on both platforms, the right command behind it.
 
 
 ## Install
@@ -69,52 +69,60 @@ Default nano:
 Custom config:
 ![Custom config](./screenshots/nanorc-custom.png)
 
-.bash_aliases
+.bash_aliases / .zsh_aliases
 ---
-Shortcuts for directories, programs, system processes and commands.
+
+Shortcuts for directories, programs, system processes and commands. Both files contain the same universal toolset, byte-identical at the source level. The only structural difference is `dang` (uses bash's `history -p` vs zsh's `fc -ln -1` since shell builtins differ).
 
 #### Directories
-- `desk` go to Desktop
-- `dl` go to Downloads
-- `proj` go to the folder where all projects are (variable)
-- `sites` go to the folder where all sites are (variable)
+- `desk` go to Desktop — `cd ~/Desktop`
+- `dl` go to Downloads — `cd ~/Downloads`
 
-#### Commands and tools
-- `ydl` shortcut for `youtube-dl`
-- `gath` starts ssh-agent and loads SSH key (variable). used for Git purposes
+#### Smart Listings (cross-platform: GNU `--color=` vs BSD `-G`)
+- `ll` List all (-a) files and directories in a detailed (-l), human readable (-h), color coded way with a trailing slash (-F)
+- `ls` Coloured short listing — `ls -hF` + colour
+- `l` Coloured line-based listing instead of columns — `ls -aFx` + colour
+- `lsd` Only list directories, including hidden ones — `ls -dl */ .[^.]*/`
+- `la` List all (incl. hidden) — `ls -A`
+- `tree` Always list the tree command in color coding — `tree -C`
+
+#### Search
+- `grep`, `egrep`, `fgrep` Always coloured — `--color=always`
+
+#### Tools
+- `c` Shortcut for `claude`
+- `kkk` Kill the current tmux session — `tmux kill-session`
+
+#### IPs
+- `myip` Show public IP via curl — `curl ifconfig.me`
+- `ip` Show public IP via OpenDNS — `dig +short myip.opendns.com @resolver1.opendns.com`
+- `localip` Show local IP — `ipconfig getifaddr en0` (macOS) / `hostname -I` (Linux)
 
 #### Misc.
-- `emptytrash` Empty the Trash on all mounted volumes and the main HDD
-- `cleanup` Recursively delete _.DS_Store_ files
-- `chromekill` Kill all the tabs in Chrome to free up memory
-- `afk` Lock the screen (when going AFK)
-- `reload` Reload the shell (i.e. invoke as a login shell)
-- `tree` Always list the tree command in color coding
-
-#### Smart Listings
-- `ll` List all (-a) files and directories in a detailed (-l), human readable (-h), color coded (-G) way with a trailing slash (-F).
-- `lsd` Only list directories, including hidden ones
+- `emptytrash` Empty the Trash on all mounted volumes and the main HDD — `/Volumes/*/.Trashes` + `~/.Trash` (macOS) / `~/.local/share/Trash/` (Linux, XDG spec)
+- `cleanup` Recursively delete `.DS_Store` files — `find . -type f -name '*.DS_Store' -delete`
+- `chromekill` Kill all the tabs in Chrome to free up memory (preserves extensions). Cross-platform regex matches both `Chrome Helper` (macOS) and `chrome` (Linux)
+- `afk` Lock the screen (when going AFK) — `CGSession -suspend` (macOS) / `loginctl lock-session` → `xdg-screensaver lock` (Linux)
+- `reload` Reload the shell (i.e. invoke as a login shell) — `exec $SHELL -l`
 
 #### Sudo
 - `dang` repeat the last command with sudo, basically `sudo !!` equivalent
 
 #### Disk Usage
-- `ducks` List top ten largest files/directories in current directory
-- `ds` Find the biggest in a folder
+- `ducks` List top ten largest files/directories in current directory, human-readable — `du -chs * | sort -rh | head -11`
+- `ds` Find the biggest in a folder — `du -ks * | sort -n`
 
 #### Memory
-- `wotgobblemem` What's gobbling the memory?
+- `wotgobblemem` What's gobbling the memory? — `ps` sorted by memory %, top 15
 
 #### DNS
-- `flush`, `flushdns` Flush DNS cache
-- `dig` Better and more to-the-point dig results
-
-#### IPs
-- `ip`, `myip` Show Public IP address
-- `localip` Show local IP
+- `flushdns` Flush DNS cache — `dscacheutil -flushcache` + `killall -HUP mDNSResponder` (macOS) / `resolvectl flush-caches` chain (Linux)
 
 #### Security
-- `netlisteners` Show active network listeners
+- `netlisteners` Show active network listeners — `lsof -i -P | grep LISTEN`
+
+#### What's *not* in the repo
+Personal/machine-specific aliases (project dirs, SSH host shortcuts, school course dirs) live in your local `~/.zsh_aliases` only — they reference paths and hosts that don't exist on a fresh machine, so they're not committed.
 
 
 
@@ -157,10 +165,6 @@ echo 'eval "$(starship init zsh)"'  >> ~/.zshrc
 - `spy()` identify and search for active network connections
 - `sniff()` sniff GET and POST traffic over http v2
 - `bell()` Ring the system bell after finishing a script/compile
-
-## .zsh_aliases
-
-zsh-side aliases (parity audit with `.bash_aliases` pending). Currently includes ssh shortcuts (`n` for hermes), tmux helpers (`kkk`), project-dir cd shortcuts (`proj`, `sites`, `notes`, `lasik`), and JAMK course shortcuts.
 
 ## .zsh_functions
 
