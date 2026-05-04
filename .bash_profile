@@ -64,7 +64,7 @@ fi
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
 # NOTE: bash brace expansion is broken by spaces between commas — keep this list tight.
-for file in ~/.{aliases,bash_functions}; do
+for file in ~/.{aliases,functions}; do
   [ -f "$file" ] && source "$file"
 done
 unset file

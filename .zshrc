@@ -44,7 +44,7 @@ setopt HIST_IGNORE_SPACE    # don't record a line that starts with a space
 autoload -Uz compinit && compinit
 
 # Personal aliases and functions
-for file in $HOME/.{aliases,zsh_functions}; do
+for file in $HOME/.{aliases,functions}; do
   [[ -f "$file" ]] && source "$file"
 done
 unset file
