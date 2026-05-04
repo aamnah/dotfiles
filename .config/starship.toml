@@ -10,10 +10,10 @@
 
 # Top-level keys MUST come before any [section] table headers,
 # otherwise TOML scopes them into the previous section.
-add_newline = true
+add_newline = true    # Inserts a blank line between shell prompts
 palette = "lasik"
 
-format = """[┌──\\[](muted)$directory[\\]](muted)$git_branch$git_status
+format = """[┌──\\[$hostname](muted)$directory[\\]](muted)$git_branch$git_status
 $character"""
 
 [palettes.lasik]
@@ -34,9 +34,9 @@ style_root = "red"
 format = "[$user]($style)"
 
 [hostname]
-ssh_only = false
+ssh_only = true
 style = "teal"
-format = "[$hostname]($style)"
+format = "[$hostname ]($style)"
 
 [directory]
 style = "blue"
