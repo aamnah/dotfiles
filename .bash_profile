@@ -3,7 +3,7 @@
 #          File: ~/.bash_profile
 #   Description: bash startup — prompt, history, shopt, color, paths, aliases
 # Compatibility: Debian, Ubuntu, Armbian, macOS
-#       Version: 0.5
+#       Version: 0.5.1
 #        Author: Aamnah
 #          Link: https://aamnah.com
 #          Date: 2020-07-15
@@ -45,31 +45,6 @@ else
 	fi
 fi
 
-
-# enable color support of ls and also add handy aliases
-if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=always'
-    alias dir='dir --color=always'
-    alias vdir='vdir --color=always'
-
-    alias grep='grep --color=always'
-    alias fgrep='fgrep --color=always'
-    alias egrep='egrep --color=always'
-fi
-
-# Alias and other definitions
-# SOURCE OTHER FILES
-# source other bash conf files like ~/.aliases etc
-# You may want to put all your additions into a separate file like
-# ~/.bash_aliases, instead of adding them here directly.
-# See /usr/share/doc/bash-doc/examples in the bash-doc package.
-# NOTE: bash brace expansion is broken by spaces between commas — keep this list tight.
-for file in ~/.{aliases,functions}; do
-  [ -f "$file" ] && source "$file"
-done
-unset file
-
 # BASH HISTORY
 # Add Timestamps to Bash histry `history`
 export HISTTIMEFORMAT="%c "
@@ -105,6 +80,21 @@ export LANG="en_US"
 # Enable color coding for tree and ls and define colors
 export CLICOLOR=1
 #export LSCOLORS="gxBxhxDxfxhxhxhxhxcxcx"
+
+
+
+# Alias and other definitions
+# SOURCE OTHER FILES
+# source other bash conf files like ~/.aliases etc
+# You may want to put all your additions into a separate file like
+# ~/.bash_aliases, instead of adding them here directly.
+# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+# NOTE: bash brace expansion is broken by spaces between commas — keep this list tight.
+for file in ~/.{aliases,aliases.local,functions,functions.local}; do
+  [ -f "$file" ] && source "$file"
+done
+unset file
+
 
 # PATHS
 # -----------------------------------------------------------------------
