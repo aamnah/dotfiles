@@ -4,7 +4,7 @@
 #          Link: https://aamnah.com
 #       Version: 0.5
 #          Date: 2020-07-15
-#       Lastmod: 2026-04-24
+#       Lastmod: 2026-05-04
 #   Description: bash startup — prompt, history, shopt, color, paths, aliases
 # Compatibility: Debian, Ubuntu, Armbian, macOS
 #-----------------------------------------------------------------------
@@ -64,7 +64,7 @@ fi
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
 # NOTE: bash brace expansion is broken by spaces between commas — keep this list tight.
-for file in ~/.{bash_aliases,bash_functions}; do
+for file in ~/.{aliases,bash_functions}; do
   [ -f "$file" ] && source "$file"
 done
 unset file

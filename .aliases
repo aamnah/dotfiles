@@ -1,18 +1,19 @@
-#!/bin/bash
+# shellcheck shell=bash
+# the above directive is only for editors/linters
 #-----------------------------------------------------------------------
 #        Author: Aamnah
 #          Link: https://aamnah.com
-#       Version: 0.4
+#       Version: 0.4.1
 #          Date: 2020-07-15
-#       Lastmod: 2026-04-24
-#   Description: Bash aliases — dirs, listings, grep, IPs, trash, DNS (cross-platform: Linux + macOS)
+#       Lastmod: 2026-05-04
+#   Description: Bash/Zsh aliases — dirs, listings, grep, IPs, trash, DNS (cross-platform: Linux + macOS)
 # Compatibility: Debian, Ubuntu, Armbian, macOS
+#          File: ~/.aliases
 #-----------------------------------------------------------------------
-
-# ~/.bash_aliases
+# Cross-platform (sourced in .bash_profile and .zshrc)
 # More ideas: http://alias.sh/  and  http://www.commandlinefu.com/commands/
 
-# OS detection — set once, used to gate platform-specific aliases below
+# OS detection — set once, used by aliases that differ between Linux (GNU) and macOS (BSD)
 case "$(uname -s)" in
     Darwin) IS_MACOS=1 ;;
     Linux)  IS_LINUX=1 ;;
@@ -37,7 +38,7 @@ else
 fi
 
 # Only list directories (including hidden, excluding . and ..)
-# Cross-platform: works without GNU-specific flags
+# Cross-platform: portable across BSD/GNU
 alias lsd='ls -dl */ .[^.]*/ 2>/dev/null'
 
 alias la='ls -A'
@@ -63,7 +64,7 @@ alias peaclock="peaclock --config-dir ~/.config/peaclock"
 alias myip='curl ifconfig.me'
 alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
 
-# localip differs: macOS has `ipconfig getifaddr`; Linux uses `hostname -I`
+# localip differs: macOS uses `ipconfig getifaddr`; Linux uses `hostname -I`
 if [[ -n "$IS_MACOS" ]]; then
     alias localip='ipconfig getifaddr en0'
 else
@@ -100,8 +101,15 @@ fi
 alias reload="exec $SHELL -l"
 
 # SUDO
-alias dang='sudo $(history -p \!\!)'
-
+# $ZSH_VERSION & $BASH_VERSION are set by the shell itself at startup 
+# and aren't exported, so they don't leak between shells
+# If .aliases is sourced from .zshrc, only $ZSH_VERSION is defined. 
+# And if .aliases is sourced from .bash_profile, then only $BASH_VERSION is defined 
+if [[ -n "$ZSH_VERSION" ]]; then
+  alias dang='sudo $(fc -ln -1)'
+elif [[ -n "$BASH_VERSION" ]]; then 
+  alias dang='sudo $(history -p \!\!)'
+fi
 
 ## DISK USAGE
 # ---------------------------------------------------------------

@@ -4,7 +4,7 @@
 #          Link: https://aamnah.com
 #       Version: 0.2.0
 #          Date: 2026-04-24
-#       Lastmod: 2026-04-24
+#       Lastmod: 2026-05-04
 #   Description: zsh interactive config — prompt, completion, aliases, functions
 # Compatibility: Debian, Ubuntu, Armbian, macOS
 #-----------------------------------------------------------------------
@@ -44,8 +44,10 @@ setopt HIST_IGNORE_SPACE    # don't record a line that starts with a space
 autoload -Uz compinit && compinit
 
 # Personal aliases and functions
-[[ -f "$HOME/.zsh_aliases" ]]   && source "$HOME/.zsh_aliases"
-[[ -f "$HOME/.zsh_functions" ]] && source "$HOME/.zsh_functions"
+for file in $HOME/.{aliases,zsh_functions}; do
+  [[ -f "$file" ]] && source "$file"
+done
+unset file
 
 # Starship prompt (cross-shell, configured via ~/.config/starship.toml)
 command -v starship >/dev/null 2>&1 && eval "$(starship init zsh)"
