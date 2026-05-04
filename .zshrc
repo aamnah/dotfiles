@@ -15,22 +15,6 @@
 # bash equivalent: ~/.bashrc
 #
 
-# Deno completions search path
-if [[ ":$FPATH:" != *":$HOME/.zsh/completions:"* ]]; then
-    export FPATH="$HOME/.zsh/completions:$FPATH"
-fi
-
-# tmuxp manages its own session titles
-export DISABLE_AUTO_TITLE='true'
-
-# Homebrew / Linuxbrew shellenv (sets PATH/MANPATH/INFOPATH for brew-installed packages)
-for brewbin in /home/linuxbrew/.linuxbrew/bin/brew /opt/homebrew/bin/brew /usr/local/bin/brew; do
-    if [[ -x "$brewbin" ]]; then
-        eval "$($brewbin shellenv)"
-        break
-    fi
-done
-
 # Shell options (defaults that OMZ used to set)
 setopt AUTO_CD              # type a directory name (incl. "..") to cd into it
 setopt AUTO_PUSHD           # every cd pushes the previous dir on the stack — popd to go back
@@ -43,11 +27,17 @@ setopt HIST_IGNORE_SPACE    # don't record a line that starts with a space
 # Tab completion (OMZ used to init this for you)
 autoload -Uz compinit && compinit
 
+# Starship prompt (cross-shell, configured via ~/.config/starship.toml)
+command -v starship >/dev/null 2>&1 && eval "$(starship init zsh)"
+
+# tmuxp manages its own session titles
+export DISABLE_AUTO_TITLE='true'
+
 # Personal aliases and functions
-for file in $HOME/.{aliases,functions}; do
+# get machine-specific stuff from *.local files
+for file in $HOME/.{aliases,aliases.local,functions,functions.local,zshrc.local}; do
   [[ -f "$file" ]] && source "$file"
 done
 unset file
 
-# Starship prompt (cross-shell, configured via ~/.config/starship.toml)
-command -v starship >/dev/null 2>&1 && eval "$(starship init zsh)"
+#-----------------------------------------------------------------------
