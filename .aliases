@@ -26,7 +26,16 @@ alias dl='cd ~/Downloads'
 
 # COMMANDS
 # ---------------------------------------------------------------
-# ls colorflag differs: GNU uses --color=, BSD (macOS) uses -G
+# -a for all (including hidden and .files)
+# -l for detailed
+# -h for human readable, print sizes like 1K 234M 2.3G etc.
+# -A List all entries except for . and ...  Always set for the super-user.
+# -F Display indicators. a slash (`/') immediately after each pathname that is a directory,
+    #  an asterisk (`*') after each that is executable, an at sign (`@') after
+    #  each symbolic link, an equals sign (`=') after each socket, a percent sign
+    #  (`%') after each whiteout, and a vertical bar (`|') after each that is a FIFO.
+# Colorized output for ls colorflag differs: GNU (Ubuntu) uses --color=, BSD (macOS) uses -G
+# -x for line based listing instead of columns. the multi-column output is produced with entries sorted across, rather than down, the columns
 if [[ -n "$IS_MACOS" ]]; then
     alias ls='ls -hFG'
     alias ll='ls -alhFG'
