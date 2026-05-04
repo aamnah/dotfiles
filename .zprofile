@@ -1,12 +1,13 @@
 #!/usr/bin/env zsh
 #-----------------------------------------------------------------------
-#        Author: Aamnah
-#          Link: https://aamnah.com
-#       Version: 0.1.0
-#          Date: 2026-04-24
-#       Lastmod: 2026-04-24
+#          File: ~/.zprofile
 #   Description: zsh login profile — runs once per login session, before .zshrc
 # Compatibility: Debian, Ubuntu, Armbian, macOS
+#       Version: 0.1.0
+#        Author: Aamnah
+#          Link: https://aamnah.com
+#          Date: 2026-04-24
+#       Lastmod: 2026-04-24
 #-----------------------------------------------------------------------
 #
 # Sourced for LOGIN shells only, before .zshrc.

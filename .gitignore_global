@@ -1,11 +1,12 @@
 #-----------------------------------------------------------------------
-#        Author: Aamnah
-#          Link: https://aamnah.com
-#       Version: 0.1.0
-#          Date: 2018-12-20
-#       Lastmod: 2026-04-24
+#          File: ~/.gitignore_global
 #   Description: Global gitignore — OS cruft, editor files, caches
 # Compatibility: Debian, Ubuntu, Armbian, macOS
+#       Version: 0.1.0
+#        Author: Aamnah
+#          Link: https://aamnah.com
+#          Date: 2018-12-20
+#       Lastmod: 2026-04-24
 #-----------------------------------------------------------------------
 
 # ~/.gitignore

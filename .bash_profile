@@ -1,12 +1,13 @@
 #!/bin/bash
 #-----------------------------------------------------------------------
-#        Author: Aamnah
-#          Link: https://aamnah.com
-#       Version: 0.5
-#          Date: 2020-07-15
-#       Lastmod: 2026-05-04
+#          File: ~/.bash_profile
 #   Description: bash startup — prompt, history, shopt, color, paths, aliases
 # Compatibility: Debian, Ubuntu, Armbian, macOS
+#       Version: 0.5
+#        Author: Aamnah
+#          Link: https://aamnah.com
+#          Date: 2020-07-15
+#       Lastmod: 2026-05-04
 #-----------------------------------------------------------------------
 #
 # Sourced for LOGIN shells. Doubles as ~/.bashrc (interactive) here —

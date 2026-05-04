@@ -1,12 +1,13 @@
 #!/usr/bin/env zsh
 #-----------------------------------------------------------------------
-#        Author: Aamnah
-#          Link: https://aamnah.com
-#       Version: 0.2.0
-#          Date: 2026-04-24
-#       Lastmod: 2026-05-04
+#          File: ~/.zshrc
 #   Description: zsh interactive config — prompt, completion, aliases, functions
 # Compatibility: Debian, Ubuntu, Armbian, macOS
+#       Version: 0.2.0
+#        Author: Aamnah
+#          Link: https://aamnah.com
+#          Date: 2026-04-24
+#       Lastmod: 2026-05-04
 #-----------------------------------------------------------------------
 #
 # Sourced for INTERACTIVE shells (every new terminal tab, login or otherwise).

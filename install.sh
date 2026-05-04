@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 #-----------------------------------------------------------------------
-#        Author: Aamnah
-#          Link: https://aamnah.com
-#       Version: 0.1.0
-#          Date: 2026-04-24
-#       Lastmod: 2026-04-24
+#          File: install.sh
 #   Description: Dotfile installer with OS/arch detection (Linux, macOS Intel/ARM)
 # Compatibility: Debian, Ubuntu, Armbian, macOS
+#       Version: 0.1.0
+#        Author: Aamnah
+#          Link: https://aamnah.com
+#          Date: 2026-04-24
+#       Lastmod: 2026-04-24
 #-----------------------------------------------------------------------
 
 set -euo pipefail

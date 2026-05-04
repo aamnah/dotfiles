@@ -1,13 +1,13 @@
 #!/bin/bash
 #-----------------------------------------------------------------------
-#        Author: Aamnah
-#          Link: https://aamnah.com
-#       Version: 0.1.0
-#          Date: 2024-04-25
-#       Lastmod: 2024-04-25
+#          File: ~/.config/tmux/reset.tmux
 #   Description: Reset theme-controlled tmux options before loading a theme
 # Compatibility: Debian, Ubuntu, Armbian, macOS
-#          File: ~/.config/tmux/reset.tmux
+#       Version: 0.1.0
+#        Author: Aamnah
+#          Link: https://aamnah.com
+#          Date: 2024-04-25
+#       Lastmod: 2024-04-25
 #-----------------------------------------------------------------------
 
 # Reset any stale styles from previously-tested themes before a new theme loads.

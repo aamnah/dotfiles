@@ -1,8 +1,9 @@
 # shellcheck shell=bash
+# the above directive is only for editors/linters
 #-----------------------------------------------------------------------
+#          File: ~/.functions
 #   Description: Bash/zsh shell functions — take, ii, getwebsite, spy, t 
 # Compatibility: Debian, Ubuntu, Armbian, macOS
-#          File: ~/.functions
 #       Version: 0.3.1
 #        Author: Aamnah
 #          Link: https://aamnah.com

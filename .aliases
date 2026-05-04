@@ -1,14 +1,14 @@
 # shellcheck shell=bash
 # the above directive is only for editors/linters
 #-----------------------------------------------------------------------
-#        Author: Aamnah
-#          Link: https://aamnah.com
-#       Version: 0.4.1
-#          Date: 2020-07-15
-#       Lastmod: 2026-05-04
+#          File: ~/.aliases
 #   Description: Bash/Zsh aliases — dirs, listings, grep, IPs, trash, DNS (cross-platform: Linux + macOS)
 # Compatibility: Debian, Ubuntu, Armbian, macOS
-#          File: ~/.aliases
+#       Version: 0.4.1
+#        Author: Aamnah
+#          Link: https://aamnah.com
+#          Date: 2020-07-15
+#       Lastmod: 2026-05-04
 #-----------------------------------------------------------------------
 # Cross-platform (sourced in .bash_profile and .zshrc)
 # More ideas: http://alias.sh/  and  http://www.commandlinefu.com/commands/

@@ -1,12 +1,13 @@
 #!/usr/bin/env zsh
 #-----------------------------------------------------------------------
-#        Author: Aamnah
-#          Link: https://aamnah.com
-#       Version: 0.1.0
-#          Date: 2026-04-24
-#       Lastmod: 2026-05-04
+#          File: ~/.zshenv
 #   Description: zsh env — PATH and env vars sourced by every zsh invocation
 # Compatibility: Debian, Ubuntu, Armbian, macOS
+#       Version: 0.1.0
+#        Author: Aamnah
+#          Link: https://aamnah.com
+#          Date: 2026-04-24
+#       Lastmod: 2026-05-04
 #-----------------------------------------------------------------------
 # Sourced for EVERY zsh invocation: interactive, login, scripts, cron, GUI launches.
 # .zshenv is sourced every time zsh starts, no matter the mode:

@@ -1,14 +1,14 @@
 #!/bin/bash
 #-----------------------------------------------------------------------
-#        Author: Aamnah
-#          Link: https://aamnah.com
-#       Version: 0.1.0
-#          Date: 2024-04-24
-#       Lastmod: 2024-04-25
+#          File: ~/.config/tmux/catppuccin.tmux
 #   Description: Catppuccin Tmux Theme
 #         Theme: https://github.com/catppuccin/tmux
 # Compatibility: Debian, Ubuntu, Armbian, macOS
-#          File: ~/.config/tmux/catppuccin.tmux
+#       Version: 0.1.0
+#        Author: Aamnah
+#          Link: https://aamnah.com
+#          Date: 2024-04-24
+#       Lastmod: 2024-04-25
 #-----------------------------------------------------------------------
 
 source-file ~/.config/tmux/reset.tmux

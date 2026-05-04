@@ -1,14 +1,14 @@
 #!/bin/bash
 #-----------------------------------------------------------------------
-#        Author: Aamnah
-#          Link: https://aamnah.com
-#       Version: 0.1.0
-#          Date: 2018-08-16
-#       Lastmod: 2024-04-25
+#          File: ~/.config/tmux/lasik.tmux
 #   Description: Lasik Tmux Theme (matches Lasik VSCode theme)
 #         Theme: https://marketplace.visualstudio.com/items?itemName=AmnaAkram.lasik
 # Compatibility: Debian, Ubuntu, Armbian, macOS
-#          File: ~/.config/tmux/lasik.tmux
+#       Version: 0.1.0
+#        Author: Aamnah
+#          Link: https://aamnah.com
+#          Date: 2018-08-16
+#       Lastmod: 2024-04-25
 #-----------------------------------------------------------------------
 
 source-file ~/.config/tmux/reset.tmux

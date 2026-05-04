@@ -1,14 +1,13 @@
 "-----------------------------------------------------------------------
-"        Author: Aamnah
-"          Link: https://aamnah.com
-"       Version: 0.0.2
-"          Date: 2018-08-16
-"       Lastmod: 2026-04-24
+"          File: ~/.vimrc
 "   Description: Vim config — line numbers, tabs, search, syntax on
 " Compatibility: Debian, Ubuntu, Armbian, macOS
+"       Version: 0.0.2
+"        Author: Aamnah
+"          Link: https://aamnah.com
+"          Date: 2018-08-16
+"       Lastmod: 2026-04-24
 "-----------------------------------------------------------------------
-
-" ~/.vimrc
 
 " Basics -------------------------------------------------------------
 
