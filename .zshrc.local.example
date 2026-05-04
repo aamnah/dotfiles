@@ -1,0 +1,21 @@
+#!/usr/bin/env zsh
+
+# File: ~/.zshrc.local
+# Sourced by: ~/.zshrc
+
+# Keep machine-specific stuff here, anything that does not need to be synced.
+# For example, not all machines will have Java or HuggingFace installed
+# Paths also change based on OS
+
+# Homebrew / Linuxbrew shellenv (sets PATH/MANPATH/INFOPATH for brew-installed packages)
+for brewbin in /home/linuxbrew/.linuxbrew/bin/brew /opt/homebrew/bin/brew /usr/local/bin/brew; do
+    if [[ -x "$brewbin" ]]; then
+        eval "$($brewbin shellenv)"
+        break
+    fi
+done
+
+# NVM
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
