@@ -41,6 +41,33 @@ chsh -s "$(which zsh)" "$USER"
 
 `install.sh` does not run `chsh` for you — switching login shells is an explicit opt-in.
 
+### Fixing syntax highlighting in VS Code
+
+To fix syntax highlighting for startup files in VS Code, add this to the `settings.json` globally
+
+```json
+"files.associations": {
+    ".aliases": "shellscript",
+    ".aliases.local": "shellscript",
+    ".zsh_aliases": "shellscript",
+    ".zsh_aliases.local": "shellscript",
+    ".functions": "shellscript",
+    ".functions.local": "shellscript",
+    ".zsh_functions": "shellscript",
+    ".zsh_functions.local": "shellscript",
+    ".zshenv.local": "shellscript",
+    ".zshrc.local": "shellscript",
+    "*.zsh": "shellscript"
+}
+```
+
+### File naming conventions
+For the `.aliases` and `.functions` files, you can call them `.bash_aliases` or `.zsh_aliases` if you want. Files without the preceding `.bash_` and `.zsh_` are meant to signify cross-shell compatibility, i.e. they work in both bash and zsh.
+
+Even though `.aliases` is neater, the one reason i would still name it `.zsh_aliases` is so that it shows up next to all the the other `.zsh` files.
+
+I guess you can rename them during the install process to match the file naming of whichever shell are you using. I don't expect to be using both at the same time.
+
 ### Startup files
 
 | zsh | runs when | bash equivalent | what to put here |
@@ -58,6 +85,52 @@ In practice most personal config can live in `.zshrc` without issue. The split m
 
 bash collapses this distinction more aggressively: `.bash_profile` is the login file, `.bashrc` the interactive file, and many setups source the latter from the former so the same content runs in both contexts. There's no `.bash_env` analog — bash has nothing that runs for every invocation including scripts.
 
+### $OSTYPE vs $(uname -s)
+
+`$(uname -s)` is POSIX-portable. it works in bash, zsh, sh, dash, ash, busybox. One subprocess at startup (~1–5ms).
+
+`$OSTYPE` is built into both bash and zsh, set at compile time, no subprocess needed. In POSIX (sh / dash / ash / busybox) it is not set; you'd get an empty string.
+
+Use `$(uname -s)` if you want POSIX compatibility, e.g. Alpine inside Docker. The cost is one `fork+exec` of `/usr/bin/uname`, ~1–5ms. Negligible if it runs once at shell start; meaningful if you accidentally re-run it on every command.
+
+```bash
+# Works in bash, zsh, dash, ash. One subprocess at startup.
+case "$(uname -s)" in
+  Darwin)  IS_MACOS=1 ;;
+  Linux)   IS_LINUX=1 ;;
+  FreeBSD) IS_BSD=1   ;;
+esac
+export IS_MACOS IS_LINUX IS_BSD
+```
+
+Use `$OSTYPE` if you only care about bash and zsh. If 
+
+```bash
+# ~/.zshenv (early — before .zshenv.local)
+case "$OSTYPE" in
+  darwin*)  IS_MACOS=1 ;;
+  linux*)   IS_LINUX=1 ;;
+  freebsd*) IS_BSD=1   ;;
+esac
+export IS_MACOS IS_LINUX IS_BSD
+```
+
+When using zsh, define it once in `.zshenv`. Then `.aliases`, `.zshenv.local`, anything else just reads `$IS_MACOS`. Zero subprocesses, set only once.
+
+If you ever add a `.profile` for POSIX `sh` (e.g., for a server where you can't install zsh), then use `uname -s` in that file only, and have it set the same `IS_MACOS`/`IS_LINUX` vars so consumers don't care which mechanism produced them.
+
+```bash
+# OS detection — set once, used by aliases that differ between Linux (GNU) and macOS (BSD).
+# Skip the ~1-5ms uname subprocess if .zshenv (or another caller) already set the flags.
+if [[ -z "$IS_MACOS$IS_LINUX" ]]; then
+  case "$(uname -s)" in
+    Darwin) IS_MACOS=1 ;;
+    Linux)  IS_LINUX=1 ;;
+  esac
+fi
+```
+
+The string concatenation in `"$IS_MACOS$IS_LINUX"` is a one-line way to ask "are both empty?" — if either is `1`, the concatenated string is non-empty and `-z` is false. Equivalent to `[[ -z "$IS_MACOS" && -z "$IS_LINUX" ]]` but shorter. Both work; pick whichever you find more readable.
 
 ## Config files
 

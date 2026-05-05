@@ -2,5 +2,11 @@
 .zsh_secrets
 .zshrc.local
 .zshenv.local
+
 .aliases.local
+.zsh_aliases.local
+.bash_aliases.local
+
 .functions.local
+.zsh_functions.local
+.bash_functions.local

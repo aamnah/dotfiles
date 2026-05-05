@@ -7,16 +7,33 @@
 # For example, not all machines will have Java or HuggingFace installed
 # Paths also change based on OS
 
-
-# NVM
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-
 # Homebrew (cross-platform)
 # Load Homebrew from the same dotfiles on different operating systems
-# https://docs.brew.sh/Tips-and-Tricks#load-homebrew-from-the-same-dotfiles-on-different-operating-systems
-command -v brew || export PATH="/opt/homebrew/bin:/home/linuxbrew/.linuxbrew/bin:/usr/local/bin"
-command -v brew && eval "$(brew shellenv)"
+# Homebrew / Linuxbrew shellenv (sets PATH/MANPATH/INFOPATH for brew-installed packages)
+for brewbin in /home/linuxbrew/.linuxbrew/bin/brew /opt/homebrew/bin/brew /usr/local/bin/brew; do
+    if [[ -x "$brewbin" ]]; then
+        eval "$($brewbin shellenv)"
+        break
+    fi
+done
 
+# NVM 
+export NVM_DIR="$HOME/.nvm"
+# nvm.sh is lazy-loaded here (instead of .zshenv) to keep startup fast
+# Stubs source nvm.sh on first invocation, then re-exec the
+# real command. Was the biggest startup cost (~150–300ms eager source).
+nvm()  { unset -f nvm node npm npx 2>/dev/null; . "$NVM_DIR/nvm.sh"; nvm "$@"; }
+node() { unset -f nvm node npm npx 2>/dev/null; . "$NVM_DIR/nvm.sh"; node "$@"; }
+npm()  { unset -f nvm node npm npx 2>/dev/null; . "$NVM_DIR/nvm.sh"; npm "$@"; }
+npx()  { unset -f nvm node npm npx 2>/dev/null; . "$NVM_DIR/nvm.sh"; npx "$@"; }
+# Put default node's bin on PATH so quick `node -v` works without firing the lazy load.
+# Resolve the alias chain (default → lts/iron → 20.18.0) so PATH gets a real version dir.
+if [[ -s "$NVM_DIR/alias/default" ]]; then
+  _nvm_default="$(<"$NVM_DIR/alias/default")"
+  while [[ -s "$NVM_DIR/alias/$_nvm_default" ]]; do
+    _nvm_default="$(<"$NVM_DIR/alias/$_nvm_default")"
+  done
+  [[ -d "$NVM_DIR/versions/node/v$_nvm_default" ]] && \
+    export PATH="$NVM_DIR/versions/node/v$_nvm_default/bin:$PATH"
+  unset _nvm_default
+fi

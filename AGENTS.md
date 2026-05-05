@@ -50,3 +50,5 @@ Source resolution is centralized in `fetch_source <repo-relative-path>`. Local m
 - Many aliases/functions in `.bash_aliases`, `.bash_functions`, and `.dev` are macOS-oriented (e.g. `emptytrash` targets `/Volumes/*/.Trashes`, `localip` uses `ipconfig getifaddr en0`). The README calls this out. Porting individual commands to Linux is expected and welcome, but don't assume a command works cross-platform without checking.
 - `.config/tmux/lasik.tmux` is the "Lasik" theme (matches the author's VSCode theme). Color palette variables are defined near the top of the file — edit those rather than the individual `set -g` lines when adjusting colors.
 - `README.md` documents the user-facing aliases and functions. Keep it in sync when renaming or removing entries.
+- `~` doesn't expand, use `$HOME` instead
+- don't take away useful comments. when adding new code, add comments to briefly mention why it was added and, if applicable, what would happen if it is not added

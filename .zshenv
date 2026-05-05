@@ -3,11 +3,11 @@
 #          File: ~/.zshenv
 #   Description: zsh env — PATH and env vars sourced by every zsh invocation
 # Compatibility: Debian, Ubuntu, Armbian, macOS
-#       Version: 0.1.0
+#       Version: 0.1.1
 #        Author: Aamnah
 #          Link: https://aamnah.com
 #          Date: 2026-04-24
-#       Lastmod: 2026-05-04
+#       Lastmod: 2026-05-05
 #-----------------------------------------------------------------------
 # Sourced for EVERY zsh invocation: interactive, login, scripts, cron, GUI launches.
 # .zshenv is sourced every time zsh starts, no matter the mode:
@@ -18,8 +18,14 @@
 #     any process launched from those shells
 # Put PATH and env vars here so non-interactive contexts (cron, GUI apps, scripts) inherit them
 
-# Source machine-local secrets (not tracked in dotfiles)
-[[ -f "$HOME/.zsh_secrets" ]] && source "$HOME/.zsh_secrets"
+# OS detection — set once, used by aliases that differ between Linux (GNU) and macOS (BSD)
+# since .zshenv is loaded before .zshrc and others, 
+# they will inherit IS_MACOS and IS_LINUX if it is set
+case "$(uname -s)" in
+  Darwin)  IS_MACOS=1 ;;
+  Linux)   IS_LINUX=1 ;;
+esac
+export IS_MACOS IS_LINUX
 
 # Locale settings needed for Fastlane/Cocoapods
 export LC_ALL=en_US.UTF-8
@@ -29,4 +35,87 @@ export LANG=en_US.UTF-8
 # https://learn.microsoft.com/en-us/dotnet/core/tools/telemetry
 export DOTNET_CLI_TELEMETRY_OPTOUT=true   # true means off
 
+# Source machine-local secrets (not tracked in dotfiles)
+[[ -f "$HOME/.zsh_secrets" ]] && source "$HOME/.zsh_secrets"
 
+# Machine-local PATH and env. Lives here (not .zshrc) so non-interactive
+# zsh invocations — cron, scripts, ssh host 'cmd', GUI apps — inherit PATH.
+[[ -f "$HOME/.zshenv.local" ]] && source "$HOME/.zshenv.local"
+
+#-----------------------------------------------------------------------
+
+# Homebrew (cross-platform)
+# Load Homebrew from the same dotfiles on different operating systems
+# Homebrew / Linuxbrew shellenv (sets PATH/MANPATH/INFOPATH for brew-installed packages)
+for brewbin in /home/linuxbrew/.linuxbrew/bin/brew /opt/homebrew/bin/brew /usr/local/bin/brew; do
+    if [[ -x "$brewbin" ]]; then
+        eval "$($brewbin shellenv)"
+        break
+    fi
+done
+
+# NVM 
+export NVM_DIR="$HOME/.nvm"
+# nvm.sh is lazy-loaded here to keep startup fast
+# Stubs source nvm.sh on first invocation, then re-exec the
+# real command. Was the biggest startup cost (~150–300ms eager source).
+nvm()  { unset -f nvm node npm npx 2>/dev/null; . "$NVM_DIR/nvm.sh"; nvm "$@"; }
+node() { unset -f nvm node npm npx 2>/dev/null; . "$NVM_DIR/nvm.sh"; node "$@"; }
+npm()  { unset -f nvm node npm npx 2>/dev/null; . "$NVM_DIR/nvm.sh"; npm "$@"; }
+npx()  { unset -f nvm node npm npx 2>/dev/null; . "$NVM_DIR/nvm.sh"; npx "$@"; }
+# Put default node's bin on PATH so quick `node -v` works without firing the lazy load.
+# Resolve the alias chain (default → lts/iron → 20.18.0) so PATH gets a real version dir.
+if [[ -s "$NVM_DIR/alias/default" ]]; then
+  _nvm_default="$(<"$NVM_DIR/alias/default")"
+  while [[ -s "$NVM_DIR/alias/$_nvm_default" ]]; do
+    _nvm_default="$(<"$NVM_DIR/alias/$_nvm_default")"
+  done
+  [[ -d "$NVM_DIR/versions/node/v$_nvm_default" ]] && \
+    export PATH="$NVM_DIR/versions/node/v$_nvm_default/bin:$PATH"
+  unset _nvm_default
+fi
+
+#-----------------------------------------------------------------------
+
+# .zshenv is the first zsh startup file, and the only one sourced for every zsh invocation, no matter the mode.
+
+#   When it runs
+#------------------------------------
+#   Zsh has five startup files, sourced in this order based on shell type:
+
+#   ┌───────────┬─────────────┬────────────┬──────────────────┐
+#   │   File    │ Every shell │ Login only │ Interactive only │
+#   ├───────────┼─────────────┼────────────┼──────────────────┤
+#   │ .zshenv   │     ✅      │            │                  │
+#   ├───────────┼─────────────┼────────────┼──────────────────┤
+#   │ .zprofile │             │     ✅     │                  │
+#   ├───────────┼─────────────┼────────────┼──────────────────┤
+#   │ .zshrc    │             │            │        ✅        │
+#   ├───────────┼─────────────┼────────────┼──────────────────┤
+#   │ .zlogin   │             │     ✅     │                  │
+#   ├───────────┼─────────────┼────────────┼──────────────────┤
+#   │ .zlogout  │             │ ✅ (exit)  │                  │
+#   └───────────┴─────────────┴────────────┴──────────────────┘
+
+#   "Every shell" means .zshenv runs for:
+#   - Interactive terminals (Terminal.app, iTerm, tmux pane)
+#   - Login shells (ssh user@host, console login)
+#   - Non-interactive scripts (zsh script.zsh, #!/usr/bin/env zsh)
+#   - Single commands (zsh -c 'foo', including ssh host 'foo')
+#   - GUI apps that spawn a zsh subprocess (cron, launchd, editors running shell commands)
+
+#   The other files are conditional: .zprofile/.zlogin only run for login shells, .zshrc only for interactive shells.
+
+# What belongs in it
+#------------------------------------
+# Anything a non-interactive shell needs to function correctly. The classic two:
+
+# 1. PATH and other env vars. A cron job, a #!/usr/bin/env zsh script, or ssh host 'mycmd' never sources .zshrc. If mycmd lives in /opt/homebrew/bin and that path is added in .zshrc, the cron job breaks. Putting it in .zshenv ensures every zsh invocation sees it.
+# 2. Locale / behavior env vars — LANG, LC_ALL, EDITOR, PAGER, tool-specific things like
+# DOTNET_CLI_TELEMETRY_OPTOUT, secrets sourced from a separate file.
+
+# What does NOT belong
+#------------------------------------
+# - Aliases, functions, completion, key bindings, prompt — these only matter at the prompt, so they belong in .zshrc. Putting them in .zshenv wastes time on every script invocation.
+# - Anything that prints output or reads stdin — would corrupt scripts and SSH command output.
+# - Anything slow (e.g., nvm.sh, pyenv init) — runs on every script execution and slows everything down. Lazy-load these in .zshrc instead.

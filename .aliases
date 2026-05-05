@@ -1,28 +1,33 @@
-# shellcheck shell=bash
-# the above directive is only for editors/linters
 #-----------------------------------------------------------------------
 #          File: ~/.aliases
 #   Description: Bash/Zsh aliases — dirs, listings, grep, IPs, trash, DNS (cross-platform: Linux + macOS)
 # Compatibility: Debian, Ubuntu, Armbian, macOS
-#       Version: 0.4.1
+#       Version: 0.4.2
 #        Author: Aamnah
 #          Link: https://aamnah.com
 #          Date: 2020-07-15
-#       Lastmod: 2026-05-04
+#       Lastmod: 2026-05-05
 #-----------------------------------------------------------------------
 # Cross-platform (sourced in .bash_profile and .zshrc)
 # More ideas: http://alias.sh/  and  http://www.commandlinefu.com/commands/
 
-# OS detection — set once, used by aliases that differ between Linux (GNU) and macOS (BSD)
-case "$(uname -s)" in
+# OS detection 
+# ---------------------------------------------------------------
+# set once, used by aliases that differ between Linux (GNU) and macOS (BSD).
+# Skip the ~1-5ms uname subprocess if .zshenv (or another caller) already set the flags.
+# "$IS_MACOS$IS_LINUX" is a concatenated string, will result in 1 if either one is present
+# on Linux only IS_LINUX is set, on macOS only IS_MACOS is set
+if [[ -z "$IS_MACOS$IS_LINUX" ]]; then
+  case "$(uname -s)" in
     Darwin) IS_MACOS=1 ;;
     Linux)  IS_LINUX=1 ;;
-esac
+  esac
+fi
 
 ## DIRs (HOME-relative — work on any box)
 # ---------------------------------------------------------------
-alias desk='cd ~/Desktop'
-alias dl='cd ~/Downloads'
+alias desk="cd $HOME/Desktop"
+alias dl="cd $HOME/Downloads"
 
 # COMMANDS
 # ---------------------------------------------------------------
@@ -37,33 +42,32 @@ alias dl='cd ~/Downloads'
 # Colorized output for ls colorflag differs: GNU (Ubuntu) uses --color=, BSD (macOS) uses -G
 # -x for line based listing instead of columns. the multi-column output is produced with entries sorted across, rather than down, the columns
 if [[ -n "$IS_MACOS" ]]; then
-    alias ls='ls -hFG'
+    alias ls='ls -hFG'      # BSD `-G` is auto-only by design
     alias ll='ls -alhFG'
     alias l='ls -aFxG'
 else
-    alias ls='ls -hF --color=always'
-    alias ll='ls -alhF --color=always'
-    alias l='ls -aFx --color=always'
+    alias ls='ls -hF --color=auto'
+    alias ll='ls -alhF --color=auto'
+    alias l='ls -aFx --color=auto'
 fi
+
+alias la='ls -A'
 
 # Only list directories (including hidden, excluding . and ..)
 # Cross-platform: portable across BSD/GNU
 alias lsd='ls -dl */ .[^.]*/ 2>/dev/null'
 
-alias la='ls -A'
+# Use --color=auto, NOT =always: `always` injects ANSI escapes even when piped, 
+# breaking `grep foo file | awk ...`, `grep foo | wc`, etc. `auto` only colors a TTY.
+alias grep='grep --color=auto'
+alias egrep='grep -E --color=auto'
+alias fgrep='grep -F --color=auto'
 
-# Always color-code the tree command
-alias tree='tree -C'
-
-# grep --color=auto displays colored output unless output piped to a different command
-# grep --color=always always colors output, even adding control sequences to other piped commands
-# more: https://linuxcommando.blogspot.com/2007/10/grep-with-color-output.html
-alias grep='grep --color=always'
-alias egrep='egrep --color=always'
-alias fgrep='fgrep --color=always'
+# tree colorizes by default when stdout is a TTY — no alias needed for the common case.
+# If you want forced color through a pager: `tree -C | less -R`
 
 # Tools (universal — work on any box where the tool is installed)
-alias c="claude"
+alias cc="claude"
 alias kkk="tmux kill-session"
 alias peaclock="peaclock --config-dir ~/.config/peaclock"
 
@@ -107,7 +111,8 @@ else
 fi
 
 ## Reload the shell (i.e. invoke as a login shell)
-alias reload="exec $SHELL -l"
+# Single quotes so $SHELL resolves at run time, not when the alias is defined.
+alias reload='exec $SHELL -l'
 
 # SUDO
 # $ZSH_VERSION & $BASH_VERSION are set by the shell itself at startup 
