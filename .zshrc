@@ -41,6 +41,16 @@ else
   compinit -C
 fi
 
+# NVM lazy-load stubs (interactive only — defined here, not in .zshenv, so
+# scripts/cron resolve `node` straight to the binary on PATH instead of
+# triggering a 150–300ms nvm.sh source). On first interactive call to
+# nvm/node/npm/npx, the stubs unset themselves, source nvm.sh, then re-exec
+# the real command. NVM_DIR and the default-node PATH live in .zshenv.
+nvm()  { unset -f nvm node npm npx 2>/dev/null; . "$NVM_DIR/nvm.sh"; nvm "$@"; }
+node() { unset -f nvm node npm npx 2>/dev/null; . "$NVM_DIR/nvm.sh"; node "$@"; }
+npm()  { unset -f nvm node npm npx 2>/dev/null; . "$NVM_DIR/nvm.sh"; npm "$@"; }
+npx()  { unset -f nvm node npm npx 2>/dev/null; . "$NVM_DIR/nvm.sh"; npx "$@"; }
+
 # Personal aliases and functions
 # get machine-specific stuff from *.local files
 for file in $HOME/.{aliases,aliases.local,zsh_aliases,zsh_aliases.local,functions,functions.local,zsh_functions,zsh_functions.local,zshrc.local}; do

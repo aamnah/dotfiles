@@ -45,26 +45,29 @@ export DOTNET_CLI_TELEMETRY_OPTOUT=true   # true means off
 #-----------------------------------------------------------------------
 
 # Homebrew (cross-platform)
-# Load Homebrew from the same dotfiles on different operating systems
-# Homebrew / Linuxbrew shellenv (sets PATH/MANPATH/INFOPATH for brew-installed packages)
+# Load Homebrew from the same dotfiles on different operating systems.
+# Sets PATH/MANPATH/INFOPATH for brew-installed packages.
+# Cache the shellenv output — skips the ~20–40ms `brew shellenv` fork on every
+# shell startup. Cache is rebuilt when the brew binary is newer than the cache.
 for brewbin in /home/linuxbrew/.linuxbrew/bin/brew /opt/homebrew/bin/brew /usr/local/bin/brew; do
     if [[ -x "$brewbin" ]]; then
-        eval "$($brewbin shellenv)"
+        _brew_cache="$HOME/.cache/brew_shellenv"
+        if [[ ! -s "$_brew_cache" ]] || [[ "$brewbin" -nt "$_brew_cache" ]]; then
+            mkdir -p "$HOME/.cache" && "$brewbin" shellenv > "$_brew_cache"
+        fi
+        source "$_brew_cache"
+        unset _brew_cache
         break
     fi
 done
 
-# NVM 
+# NVM — env only. Lazy-load stubs live in .zshrc (interactive only).
+# Defining node()/npm()/etc. here would shadow the real binary in scripts and
+# cron, making every non-interactive `node script.js` pay the nvm.sh source cost.
 export NVM_DIR="$HOME/.nvm"
-# nvm.sh is lazy-loaded here to keep startup fast
-# Stubs source nvm.sh on first invocation, then re-exec the
-# real command. Was the biggest startup cost (~150–300ms eager source).
-nvm()  { unset -f nvm node npm npx 2>/dev/null; . "$NVM_DIR/nvm.sh"; nvm "$@"; }
-node() { unset -f nvm node npm npx 2>/dev/null; . "$NVM_DIR/nvm.sh"; node "$@"; }
-npm()  { unset -f nvm node npm npx 2>/dev/null; . "$NVM_DIR/nvm.sh"; npm "$@"; }
-npx()  { unset -f nvm node npm npx 2>/dev/null; . "$NVM_DIR/nvm.sh"; npx "$@"; }
-# Put default node's bin on PATH so quick `node -v` works without firing the lazy load.
-# Resolve the alias chain (default → lts/iron → 20.18.0) so PATH gets a real version dir.
+# Put default node's bin on PATH so scripts, cron, and quick `node -v` find a
+# real binary without sourcing nvm.sh. Resolve the alias chain
+# (default → lts/iron → 20.18.0) so PATH points at a real version dir.
 if [[ -s "$NVM_DIR/alias/default" ]]; then
   _nvm_default="$(<"$NVM_DIR/alias/default")"
   while [[ -s "$NVM_DIR/alias/$_nvm_default" ]]; do
