@@ -13,6 +13,7 @@
 # If you get 'Unknown flag' errors then you're probably on macOS which uses an older version of nano (2.0.6)
 # You can install the latest version with Homebrew: brew install nano
 
+# -- DEFAULTS ------------------------------------------------------------------
 set linenumbers
 set tabsize 4
 set tabstospaces
@@ -26,7 +27,11 @@ set softwrap             # wrap long lines visually without inserting breaks
 set indicator            # scrollbar-like indicator on the right
 include "/usr/share/nano/*.nanorc"   # syntax highlighting
 
-# COLORS
+# -- SPELL CHECK ---------------------------------------------------------------
+# sudo apt install aspell aspell-en
+set speller "aspell -c"
+
+# -- COLORS --------------------------------------------------------------------
 # Valid names for the foreground and background colors are:
 # Legacy palette: normal, white, black, blue, green, red, cyan, yellow, magenta
 # Extended palette (since 6.0+): normal, pink, purple, mauve, lagoon, mint, lime, peach orange, latte, rosy, beet, plum, sea, sky, slate, teal, sage, brown, ocher, sand, tawny, brick, crimson, grey/gray
