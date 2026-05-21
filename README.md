@@ -4,7 +4,6 @@ These files are an accumulation of bash and zsh aliases, shortcuts and functions
 
 Cross-platform: aliases that wrap commands with Linux/macOS differences (GNU vs BSD flags, trash paths, DNS flush, screen lock) detect the OS at source-time and pick the right invocation. Same alias name on both platforms, the right command behind it.
 
-
 ## Install
 
 Clone and run:
@@ -20,7 +19,6 @@ curl -fsSL https://raw.githubusercontent.com/aamnah/dotfiles/master/install.sh |
 ```
 
 `install.sh` backs up any existing target as `<file>.bak.<timestamp>` before overwriting, and installs starship if it's missing. It does **not** change your login shell — see the Shell section below for `chsh`.
-
 
 ## Shell
 
@@ -62,6 +60,7 @@ To fix syntax highlighting for startup files in VS Code, add this to the `settin
 ```
 
 ### File naming conventions
+
 For the `.aliases` and `.functions` files, you can call them `.bash_aliases` or `.zsh_aliases` if you want. Files without the preceding `.bash_` and `.zsh_` are meant to signify cross-shell compatibility, i.e. they work in both bash and zsh.
 
 Even though `.aliases` is neater, the one reason i would still name it `.zsh_aliases` is so that it shows up next to all the the other `.zsh` files.
@@ -70,13 +69,13 @@ I guess you can rename them during the install process to match the file naming 
 
 ### Startup files
 
-| zsh | runs when | bash equivalent | what to put here |
-|---|---|---|---|
-| `.zshenv` | **every** zsh invocation — interactive, login, scripts, cron, GUI launches | (no real equivalent) | `PATH` and env vars that everything needs to see |
-| `.zprofile` | login shells only, **before** `.zshrc` | `.bash_profile` | login-once setup (e.g. `ssh-agent` autostart, tmux auto-attach) |
-| `.zshrc` | interactive shells (every new tab) | `.bashrc` | aliases, functions, prompt, completion, keybindings |
-| `.zlogin` | login shells, **after** `.zshrc` | (`.bash_login`, rare) | login-once setup that needs the shell already configured |
-| `.zlogout` | on logout from a login shell | `.bash_logout` | cleanup on exit |
+| zsh         | runs when                                                                  | bash equivalent       | what to put here                                                |
+| ----------- | -------------------------------------------------------------------------- | --------------------- | --------------------------------------------------------------- |
+| `.zshenv`   | **every** zsh invocation — interactive, login, scripts, cron, GUI launches | (no real equivalent)  | `PATH` and env vars that everything needs to see                |
+| `.zprofile` | login shells only, **before** `.zshrc`                                     | `.bash_profile`       | login-once setup (e.g. `ssh-agent` autostart, tmux auto-attach) |
+| `.zshrc`    | interactive shells (every new tab)                                         | `.bashrc`             | aliases, functions, prompt, completion, keybindings             |
+| `.zlogin`   | login shells, **after** `.zshrc`                                           | (`.bash_login`, rare) | login-once setup that needs the shell already configured        |
+| `.zlogout`  | on logout from a login shell                                               | `.bash_logout`        | cleanup on exit                                                 |
 
 In practice most personal config can live in `.zshrc` without issue. The split matters when:
 
@@ -85,7 +84,7 @@ In practice most personal config can live in `.zshrc` without issue. The split m
 
 bash collapses this distinction more aggressively: `.bash_profile` is the login file, `.bashrc` the interactive file, and many setups source the latter from the former so the same content runs in both contexts. There's no `.bash_env` analog — bash has nothing that runs for every invocation including scripts.
 
-### $OSTYPE vs $(uname -s)
+### `$OSTYPE` vs `$(uname -s)`
 
 `$(uname -s)` is POSIX-portable. it works in bash, zsh, sh, dash, ash, busybox. One subprocess at startup (~1–5ms).
 
@@ -103,7 +102,7 @@ esac
 export IS_MACOS IS_LINUX IS_BSD
 ```
 
-Use `$OSTYPE` if you only care about bash and zsh. If 
+Use `$OSTYPE` if you only care about bash and zsh. If
 
 ```bash
 # ~/.zshenv (early — before .zshenv.local)
@@ -132,35 +131,35 @@ fi
 
 The string concatenation in `"$IS_MACOS$IS_LINUX"` is a one-line way to ask "are both empty?" — if either is `1`, the concatenated string is non-empty and `-z` is false. Equivalent to `[[ -z "$IS_MACOS" && -z "$IS_LINUX" ]]` but shorter. Both work; pick whichever you find more readable.
 
-## Config files
-
-`.nanorc`
-
-Default nano:
-![Default config](./screenshots/nanorc-default.png)
-
-Custom config:
-![Custom config](./screenshots/nanorc-custom.png)
-
 ## .config/
 
 Editor and terminal configs that live under XDG-style paths:
 
-- `.config/kitty/kitty.conf` — kitty terminal config
+- `.config/kitty/kitty.conf` — kitty terminal config and themes
 - `.config/nvim/init.lua` — Neovim config (tabs/indents, line numbers)
 - `.config/starship.toml` — Starship prompt (see above)
 - `.config/tmux/tmux.conf` — tmux config; themes live alongside it as `.config/tmux/lasik.tmux`, `.config/tmux/catppuccin.tmux`, and `.config/tmux/reset.tmux`. A root `.tmux.conf` shim sources this XDG config for compatibility.
+- `.config/nano/nanorc` - Nano configuration
 
+Nano:
+
+![Nano preview](./screenshots/nano.png)
+
+Lasik theme for Kitty:
+
+![Kitty - Lasik preview](./screenshots/kitty-lasik-theme.png)
 
 ## .bash_aliases / .zsh_aliases
 
 Shortcuts for directories, programs, system processes and commands. Both files contain the same universal toolset, byte-identical at the source level. The only structural difference is `dang` (uses bash's `history -p` vs zsh's `fc -ln -1` since shell builtins differ).
 
 #### Directories
+
 - `desk` go to Desktop — `cd ~/Desktop`
 - `dl` go to Downloads — `cd ~/Downloads`
 
 #### Smart Listings (cross-platform: GNU `--color=` vs BSD `-G`)
+
 - `ll` List all (-a) files and directories in a detailed (-l), human readable (-h), color coded way with a trailing slash (-F)
 - `ls` Coloured short listing — `ls -hF` + colour
 - `l` Coloured line-based listing instead of columns — `ls -aFx` + colour
@@ -169,18 +168,22 @@ Shortcuts for directories, programs, system processes and commands. Both files c
 - `tree` Always list the tree command in color coding — `tree -C`
 
 #### Search
+
 - `grep`, `egrep`, `fgrep` Always coloured — `--color=always`
 
 #### Tools
+
 - `c` Shortcut for `claude`
 - `kkk` Kill the current tmux session — `tmux kill-session`
 
 #### IPs
+
 - `myip` Show public IP via curl — `curl ifconfig.me`
 - `ip` Show public IP via OpenDNS — `dig +short myip.opendns.com @resolver1.opendns.com`
 - `localip` Show local IP — `ipconfig getifaddr en0` (macOS) / `hostname -I` (Linux)
 
 #### Misc.
+
 - `emptytrash` Empty the Trash on all mounted volumes and the main HDD — `/Volumes/*/.Trashes` + `~/.Trash` (macOS) / `~/.local/share/Trash/` (Linux, XDG spec)
 - `cleanup` Recursively delete `.DS_Store` files — `find . -type f -name '*.DS_Store' -delete`
 - `chromekill` Kill all the tabs in Chrome to free up memory (preserves extensions). Cross-platform regex matches both `Chrome Helper` (macOS) and `chrome` (Linux)
@@ -188,25 +191,29 @@ Shortcuts for directories, programs, system processes and commands. Both files c
 - `reload` Reload the shell (i.e. invoke as a login shell) — `exec $SHELL -l`
 
 #### Sudo
+
 - `dang` repeat the last command with sudo, basically `sudo !!` equivalent
 
 #### Disk Usage
+
 - `ducks` List top ten largest files/directories in current directory, human-readable — `du -chs * | sort -rh | head -11`
 - `ds` Find the biggest in a folder — `du -ks * | sort -n`
 
 #### Memory
+
 - `wotgobblemem` What's gobbling the memory? — `ps` sorted by memory %, top 15
 
 #### DNS
+
 - `flushdns` Flush DNS cache — `dscacheutil -flushcache` + `killall -HUP mDNSResponder` (macOS) / `resolvectl flush-caches` chain (Linux)
 
 #### Security
+
 - `netlisteners` Show active network listeners — `lsof -i -P | grep LISTEN`
 
-#### What's *not* in the repo
+#### What's _not_ in the repo
+
 Personal/machine-specific aliases (project dirs, SSH host shortcuts, school course dirs) live in your local `~/.zsh_aliases` only — they reference paths and hosts that don't exist on a fresh machine, so they're not committed.
-
-
 
 ### bash
 
