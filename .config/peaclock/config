@@ -83,7 +83,7 @@ stopwatch start
 
 # set the timers initial value
 # clear, stop, start, 00h:00m:00s
-timer 10m:0s
+timer 40m:0s
 
 # set the string value to be executed by a shell upon timer completion,
 # an empty string clears the value
@@ -155,10 +155,12 @@ style inactive-fg clear
 style colon-fg clear
 
 # set the style of the background used to draw active blocks in the clock
-style active-bg reverse
+# style active-bg reverse
+style active-bg #cdd2e4
 
 # set the style of the background used to draw inactive blocks in the clock
-style inactive-bg #2c323c
+# style inactive-bg #2c323c
+style inactive-bg #2a324b
 
 # set the style of the background used to draw colon blocks in the clock
 style colon-bg clear
