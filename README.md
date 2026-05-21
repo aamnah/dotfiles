@@ -141,10 +141,6 @@ Editor and terminal configs that live under XDG-style paths:
 - `.config/tmux/tmux.conf` — tmux config; themes live alongside it as `.config/tmux/lasik.tmux`, `.config/tmux/catppuccin.tmux`, and `.config/tmux/reset.tmux`. A root `.tmux.conf` shim sources this XDG config for compatibility.
 - `.config/nano/nanorc` - Nano configuration
 
-Nano:
-
-![Nano preview](./screenshots/nano.png)
-
 Lasik theme for Kitty:
 
 ![Kitty - Lasik preview](./screenshots/kitty-lasik-theme.png)
