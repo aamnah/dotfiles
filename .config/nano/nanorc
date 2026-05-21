@@ -2,11 +2,11 @@
 #          File: ~/.nanorc
 #   Description: Nano config with Lasik-themed colors
 # Compatibility: Debian, Ubuntu, Armbian, macOS
-#       Version: 0.1.0
+#       Version: 0.1.1
 #        Author: Aamnah
 #          Link: https://aamnah.com
 #          Date: 2026-04-14
-#       Lastmod: 2026-04-24
+#       Lastmod: 2026-05-21
 #-------------------------------------------------------------------------------
 # https://www.nano-editor.org/dist/latest/nanorc.5.html
 
@@ -46,9 +46,9 @@ set speller "aspell -c"
 # Terminals like Kitty can set opacity for text color but not background color
 # pick muted colors for status bar backgrounds, so that they don't stand out too much
 # when nano is in an inactive tab/window
-set titlecolor     white,black
-set statuscolor    white,black          # statusbar is the one in center showing column/row number
-set minicolor      white,black          # minibar shows up when it asks for confirmations/filename etc.
+set titlecolor     white,brightblack
+set statuscolor    white,brightblack    # statusbar is the one in center showing column/row number
+set minicolor      white,brightblack    # minibar shows up when it asks for confirmations/filename etc.
 set errorcolor     white,red
 set selectedcolor  black,grey
 set stripecolor    normal,slate         # column guide (if set)
