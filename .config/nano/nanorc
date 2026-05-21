@@ -1,5 +1,5 @@
 #-----------------------------------------------------------------------
-#          File: ~/.nanorc
+#          File: ~/.config/nano/nanorc
 #   Description: Nano config with Lasik-themed colors
 # Compatibility: Debian, Ubuntu, Armbian, macOS
 #       Version: 0.1.0
