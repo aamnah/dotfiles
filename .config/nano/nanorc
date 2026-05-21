@@ -1,5 +1,5 @@
-#-----------------------------------------------------------------------
-#          File: ~/.config/nano/nanorc
+#-------------------------------------------------------------------------------
+#          File: ~/.nanorc
 #   Description: Nano config with Lasik-themed colors
 # Compatibility: Debian, Ubuntu, Armbian, macOS
 #       Version: 0.1.0
@@ -7,7 +7,7 @@
 #          Link: https://aamnah.com
 #          Date: 2026-04-14
 #       Lastmod: 2026-04-24
-#-----------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # https://www.nano-editor.org/dist/latest/nanorc.5.html
 
 # If you get 'Unknown flag' errors then you're probably on macOS which uses an older version of nano (2.0.6)
@@ -29,6 +29,9 @@ include "/usr/share/nano/*.nanorc"   # syntax highlighting
 
 # -- SPELL CHECK ---------------------------------------------------------------
 # sudo apt install aspell aspell-en
+# Usage (inside a file): Ctrl + T (twice)
+# First Ctrl + T open the "execute tool / command" prompt
+# Second Ctrl + T runs nano's spell checker 
 set speller "aspell -c"
 
 # -- COLORS --------------------------------------------------------------------
@@ -40,8 +43,12 @@ set speller "aspell -c"
 
 # Interface elements — format: set <element> <fg>,<bg>
 # set titlecolor fgcolor,bgcolor
+# Terminals like Kitty can set opacity for text color but not background color
+# pick muted colors for status bar backgrounds, so that they don't stand out too much
+# when nano is in an inactive tab/window
 set titlecolor     white,black
-set statuscolor    black,lightyellow
+set statuscolor    white,black          # statusbar is the one in center showing column/row number
+set minicolor      white,black          # minibar shows up when it asks for confirmations/filename etc.
 set errorcolor     white,red
 set selectedcolor  black,grey
 set stripecolor    normal,slate         # column guide (if set)
@@ -50,4 +57,3 @@ set keycolor       cyan,normal          # shortcut key combos in the two help li
 set functioncolor  green,normal         # function descriptions in the two help lines at the bottom of the screen
 set promptcolor    white,black
 set scrollercolor  slate,normal
-set minicolor      white,black
