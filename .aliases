@@ -71,6 +71,12 @@ alias cc="claude"
 alias kkk="tmux kill-session"
 alias peaclock="peaclock --config-dir ~/.config/peaclock"
 
+
+# Copy over Kitty's terminfo when using SSH
+# https://wiki.archlinux.org/title/Kitty#Terminal_issues_with_SSH
+[ "$TERM" = "xterm-kitty" ] && alias ssh="kitty +kitten ssh"
+
+
 # MISC.
 # ---------------------------------------------------------------
 ## IP addresses
