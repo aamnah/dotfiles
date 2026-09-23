@@ -31,6 +31,12 @@ HISTFILE="$HOME/.zsh_history"
 HISTSIZE=50000
 SAVEHIST=50000
 
+# auto-complete in middle of filename
+zstyle ':completion:*' matcher-list 'r:|=*' 'l:|=* r:|=*'
+
+# limit tab completion to current dir
+unset '_comps[source]'
+
 # Tab completion — refresh the dump cache once a day; otherwise skip the
 # security audit (saves ~50–100ms). Glob qualifier `mh+24` matches files
 # older than 24 hours; the `N` makes a missing dump silently skip too.
