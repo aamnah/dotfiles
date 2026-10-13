@@ -4,9 +4,7 @@ These files are an accumulation of bash and zsh aliases, shortcuts and functions
 
 Cross-platform: aliases that wrap commands with Linux/macOS differences (GNU vs BSD flags, trash paths, DNS flush, screen lock) detect the OS at source-time and pick the right invocation. Same alias name on both platforms, the right command behind it.
 
-** Documentation: [aamnah.github.io/dotfiles](https://aamnah.github.io/dotfiles/)** — one page per config, with search, troubleshooting and known issues.
-
-![The Starship prompt](./docs/src/assets/screenshots/prompt-starship.png)
+**Documentation: [aamnah.github.io/dotfiles](https://aamnah.github.io/dotfiles/)** — one page per config, with search, troubleshooting and known issues.
 
 ## Install
 
