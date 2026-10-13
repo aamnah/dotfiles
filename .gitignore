@@ -2,6 +2,7 @@
 .zsh_secrets
 .zshrc.local
 .zshenv.local
+.bash_profile.local
 
 .aliases.local
 .zsh_aliases.local
@@ -10,3 +11,6 @@
 .functions.local
 .zsh_functions.local
 .bash_functions.local
+
+# Local, machine-specific notes for this checkout. Never committed.
+AGENTS.local.md

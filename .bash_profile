@@ -72,14 +72,55 @@ shopt -s cdspell;
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
 
-# Prefer US English and use UTF-8
-export LC_ALL="en_US.UTF-8"
-export LANG="en_US"
+# Locale: the one picked during install.sh is saved as LANG=… in
+# ~/.config/locale.conf; en_US.UTF-8 (US English, UTF-8) if that file
+# doesn't exist. Same logic as .zshenv.
+_locale="en_US.UTF-8"
+if [[ -r "$HOME/.config/locale.conf" ]]; then
+  while IFS='=' read -r _key _val; do
+    [[ "$_key" == "LANG" && -n "$_val" ]] && _locale="${_val//\"/}"
+  done < "$HOME/.config/locale.conf"
+fi
+# Use it only if this system has it. Minimal servers and Docker images
+# often ship only C.UTF-8; forcing a missing locale makes bash print
+# "setlocale: cannot change locale" on every start (and perl/python warn
+# on every run).
+# C.UTF-8 keeps UTF-8 (emoji, accents) with plain-English messages.
+# `locale -a` spells it en_US.utf8 on Linux, en_US.UTF-8 on macOS — hence -i.
+# No `locale` command (Alpine/musl): musl accepts any name, so keep it.
+if ! command -v locale >/dev/null 2>&1 || locale -a 2>/dev/null | grep -qiE "^${_locale%%.*}\.utf-?8$"; then
+  export LC_ALL="$_locale"
+  export LANG="$_locale"
+else
+  export LC_ALL="C.UTF-8"
+  export LANG="C.UTF-8"
+fi
+unset _locale _key _val
 
 # COLOR CODING
 # Enable color coding for tree and ls and define colors
 export CLICOLOR=1
 #export LSCOLORS="gxBxhxDxfxhxhxhxhxcxcx"
+
+# Ubuntu defaults (from 26.04 LTS /etc/skel/.bashrc) — this file replaces
+# that .bashrc, so without these blocks we'd lose them.
+
+# lesspipe lets `less` open non-text files (archives, PDFs, images) by
+# showing a readable summary instead of binary garbage.
+# SHELL=/bin/sh makes lesspipe print sh-syntax exports.
+command -v lesspipe >/dev/null 2>&1 && eval "$(SHELL=/bin/sh lesspipe)"
+
+# dircolors sets LS_COLORS, the colour scheme GNU ls --color uses.
+# Without it ls still colours, but with the built-in scheme only.
+# Put a custom scheme in ~/.dircolors (dircolors -p > ~/.dircolors to start).
+# Not on macOS — there, CLICOLOR above handles ls colours.
+if command -v dircolors >/dev/null 2>&1; then
+  if [ -r "$HOME/.dircolors" ]; then
+    eval "$(dircolors -b "$HOME/.dircolors")"
+  else
+    eval "$(dircolors -b)"
+  fi
+fi
 
 
 
@@ -95,9 +136,32 @@ for file in ~/.{aliases,aliases.local,functions,functions.local}; do
 done
 unset file
 
+# Programmable Tab completion (git branches, apt packages, ssh hosts…) —
+# Ubuntu default. Without it, Tab only completes file and command names.
+# Skipped in POSIX mode, where bash-completion doesn't work.
+# Needs the bash-completion package (apt install bash-completion).
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
+
 
 # PATHS
 # -----------------------------------------------------------------------
+
+# Personal bin folders — Ubuntu adds these in ~/.profile, but bash stops
+# reading ~/.profile once ~/.bash_profile exists. Without this, tools in
+# ~/.local/bin (pipx, uv…) go missing in SSH / login shells.
+# Guarded so a path is only added once (no duplicates when nested).
+for _dir in "$HOME/bin" "$HOME/.local/bin"; do
+  if [ -d "$_dir" ] && [[ ":$PATH:" != *":$_dir:"* ]]; then
+    PATH="$_dir:$PATH"
+  fi
+done
+unset _dir
 
 # Android
 export ANDROID_HOME=$HOME/Android/Sdk
@@ -105,3 +169,9 @@ export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:$ANDROID_HOME/tools
 export PATH=$PATH:$ANDROID_HOME/tools/bin
 export PATH=$PATH:$ANDROID_HOME/platform-tools
+
+# Machine-specific PATH and environment for THIS computer (bash's counterpart
+# of ~/.zshenv.local). Never committed. Tools' installers append lines to
+# ~/.bashrc or ~/.profile — move them here so a dotfiles re-install (which
+# replaces ~/.bashrc) can't drop them. Loaded last so it can override anything.
+[ -f "$HOME/.bash_profile.local" ] && . "$HOME/.bash_profile.local"

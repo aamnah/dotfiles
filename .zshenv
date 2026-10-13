@@ -27,9 +27,31 @@ case "$(uname -s)" in
 esac
 export IS_MACOS IS_LINUX
 
-# Locale settings needed for Fastlane/Cocoapods
-export LC_ALL=en_US.UTF-8
-export LANG=en_US.UTF-8
+# Locale settings needed for Fastlane/Cocoapods (they need a UTF-8 locale)
+# The locale picked during install.sh is saved as LANG=… in
+# ~/.config/locale.conf; en_US.UTF-8 if that file doesn't exist.
+# Parsed with `read` instead of sed/grep: this file runs for every zsh
+# (scripts too), so it avoids spawning extra processes.
+_locale="en_US.UTF-8"
+if [[ -r "$HOME/.config/locale.conf" ]]; then
+  while IFS='=' read -r _key _val; do
+    [[ "$_key" == "LANG" && -n "$_val" ]] && _locale="${_val//\"/}"
+  done < "$HOME/.config/locale.conf"
+fi
+# Use it only if this system has it. Minimal servers and Docker images
+# often ship only C.UTF-8 — forcing a missing locale makes perl/python
+# print "Setting locale failed" warnings on every run.
+# C.UTF-8 keeps UTF-8 (emoji, accents) with plain-English messages.
+# `locale -a` spells it en_US.utf8 on Linux, en_US.UTF-8 on macOS — hence -i.
+# No `locale` command (Alpine/musl): musl accepts any name, so keep it.
+if ! command -v locale >/dev/null 2>&1 || locale -a 2>/dev/null | grep -qiE "^${_locale%%.*}\.utf-?8$"; then
+  export LC_ALL="$_locale"
+  export LANG="$_locale"
+else
+  export LC_ALL=C.UTF-8
+  export LANG=C.UTF-8
+fi
+unset _locale _key _val
 
 # Dotnet
 # https://learn.microsoft.com/en-us/dotnet/core/tools/telemetry

@@ -63,6 +63,15 @@ alias grep='grep --color=auto'
 alias egrep='grep -E --color=auto'
 alias fgrep='grep -F --color=auto'
 
+# Desktop notification when a long command finishes — Ubuntu default.
+# Usage: sleep 10; alert
+# Shows a "terminal" icon on success, "error" icon on failure, and the
+# command text as the message. Only defined where notify-send exists
+# (Linux desktops) — absent on servers and macOS.
+if command -v notify-send >/dev/null 2>&1; then
+    alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+fi
+
 # tree colorizes by default when stdout is a TTY — no alias needed for the common case.
 # If you want forced color through a pager: `tree -C | less -R`
 
@@ -71,11 +80,10 @@ alias cc="claude"
 alias kkk="tmux kill-session"
 alias peaclock="peaclock --config-dir ~/.config/peaclock"
 
-
 # Copy over Kitty's terminfo when using SSH
 # https://wiki.archlinux.org/title/Kitty#Terminal_issues_with_SSH
+# Only inside kitty: elsewhere `ssh` stays the plain command.
 [ "$TERM" = "xterm-kitty" ] && alias ssh="kitty +kitten ssh"
-
 
 # MISC.
 # ---------------------------------------------------------------

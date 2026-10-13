@@ -7,7 +7,7 @@
 #        Author: Aamnah
 #          Link: https://aamnah.com
 #          Date: 2026-04-24
-#       Lastmod: 2026-09-23
+#       Lastmod: 2026-05-05
 #-----------------------------------------------------------------------
 #
 # Sourced for INTERACTIVE shells (every new terminal tab, login or otherwise).
@@ -41,12 +41,37 @@ else
   compinit -C
 fi
 
-# limit tab completion to current dir
+# Tab-complete `source` with files in the current folder only. Without this,
+# zsh's `source` completion also offers every command on PATH.
 unset '_comps[source]'
 
-# auto-complete in middle of filename
-# case-insensitive auto complete
+# Completion matching, tried left to right:
+#   'r:|=*'                    complete the word as typed (default behaviour)
+#   'l:|=* r:|=*'              match anywhere in the name ("conf" → "kitty.conf")
+#   'm:{a-z}={A-Za-z}'         lowercase also matches uppercase ("doc" → "Documents")
 zstyle ':completion:*' matcher-list 'r:|=*' 'l:|=* r:|=* m:{a-z}={A-Za-z}'
+
+# Ubuntu defaults (from 26.04 LTS /etc/skel/.bashrc), ported to zsh
+
+# lesspipe lets `less` open non-text files (archives, PDFs, images) by
+# showing a readable summary instead of binary garbage.
+# SHELL=/bin/sh makes lesspipe print sh-syntax exports.
+(( $+commands[lesspipe] )) && eval "$(SHELL=/bin/sh lesspipe)"
+
+# dircolors sets LS_COLORS, the colour scheme GNU ls --color uses.
+# Put a custom scheme in ~/.dircolors (dircolors -p > ~/.dircolors to start).
+# Not on macOS — there, CLICOLOR handles ls colours.
+if (( $+commands[dircolors] )); then
+  if [[ -r "$HOME/.dircolors" ]]; then
+    eval "$(dircolors -b "$HOME/.dircolors")"
+  else
+    eval "$(dircolors -b)"
+  fi
+fi
+
+# Colour Tab-completion file lists with the same scheme as ls.
+# zsh-only (bash has no equivalent); without it the list is plain text.
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 
 # NVM lazy-load stubs (interactive only — defined here, not in .zshenv, so
 # scripts/cron resolve `node` straight to the binary on PATH instead of
