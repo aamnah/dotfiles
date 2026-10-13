@@ -2,6 +2,8 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import starlightLinksValidator from 'starlight-links-validator';
+import { satteri } from '@astrojs/markdown-satteri';
+import changelogPlugin from './src/plugins/changelog-plugin.mjs';
 
 // https://astro.build/config
 export default defineConfig({
@@ -14,6 +16,10 @@ export default defineConfig({
 	// server only serves files inside docs/ by default, so without this the
 	// page errors in `npm run dev` (the production build works either way).
 	vite: { server: { fs: { allow: ['..'] } } },
+	// Changelog layout: a coloured tag on every line (see the plugin file).
+	// satteri() is Astro's default Markdown engine; naming it here only adds
+	// the plugin.
+	markdown: { processor: satteri({ hastPlugins: [changelogPlugin] }) },
 	integrations: [
 		starlight({
 			// Fails the build on broken internal links or #anchors, so a renamed

@@ -129,38 +129,95 @@
 	display: none;
 }
 
-/* Changelog layout, loosely after Zen Browser's release notes: big version
-   numbers, a quiet date line, and the Added / Changed / Fixed labels as small
-   tags. Uses Starlight's colour variables, so it follows Light / Dark / High
-   contrast automatically. Without this the page is one long wall of text. */
-.changelog h2 {
-	font-size: var(--sl-text-3xl);
-	margin-top: 0;
+/* Changelog layout: the version on the left, the date on the right, and a
+   coloured tag in front of every line.
+   src/plugins/changelog-plugin.mjs adds the classes used here. */
+
+/* One colour per group. Dark theme first (Starlight's default), then darker
+   shades for the light theme so the tags stay readable on white (4.5:1+). */
+:root {
+	--cl-added: #7ee2a8;
+	--cl-changed: #ffc078;
+	--cl-fixed: #8ab4ff;
+	--cl-removed: #ff8a8a;
+	--cl-theme: #d6a4ff;
+	--cl-known: #b0b4bd;
 }
+:root[data-theme='light'] {
+	--cl-added: #1a7f37;
+	--cl-changed: #9a5b00;
+	--cl-fixed: #0b5cd5;
+	--cl-removed: #c62828;
+	--cl-theme: #7b3fc4;
+	--cl-known: #57606a;
+}
+/* High contrast on white: darker still, all 7:1 or more. (On black the dark
+   theme's colours above are already 7:1+.) */
+:root[data-contrast='high'][data-theme='light'] {
+	--cl-added: #0a5c1f;
+	--cl-changed: #6b3f00;
+	--cl-fixed: #00008b;
+	--cl-removed: #8b0000;
+	--cl-theme: #4b0082;
+	--cl-known: #000;
+}
+
 /* The --- between releases in CHANGELOG.md: more room, so each release reads
    as its own block */
 .changelog hr {
-	margin: 3rem 0 2rem;
+	margin: 3.5rem 0 2rem;
 }
-/* The line under each version: "October 13, 2026 · Compare changes" */
-.changelog h2 + p {
+
+/* Header row: version left, "October 13, 2026 · Compare changes" right.
+   Wraps onto two lines on narrow screens. */
+.changelog .cl-release {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: baseline;
+	gap: 0.25rem 1rem;
+}
+.changelog .cl-release h2 {
+	margin: 0;
+	font-size: var(--sl-text-2xl);
+}
+.changelog .cl-release p {
+	margin: 0;
 	color: var(--sl-color-gray-3);
 	font-size: var(--sl-text-sm);
-	margin-top: 0.25rem;
 }
-/* A paragraph that is only a bold word = a group label (**Added** etc.).
-   The date line also starts with bold text, but has a link next to it, so
-   :only-child keeps it out. */
-.changelog p:has(> strong:only-child) {
-	margin-top: 1.5rem;
+
+/* Each group's list: no bullets; tag in a fixed-width column, text next to it */
+.changelog ul.cl-list {
+	list-style: none;
+	padding-left: 0;
+	margin-top: 1.25rem;
 }
-.changelog p > strong:only-child {
-	display: inline-block;
-	padding: 0.1rem 0.6rem;
-	border: 1px solid var(--sl-color-accent);
-	border-radius: 999px;
-	color: var(--sl-color-accent-high);
-	font-size: var(--sl-text-xs);
-	text-transform: uppercase;
-	letter-spacing: 0.05em;
+.changelog ul.cl-list li {
+	display: grid;
+	/* Wide enough for the longest label, "Removed" */
+	grid-template-columns: 4.75rem 1fr;
+	gap: 0.5rem;
+	/* Sit the smaller tag on the same baseline as the first line of text */
+	align-items: baseline;
+	margin-top: 0.35rem;
 }
+.changelog .cl-tag {
+	font-weight: 600;
+	font-size: var(--sl-text-sm);
+}
+/* Phones: the tag sits above its line, so the text keeps the full width */
+@media (max-width: 30rem) {
+	.changelog ul.cl-list li {
+		grid-template-columns: 1fr;
+		gap: 0;
+		margin-top: 0.75rem;
+	}
+}
+
+.changelog .cl-added .cl-tag { color: var(--cl-added); }
+.changelog .cl-changed .cl-tag { color: var(--cl-changed); }
+.changelog .cl-fixed .cl-tag { color: var(--cl-fixed); }
+.changelog .cl-removed .cl-tag { color: var(--cl-removed); }
+.changelog .cl-theme .cl-tag { color: var(--cl-theme); }
+.changelog .cl-known .cl-tag { color: var(--cl-known); }
