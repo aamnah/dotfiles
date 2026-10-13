@@ -1,12 +1,12 @@
 #-----------------------------------------------------------------------
 #          File: ~/.functions
-#   Description: Bash/zsh shell functions — take, ii, getwebsite, spy, t 
+#   Description: Bash/zsh shell functions — take, ii, myip, getwebsite, spy, t
 # Compatibility: Debian, Ubuntu, Armbian, macOS
 #       Version: 0.3.1
 #        Author: Aamnah
 #          Link: https://aamnah.com
 #          Date: 2014-06-21
-#       Lastmod: 2026-05-04
+#       Lastmod: 2026-10-13
 #-----------------------------------------------------------------------
 
 # take: create a dir (with parents if needed) and cd into it
@@ -30,6 +30,51 @@ _ii_bar() {
   (( pct >= 85 )) && color='\033[0;31m'
   (( pct >= 60 && pct < 85 )) && color='\033[0;33m'
   printf "[${color}%s\033[0m%s]" "${bars:0:$filled}" "${spaces:0:$((10 - filled))}"
+}
+
+# _local_ip: this machine's IP on the local network — the address of the
+#   interface that leads to the internet (Wi-Fi, Ethernet or VPN, whichever
+#   is in use), not just the first one listed.
+#   Usage: _local_ip [4|6]   (default 4)
+#   Prints nothing if there's no route for that IP version (e.g. no IPv6
+#   internet) or none of the tools exist (minimal containers).
+# -------------------------------------------------------------------
+_local_ip() {
+  # fam:   short for "address family", the network term for IPv4 vs IPv6
+  # iface: short for "network interface" — a network connection such as
+  #        en0 (Wi-Fi on a Mac) or eth0 (Ethernet on Linux)
+  # addr:  the address we're looking for
+  local fam="${1:-4}" addr iface
+
+  # Linux: ask the kernel which source address ("src") it would use to reach
+  # a public address. Nothing is sent — `ip route get` only looks up the
+  # route. 1.1.1.1 / 2606:4700:4700::1111 are Cloudflare's DNS; any public
+  # address works. Output looks like: "1.1.1.1 via 10.0.0.1 dev eth0 src 10.0.0.5"
+  local target=1.1.1.1
+  [[ "$fam" == 6 ]] && target=2606:4700:4700::1111
+  if command -v ip >/dev/null 2>&1; then
+    addr=$(command ip -"$fam" route get "$target" 2>/dev/null | awk '{for (i = 1; i < NF; i++) if ($i == "src") {print $(i + 1); exit}}')
+  fi
+
+  # Linux without `ip`: the first address from `hostname -I` (IPv4 only;
+  # only Debian/Ubuntu's hostname has -I)
+  if [[ -z "$addr" && "$fam" == 4 ]] && hostname -I >/dev/null 2>&1; then
+    addr=$(hostname -I | awk '{print $1}')
+  fi
+
+  # macOS: find the iface of the default route, then its address.
+  # IPv6 skips fe80:: ("link-local") addresses — every interface has one,
+  # and they only work inside the local network.
+  if [[ -z "$addr" ]] && command -v ipconfig >/dev/null 2>&1; then
+    if [[ "$fam" == 6 ]]; then
+      iface=$(route -n get -inet6 default 2>/dev/null | awk '/interface:/ {print $2}')
+      [[ -n "$iface" ]] && addr=$(ifconfig "$iface" 2>/dev/null | awk '/inet6 / && $2 !~ /^fe80/ {print $2; exit}')
+    else
+      iface=$(route -n get default 2>/dev/null | awk '/interface:/ {print $2}')
+      addr=$(ipconfig getifaddr "${iface:-en0}" 2>/dev/null || ipconfig getifaddr en1 2>/dev/null)
+    fi
+  fi
+  printf '%s' "$addr"
 }
 
 # ii: display a compact MOTD-style host summary
@@ -66,11 +111,7 @@ ii() {
 
   # Network — local + public IP
   local local_ip
-  if [[ "$OS" == "Linux" ]]; then
-    local_ip=$(hostname -I 2>/dev/null | awk '{print $1}')
-  else
-    local_ip=$(ipconfig getifaddr en0 2>/dev/null || ipconfig getifaddr en1 2>/dev/null || echo "n/a")
-  fi
+  local_ip=$(_local_ip)
   printf "  ${BLUE}Local IP   ${RESET}%s\n"  "${local_ip:-n/a}"
   printf "  ${BLUE}Public IP  ${RESET}%s\n"  "$(curl -s --max-time 3 ifconfig.me 2>/dev/null || echo 'n/a')"
 
@@ -127,6 +168,56 @@ ii() {
   session_count=$(who | wc -l | tr -d ' ')
   printf "  ${GREEN}Users      ${RESET}%s logged in (%s sessions)\n" "$user_count" "$session_count"
   echo
+}
+
+
+# myip: your IP addresses — local, and public asked two different ways
+#   Local        — this machine's address on your network (see _local_ip)
+#   ifconfig.me  — a web server reports the address your web traffic comes from
+#   OpenDNS      — a DNS server reports the address your DNS lookups come from
+#   The public ones usually match. If they differ, web traffic and DNS leave
+#   through different routes (e.g. a VPN or proxy that only covers one).
+#   IPv4 always; an IPv6 column appears only when any IPv6 address is found.
+#   Needs curl; the OpenDNS row also needs dig (Debian/Ubuntu: dnsutils,
+#   Fedora: bind-utils, macOS: built in).
+# ---------------------------------------------------------
+# myip and localip used to be aliases. In a shell that still has them (an
+# open terminal, or an old ~/.aliases.local), defining a function with the
+# same name fails — both bash and zsh expand the alias first. Remove them.
+unalias myip localip 2>/dev/null
+myip() {
+  local timeout=3   # seconds per lookup, then show "-" instead of hanging
+  local local4 local6 web4 web6 dns4 dns6
+
+  local4=$(_local_ip 4)
+  local6=$(_local_ip 6)
+  web4=$(curl -4 -s --max-time "$timeout" ifconfig.me 2>/dev/null)
+  web6=$(curl -6 -s --max-time "$timeout" ifconfig.me 2>/dev/null)
+
+  # myip.opendns.com is a special name: OpenDNS answers it with the address
+  # the question came from. A record = IPv4 answer, AAAA record = IPv6.
+  # IPv6 needs OpenDNS's IPv6 resolver (untested here: no IPv6 internet).
+  # grep drops dig's error lines, which start with ";;".
+  if command -v dig >/dev/null 2>&1; then
+    dns4=$(dig -4 +short +time="$timeout" +tries=1 A myip.opendns.com @resolver1.opendns.com 2>/dev/null | grep -v '^;' | tail -1)
+    dns6=$(dig -6 +short +time="$timeout" +tries=1 AAAA myip.opendns.com @resolver1.ipv6-sandbox.opendns.com 2>/dev/null | grep -v '^;' | tail -1)
+  else
+    dns4="install dig"
+  fi
+
+  # %-13s pads the label to 13 characters so the columns line up;
+  # ${x:--} prints "-" when a value is empty
+  if [[ -n "$local6$web6$dns6" ]]; then
+    printf "%-13s%-17s%s\n" "" "IPv4" "IPv6" \
+      "Local" "${local4:--}" "${local6:--}" \
+      "ifconfig.me" "${web4:--}" "${web6:--}" \
+      "OpenDNS" "${dns4:--}" "${dns6:--}"
+  else
+    printf "%-13s%s\n" \
+      "Local" "${local4:--}" \
+      "ifconfig.me" "${web4:--}" \
+      "OpenDNS" "${dns4:--}"
+  fi
 }
 
 

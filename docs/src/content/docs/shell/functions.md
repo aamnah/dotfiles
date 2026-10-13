@@ -1,6 +1,6 @@
 ---
 title: Functions
-description: take, ii, getwebsite, spy and t — shell functions shared by bash and zsh.
+description: take, ii, myip, getwebsite, spy and t — shell functions shared by bash and zsh.
 ---
 
 `~/.functions` is loaded by both bash and zsh. Functions can take arguments and run several
@@ -29,7 +29,45 @@ logged-in users.
 - **Works on Linux and macOS**, and shows `n/a` for anything it can't find instead of failing.
 - **Public IP needs internet.** It waits at most 3 seconds (`curl --max-time 3`), then shows
   `n/a`.
-- On macOS the local IP comes from `en0`, then `en1`.
+- The local IP is the one on the interface that leads to the internet (same as [`myip`](#myip)).
+
+## `myip`
+
+All your IP addresses at once: the local one, and the public one asked two different ways.
+
+```sh
+myip
+# Local        192.168.1.20
+# ifconfig.me  203.0.113.31
+# OpenDNS      203.0.113.31
+```
+
+With IPv6 available, a second column appears:
+
+```sh
+myip
+#              IPv4             IPv6
+# Local        192.168.1.20     2001:db8::20
+# ifconfig.me  203.0.113.31     2001:db8::99
+# OpenDNS      203.0.113.31     2001:db8::99
+```
+
+- **Local** — this machine's address on your network: the one on the interface that leads to the
+  internet (Wi-Fi, Ethernet or VPN, whichever is in use), not just the first one listed.
+- **ifconfig.me** — a web server reports the address your web traffic comes from.
+- **OpenDNS** — a DNS server reports the address your DNS lookups come from.
+
+The two public answers usually match. **If they differ**, web traffic and DNS leave through
+different routes — for example a VPN or proxy that only covers one of them.
+
+- **The IPv6 column only shows when an IPv6 address is found.** Without IPv6 internet you get the
+  short IPv4 table. The IPv6 lookups fail instantly in that case, so `myip` stays fast.
+- Each lookup gives up after 3 seconds and shows `-` instead of hanging.
+- Needs `curl`. The OpenDNS row also needs `dig` (Debian/Ubuntu: `dnsutils`, Fedora: `bind-utils`,
+  built into macOS); without it you see `install dig`.
+- The local address comes from `ip route get` (Linux), `hostname -I` (older Debian/Ubuntu setups)
+  or the default route's interface (macOS). Minimal containers may have none of these and show `-`.
+- `localip` used to be a separate alias; it's part of `myip` now.
 
 ## `getwebsite`
 

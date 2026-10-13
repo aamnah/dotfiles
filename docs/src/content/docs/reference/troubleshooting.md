@@ -78,15 +78,12 @@ Something prints text in a non-interactive shell. This repo's `.bashrc` stops ea
 non-interactive shells; check your `~/.aliases.local`, `~/.functions.local` and
 `~/.zshenv.local` for `echo` lines.
 
-### `cc main.c` opens Claude instead of compiling
+### `cc` or `ip` still behave strangely
 
-The [`cc` alias](/dotfiles/shell/aliases/#tools) replaces the C compiler at the prompt. Use
-`gcc`, `clang` or `command cc`. Scripts and `make` aren't affected.
-
-### `ip addr` doesn't work
-
-The [`ip` alias](/dotfiles/shell/aliases/#network) replaces Linux's `ip` command. Use
-`command ip addr`, or add `unalias ip` to `~/.aliases.local`.
+Older versions had a `cc` alias (Claude Code) and an `ip` alias (public IP), which hid the C
+compiler and Linux's `ip` command, plus a `localip` alias. They're now [`c`](/dotfiles/shell/aliases/#tools) and
+[`myip`](/dotfiles/shell/functions/#myip). If an old shell still has them, open a new terminal
+or run `unalias cc ip localip`.
 
 ### `npm: command not found` in a script (zsh)
 

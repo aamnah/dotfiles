@@ -23,7 +23,7 @@ an alias you don't want:
 
 ```sh
 # ~/.aliases.local
-unalias ip        # get Linux's real `ip` command back
+unalias kkk       # drop an alias you don't want
 alias proj='cd ~/work/big-project'
 ```
 

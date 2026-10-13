@@ -76,7 +76,9 @@ fi
 # If you want forced color through a pager: `tree -C | less -R`
 
 # Tools (universal — work on any box where the tool is installed)
-alias cc="claude"
+# `c`, not `cc`: `cc` is the system C compiler, and an alias would hide it
+# at the prompt (`cc main.c` would start Claude instead of compiling)
+alias c="claude"
 alias kkk="tmux kill-session"
 alias peaclock="peaclock --config-dir ~/.config/peaclock"
 
@@ -88,15 +90,9 @@ alias peaclock="peaclock --config-dir ~/.config/peaclock"
 # MISC.
 # ---------------------------------------------------------------
 ## IP addresses
-alias myip='curl ifconfig.me'
-alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
-
-# localip differs: macOS uses `ipconfig getifaddr`; Linux uses `hostname -I`
-if [[ -n "$IS_MACOS" ]]; then
-    alias localip='ipconfig getifaddr en0'
-else
-    alias localip="hostname -I | awk '{print \$1}'"
-fi
+# Local and public IP: `myip` is a function in ~/.functions.
+# No `ip` alias any more — on Linux `ip` is the standard network tool
+# (`ip addr`, `ip route`), which an alias would hide.
 
 ## Empty the Trash
 # macOS: trash lives in /Volumes/*/.Trashes (per-mount) and ~/.Trash

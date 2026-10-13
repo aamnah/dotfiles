@@ -51,36 +51,23 @@ would also add colour codes when piped (`grep foo file | wc -l`), which breaks t
 
 | Alias | What it does | Command |
 |---|---|---|
-| `cc` | start Claude Code | `claude` |
+| `c` | start Claude Code | `claude` |
 | `kkk` | kill the current tmux session | `tmux kill-session` |
 | `peaclock` | terminal clock with this repo's config | `peaclock --config-dir ~/.config/peaclock` |
 | `ssh` | **inside kitty only:** SSH that copies kitty's terminfo to the server | `kitty +kitten ssh` |
 
-:::caution[`cc` hides the C compiler]
-On Linux and macOS, `cc` is normally the system **C compiler**. With this alias, typing
-`cc main.c` starts Claude Code instead. Scripts and `make` are **not** affected — aliases only
-apply to what you type at the prompt. To reach the compiler, use `gcc`, `clang`, `command cc`,
-or `\cc`.
-:::
+It's `c`, not `cc`, on purpose: `cc` is the system C compiler, and an alias would hide it at the
+prompt.
 
 ## Network
 
 | Alias | What it does | Command |
 |---|---|---|
-| `myip` | your public IP | `curl ifconfig.me` |
-| `ip` | your public IP, via DNS | `dig +short myip.opendns.com @resolver1.opendns.com` |
-| `localip` | your local network IP | Linux: `hostname -I \| awk '{print $1}'` · macOS: `ipconfig getifaddr en0` |
 | `netlisteners` | programs listening for connections | `lsof -i -P \| grep LISTEN` |
 | `flushdns` | clear the DNS cache | Linux: `resolvectl flush-caches` (or the older `systemd-resolve`) · macOS: `dscacheutil -flushcache` + restart `mDNSResponder` |
 
-:::caution[`ip` hides Linux's `ip` command]
-On Linux, `ip` is the standard network tool (`ip addr`, `ip route`). This alias replaces it at
-the prompt, so `ip addr` won't work. Use `command ip addr` or `\ip addr`, or remove the alias
-in `~/.aliases.local` with `unalias ip`. `myip` does the same job without the clash.
-:::
-
-`localip` on macOS only checks `en0` (usually Wi-Fi on laptops). On a Mac using Ethernet or a
-different adapter it may print nothing — try `ipconfig getifaddr en1`.
+Your local and public IP addresses, IPv4 and IPv6: [`myip`](/dotfiles/shell/functions/#myip) (a function).
+There's no `ip` alias, so Linux's own `ip` command (`ip addr`, `ip route`) works as normal.
 
 ## System
 

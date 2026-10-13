@@ -35,6 +35,9 @@ The installer grew up. It now asks two questions (your login shell and your loca
 - The README is now a short intro that links to the docs site.
 - The "kitty not found" warning only appears on desktops. On a server kitty isn't needed.
 - Remote installs use the `main` branch.
+- The Claude Code alias is now `c` instead of `cc`, so the C compiler `cc` works again.
+- `myip` shows all your IP addresses: the local one and the public one from both ifconfig.me and OpenDNS, with an IPv6 column when IPv6 is available. It replaces the `ip` and `localip` aliases, so Linux's own `ip` command works again.
+- The local IP in `myip` and `ii` comes from the interface that actually leads to the internet, so it also works on Arch, Alpine and Macs on Ethernet.
 
 **Fixed**
 

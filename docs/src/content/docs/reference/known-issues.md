@@ -32,8 +32,6 @@ Things that don't work as they should yet. Each has a workaround.
 
 These work as designed but can surprise you:
 
-- [`cc`](/dotfiles/shell/aliases/#tools) hides the C compiler and [`ip`](/dotfiles/shell/aliases/#network)
-  hides Linux's `ip` command at the prompt.
 - **kitty's Ctrl+Shift+H/J/K/L/-** defaults are replaced by split navigation — see
   [kitty](/dotfiles/terminal/kitty/#splits-like-tmux).
 - **`LC_ALL` is set**, which overrides per-category locale settings like `LC_TIME` — see
