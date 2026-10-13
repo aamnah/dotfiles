@@ -42,6 +42,8 @@ git config --global pull.rebase true
 | `git lg` | compact, coloured history graph of all branches |
 | `git s` | `git status` |
 
+![git lg: one coloured line per commit with hash, message, age and author](../../../assets/screenshots/git-lg.png)
+
 `git lg` shows one line per commit: short hash (red), branch/tag names (yellow), message, age
 (green) and author (blue), with a graph of how branches join.
 

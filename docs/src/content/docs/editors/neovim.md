@@ -10,6 +10,8 @@ default.
 The installer copies the config but **doesn't install Neovim**:
 `sudo apt install neovim` or `brew install neovim`.
 
+![Neovim showing part of install.sh with relative line numbers, a highlighted cursor line and guide columns](../../../assets/screenshots/neovim.png)
+
 ## Settings
 
 | Area | Setting | Effect |

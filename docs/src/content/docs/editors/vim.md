@@ -7,6 +7,8 @@ description: .vimrc — line numbers, tab indents, mouse, folding, smart search.
 Vim itself (`sudo apt install vim` or `brew install vim`). For Neovim, see
 [Neovim](/dotfiles/editors/neovim/).
 
+![Vim with the Sublime Monokai colour scheme, showing part of install.sh indented with tabs](../../../assets/screenshots/vim-monokai.png)
+
 ## Colour scheme
 
 Vim uses **[Sublime Monokai](https://github.com/ErichDonGubler/vim-sublime-monokai)**. It's

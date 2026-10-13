@@ -42,6 +42,7 @@ The installer grew up. It now asks two questions (your login shell and your loca
 - `.zshrc.local.example` is a short, up-to-date template.
 - The README is now a short intro that links to the docs site.
 - The docs home page and README say up front that the defaults are opinionated, with how to change each one.
+- Screenshots on the docs site for peaclock, Vim, Neovim and `git lg`.
 - The "kitty not found" warning only appears on desktops. On a server kitty isn't needed.
 - Remote installs use the `main` branch.
 - The Claude Code alias is now `c` instead of `cc`, so the C compiler `cc` works again.

@@ -6,6 +6,8 @@ description: A binary clock, timer and stopwatch for the terminal.
 [peaclock](https://github.com/octobanana/peaclock) shows a big clock in the terminal — nice in a
 spare tmux pane.
 
+![peaclock showing the time as a binary clock in the Lasik colours, with the date underneath](../../../assets/screenshots/peaclock.png)
+
 The config, `.config/peaclock/config`, sets:
 
 | Setting | Value |
