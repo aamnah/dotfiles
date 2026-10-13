@@ -37,6 +37,7 @@ Only installed when missing. Already-installed ones are reported as `found:` and
 | **bash-completion** | Linux | Tab-completion for `git`, `apt`, `ssh` hosts… |
 | **notify-send** (`libnotify-bin` / `libnotify`) | Linux **desktops** only | the [`alert`](/dotfiles/shell/aliases/#alert) alias |
 | **kitty terminfo** (`kitty-terminfo`) | Linux, when kitty itself isn't installed | so SSH from kitty works — see [kitty](/dotfiles/terminal/kitty/#using-kitty-over-ssh) |
+| **A Nerd Font** (Hasklug by default) | desktops, when it isn't installed yet | icons in the prompt, tmux and kitty; goes to `~/.local/share/fonts` (Linux) or `~/Library/Fonts` (macOS), no `sudo` |
 | **locale** (`locales`, `glibc-langpack-*`, `glibc-locale`) | chosen locale missing | see [Locale](/dotfiles/shell/locale/) |
 | **chsh** (`util-linux-user` / `shadow`) | Fedora / Alpine, when missing | to change the login shell |
 | **TPM** and **Catppuccin for tmux** | `git` is installed | cloned into `~/.config/tmux/plugins/` |

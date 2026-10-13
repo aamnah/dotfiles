@@ -63,13 +63,31 @@ anything it replaces. It asks two questions first and shows a plan before changi
 
    For "other", type `ja_JP` or `ja_JP.UTF-8` — both work. See [Locale](/dotfiles/shell/locale/).
 
-4. **It shows the plan and asks `Proceed? [Y/n]`.** Press Enter to go ahead. Anything else stops
+4. **On a desktop, it asks for a terminal font** — a *Nerd Font*: a programming font with icons
+   added, so the prompt, tmux and editors show icons instead of boxes.
+
+   ```
+   Terminal font? (a Nerd Font, so prompt and tmux icons show instead of boxes)
+     1) Hasklug  (default)
+     2) JetBrains Mono
+     3) Fira Code
+     4) Meslo
+     5) Caskaydia Cove
+     6) Hack
+     7) none (skip)
+   ```
+
+   It's installed just for you (no `sudo`), and kitty's config is set to use it. Not asked on
+   servers or in containers — the font belongs on the machine you look at. See
+   [kitty](/dotfiles/terminal/kitty/#font-and-window).
+
+5. **It shows the plan and asks `Proceed? [Y/n]`.** Press Enter to go ahead. Anything else stops
    the script — nothing has been changed at that point.
 
-5. **It installs** — configs, missing tools, the locale — and sets your login shell. See
+6. **It installs** — configs, missing tools, the locale, the font — and sets your login shell. See
    [What gets installed](/dotfiles/start/what-gets-installed/) for the full list.
 
-6. **Log out and back in** so the new login shell takes effect.
+7. **Log out and back in** so the new login shell takes effect.
 
 </Steps>
 
@@ -81,6 +99,7 @@ Press **Enter** at any question to take the default. Typing something invalid ju
 |---|---|
 | `-y`, `--yes` | Don't ask anything — use the defaults (or the values from the flags below). |
 | `--shell=zsh\|bash\|keep` | Login shell. Default: `zsh`. Configs for both shells are installed either way. |
+| `--font=FONT` | Nerd Font for the terminal (desktops only): `Hasklig` (default, installs as "Hasklug"), `JetBrainsMono`, `FiraCode`, `Meslo`, `CascadiaCode`, `Hack`, or `none`. |
 | `--locale=LOCALE` | UTF-8 locale to generate and use, e.g. `fi_FI` or `ja_JP.UTF-8`. Default: `en_US.UTF-8`. |
 | `--remote` | Fetch configs from GitHub instead of the local checkout. |
 | `-h`, `--help` | Show all options. |

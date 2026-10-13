@@ -129,8 +129,10 @@ See [kitty](/dotfiles/terminal/kitty/#theme).
 
 ### Icons in the prompt or tmux show as boxes
 
-The terminal font has no Nerd Font icons. Install **Hasklug Nerd Font** (or any Nerd Font) and
-select it in your terminal.
+The terminal font has no Nerd Font icons. Run the installer on that machine (it asks for a Nerd
+Font, Hasklug by default), or install one from [nerdfonts.com](https://www.nerdfonts.com/font-downloads)
+and select it in your terminal. Over SSH, the font that matters is the one on **your own
+computer**, not the server.
 
 ### tmux: error about `catppuccin.tmux` on start
 

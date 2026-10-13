@@ -69,7 +69,8 @@ echo 'eval "$(starship init zsh)"'  >> ~/.zshrc
 - **No starship** (minimal server, install failed): bash uses its
   [fallback prompt](/dotfiles/shell/bash/#prompt); zsh shows its plain default `%` prompt.
 - **Icons show as boxes**: the terminal font has no Nerd Font icons. This config uses plain
-  characters, but other tools might not — see [kitty](/dotfiles/terminal/kitty/#font-and-window).
+  characters, but other tools might not. The installer can install a Nerd Font for you — see
+  [kitty](/dotfiles/terminal/kitty/#font-and-window).
 - **Installer needs root for starship.** The official installer puts it in `/usr/local/bin` and
   may ask for your `sudo` password.
 - **The `muted` frame is nearly invisible on light or high-contrast terminal themes** — by

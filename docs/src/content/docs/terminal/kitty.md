@@ -20,9 +20,13 @@ you use kitty on your own computer and SSH *from* it.
 | Window size on open | 120 × 32 characters, every time (`remember_window_size no`) |
 
 A *Nerd Font* is a programming font with thousands of extra icons added — prompts and tools use
-them for symbols like the git branch icon. If Hasklug isn't installed, kitty silently uses a
-fallback font and some icons show as boxes. Get it from
-[nerdfonts.com](https://www.nerdfonts.com/font-downloads) (it's Hasklig with icons added).
+them for symbols like the git branch icon. If the font isn't installed, kitty silently uses a
+fallback font and some icons show as boxes.
+
+**The installer installs it on desktops.** It asks which Nerd Font you want (Hasklug, the default,
+is Hasklig with icons added) and, if you pick another one, writes that font's name into
+`kitty.conf` while copying it. You can also pass `--font=FiraCode` and so on, or get fonts from
+[nerdfonts.com](https://www.nerdfonts.com/font-downloads).
 
 ## Theme
 

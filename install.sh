@@ -22,11 +22,18 @@ MODE="local"
 # no terminal to ask on (Docker builds, CI).
 DEFAULT_SHELL="zsh"
 DEFAULT_LOCALE="en_US.UTF-8"
+DEFAULT_FONT="Hasklig"       # Nerd Font archive name; "Hasklig" installs as "Hasklug Nerd Font"
+
+# Nerd Fonts release to download fonts from. Pinned (not "latest") so every
+# install gets the same, tested files. To update: pick a newer tag from
+# https://github.com/ryanoasis/nerd-fonts/releases and re-test.
+NERD_FONTS_VERSION="v3.5.1"
 
 # Answers — set by flags (--shell=, --locale=) or by the prompts.
 # Empty = not decided yet, ask_questions fills them in.
 SHELL_CHOICE=""   # zsh | bash | keep (don't change the login shell)
 LOCALE=""         # UTF-8 locale to generate and save, e.g. en_US.UTF-8
+FONT_CHOICE=""    # Nerd Font archive name (Hasklig, FiraCode…) or "none"
 ASSUME_YES=0      # 1 = -y: accept defaults, never prompt
 
 for arg in "$@"; do
@@ -35,18 +42,22 @@ for arg in "$@"; do
         -y|--yes) ASSUME_YES=1 ;;
         --shell=*) SHELL_CHOICE="${arg#--shell=}" ;;
         --locale=*) LOCALE="${arg#--locale=}" ;;
+        --font=*) FONT_CHOICE="${arg#--font=}" ;;
         -h|--help)
             cat <<EOF
-Usage: install.sh [--remote] [-y] [--shell=zsh|bash|keep] [--locale=LOCALE]
+Usage: install.sh [--remote] [-y] [--shell=zsh|bash|keep] [--locale=LOCALE] [--font=FONT]
 
   (default)        Copy configs from this checkout to \$HOME, asking a few
-                   questions first (login shell, locale).
+                   questions first (login shell, locale, font).
   --remote         Fetch configs from $RAW_BASE and install to \$HOME (no clone needed).
   -y, --yes        Don't ask — use defaults (or the values from the flags below).
   --shell=SHELL    Login shell: zsh (default), bash, or keep (leave it as is).
                    Configs for both zsh and bash are always installed.
   --locale=LOCALE  UTF-8 locale to generate and use, e.g. ja_JP.UTF-8
                    (default: $DEFAULT_LOCALE). Saved to ~/.config/locale.conf.
+  --font=FONT      Nerd Font for the terminal (desktops only): Hasklig (default,
+                   "Hasklug"), JetBrainsMono, FiraCode, Meslo, CascadiaCode,
+                   Hack, or none.
 
 Example (fresh VPS, no questions):
   curl -fsSL $RAW_BASE/install.sh | bash -s -- --remote -y
@@ -205,6 +216,42 @@ normalize_locale() {
     echo "$base.UTF-8"
 }
 
+# Nerd Fonts offered by the installer. A "Nerd Font" is a programming font
+# with thousands of icons added (git branch, folder, OS logos…) that prompts,
+# tmux status bars and editors use. Without one, those icons show as boxes.
+#
+# nerd_font_archive: turn what the user typed or picked into the archive
+#   name used on the Nerd Fonts download page (e.g. "hasklug" → Hasklig).
+#   Prints nothing for an unknown font.
+# The archive name and the installed font name sometimes differ: Hasklig is
+# installed as "Hasklug", CascadiaCode as "CaskaydiaCove" (the originals'
+# licences don't allow modified copies under the same name).
+nerd_font_archive() {
+    case "$(printf '%s' "$1" | tr '[:upper:]' '[:lower:]' | tr -d ' ')" in
+        hasklig|hasklug*)       echo Hasklig ;;
+        jetbrainsmono*)         echo JetBrainsMono ;;
+        firacode*)              echo FiraCode ;;
+        meslo*)                 echo Meslo ;;
+        cascadia*|caskaydia*)   echo CascadiaCode ;;
+        hack*)                  echo Hack ;;
+        none*|skip*)            echo none ;;
+    esac
+}
+
+# nerd_font_family: the font name apps see once it's installed — what
+# kitty.conf's font_family needs. "Mono" = every icon is one character
+# wide, so columns stay aligned in a terminal.
+nerd_font_family() {
+    case "$1" in
+        Hasklig)        echo "Hasklug Nerd Font Mono" ;;
+        JetBrainsMono)  echo "JetBrainsMono Nerd Font Mono" ;;
+        FiraCode)       echo "FiraCode Nerd Font Mono" ;;
+        Meslo)          echo "MesloLGS Nerd Font Mono" ;;
+        CascadiaCode)   echo "CaskaydiaCove Nerd Font Mono" ;;
+        Hack)           echo "Hack Nerd Font Mono" ;;
+    esac
+}
+
 # Fill in SHELL_CHOICE and LOCALE. Flags win; prompts cover the rest;
 # defaults are used with -y or when there's no terminal.
 ask_questions() {
@@ -216,6 +263,19 @@ ask_questions() {
             exit 1
             ;;
     esac
+    if [[ -n "$FONT_CHOICE" ]]; then
+        local given_font="$FONT_CHOICE"
+        FONT_CHOICE="$(nerd_font_archive "$given_font")"
+        if [[ -z "$FONT_CHOICE" ]]; then
+            echo "error: --font must be Hasklig, JetBrainsMono, FiraCode, Meslo, CascadiaCode, Hack or none (got: $given_font)" >&2
+            exit 1
+        fi
+    fi
+    # Fonts only matter on the machine you look at: on a VPS or in a
+    # container the terminal (and its font) is on your own computer
+    if ! is_desktop; then
+        FONT_CHOICE="none"
+    fi
     if [[ -n "$LOCALE" ]]; then
         local given="$LOCALE"
         if ! LOCALE="$(normalize_locale "$given")"; then
@@ -227,6 +287,7 @@ ask_questions() {
     if ! can_prompt; then
         SHELL_CHOICE="${SHELL_CHOICE:-$DEFAULT_SHELL}"
         LOCALE="${LOCALE:-$DEFAULT_LOCALE}"
+        FONT_CHOICE="${FONT_CHOICE:-$DEFAULT_FONT}"
         return 0
     fi
 
@@ -259,6 +320,12 @@ ask_questions() {
             LOCALE="$REPLY_CHOICE"
         fi
     fi
+
+    if [[ -z "$FONT_CHOICE" ]]; then
+        ask_choice "Terminal font? (a Nerd Font, so prompt and tmux icons show instead of boxes)" 1 \
+            "Hasklug" "JetBrains Mono" "Fira Code" "Meslo" "Caskaydia Cove" "Hack" "none (skip)"
+        FONT_CHOICE="$(nerd_font_archive "$REPLY_CHOICE")"
+    fi
 }
 
 # Show what's about to happen and ask before changing anything.
@@ -266,12 +333,15 @@ ask_questions() {
 confirm_plan() {
     local shell_line="$SHELL_CHOICE"
     [[ "$SHELL_CHOICE" == "keep" ]] && shell_line="keep current (${SHELL:-unknown})"
+    local font_line="$(nerd_font_family "$FONT_CHOICE")"
+    [[ "$FONT_CHOICE" == "none" ]] && font_line="none (skipped$(is_desktop || echo ': not a desktop'))"
 
     cat <<PLAN
 
 Plan:
   login shell  $shell_line
   locale       $LOCALE (saved to $HOME/.config/locale.conf)
+  font         $font_line
   configs      nano, tmux, kitty, nvim, starship, zsh, bash
                (existing files are backed up as <file>.bak.<timestamp>)
   source       $MODE
@@ -406,6 +476,69 @@ ensure_kitty_terminfo() {
         || echo "warning: failed to install kitty-terminfo — connect with 'kitten ssh <host>' instead, it copies the terminfo over" >&2
 }
 
+# Install the chosen Nerd Font for the current user (no sudo needed).
+# Desktops only — FONT_CHOICE is "none" elsewhere (see ask_questions).
+# Never fails the script: on any problem it warns and returns.
+ensure_nerd_font() {
+    [[ "$FONT_CHOICE" == "none" || -z "$FONT_CHOICE" ]] && return 0
+
+    local family; family="$(nerd_font_family "$FONT_CHOICE")"
+    # Font files are named without spaces, e.g. HasklugNerdFontMono-Regular.ttf
+    local file_prefix="${family// /}"
+    file_prefix="${file_prefix%Mono}"   # match the Mono and non-Mono files
+
+    # Where fonts for one user go. Linux: any folder under ~/.local/share/fonts
+    # is picked up by fontconfig (the font finder most Linux apps use).
+    local font_dir
+    if [[ "$SYSTEM" == macos-* ]]; then
+        font_dir="$HOME/Library/Fonts"
+    else
+        font_dir="$HOME/.local/share/fonts/${FONT_CHOICE}NerdFont"
+    fi
+
+    # Already installed? fc-list lists every font fontconfig knows (Linux);
+    # on macOS (no fontconfig) look for the files themselves.
+    # Why `grep … >/dev/null` and not `grep -q`: -q quits at the first match,
+    # and fc-list, still writing its long list, then gets SIGPIPE ("nobody is
+    # reading any more") and fails. With `set -o pipefail` (top of this
+    # script) that failure makes the whole check false — "not installed"
+    # exactly when it IS installed. Reading everything avoids that.
+    if { command -v fc-list >/dev/null 2>&1 && fc-list : family | grep -i "$family" >/dev/null; } ||
+       compgen -G "$font_dir/${file_prefix}*" >/dev/null; then
+        echo "found: $family"
+        return 0
+    fi
+
+    # The download is a .tar.xz archive; tar needs the xz tool to unpack it.
+    # macOS's tar has it built in; minimal Linux installs may not.
+    if [[ "$SYSTEM" == linux ]] && ! command -v xz >/dev/null 2>&1; then
+        case "$PKG_MGR" in
+            apt) pkg_install xz-utils ;;
+            *)   pkg_install xz ;;
+        esac || { echo "warning: can't unpack the font without xz — font not installed" >&2; return 0; }
+    fi
+
+    local url="https://github.com/ryanoasis/nerd-fonts/releases/download/$NERD_FONTS_VERSION/$FONT_CHOICE.tar.xz"
+    local download_dir; download_dir="$(mktemp -d)"
+    echo "installing font: $family"
+    if ! curl -fsSL "$url" -o "$download_dir/font.tar.xz"; then
+        echo "warning: font download failed ($url) — font not installed" >&2
+        rm -rf "$download_dir"
+        return 0
+    fi
+    mkdir -p "$font_dir"
+    # -x extract, -J the archive is xz-compressed, -f the file to read,
+    # -C unpack into this folder. Only the font files are kept.
+    tar -xJf "$download_dir/font.tar.xz" -C "$download_dir" &&
+        cp "$download_dir"/*.[ot]tf "$font_dir"/
+    rm -rf "$download_dir"
+
+    # Refresh fontconfig's list of fonts so apps find the new one right away
+    # (otherwise only after a re-login). macOS notices new fonts by itself.
+    command -v fc-cache >/dev/null 2>&1 && fc-cache -f "$font_dir" >/dev/null 2>&1
+    echo "installed: $family -> $font_dir"
+}
+
 install_nano() {
     local src; src="$(fetch_source ".config/nano/nanorc")"
     local dest="$HOME/.nanorc"
@@ -416,7 +549,7 @@ install_nano() {
     fi
 
     if [[ "$SYSTEM" == macos-* ]]; then
-        if ! command -v nano >/dev/null 2>&1 || ! nano --version 2>/dev/null | grep -q 'GNU nano'; then
+        if ! command -v nano >/dev/null 2>&1 || ! nano --version 2>/dev/null | grep 'GNU nano' >/dev/null; then
             echo "warning: macOS ships an old nano (2.0.6). Install a modern one with: brew install nano" >&2
         fi
     fi
@@ -539,8 +672,16 @@ install_kitty() {
 
     mkdir -p "$(dirname "$dest")"
     backup_if_exists "$dest"
-    cp "$src" "$dest"
-    echo "installed: $dest"
+    # kitty.conf names Hasklug as its font. If another Nerd Font was chosen,
+    # put that font's name in while copying (same idea as nano's paths) —
+    # otherwise kitty would look for a font that isn't installed.
+    local family; family="$(nerd_font_family "$FONT_CHOICE")"
+    if [[ -n "$family" && "$FONT_CHOICE" != "$DEFAULT_FONT" ]]; then
+        sed "s|^font_family .*|font_family      $family|" "$src" > "$dest"
+    else
+        cp "$src" "$dest"
+    fi
+    echo "installed: $dest${family:+ (font: $family)}"
 }
 
 install_starship() {
@@ -751,7 +892,7 @@ ensure_locale() {
     fi
 
     # `locale -a` spells it en_US.utf8 on Linux — hence -i and optional dash
-    if locale -a 2>/dev/null | grep -qiE "^${lang}\.utf-?8$"; then
+    if locale -a 2>/dev/null | grep -iE "^${lang}\.utf-?8$" >/dev/null; then
         echo "found: locale $LOCALE"
         return 0
     fi
@@ -786,7 +927,7 @@ ensure_locale() {
             ;;
     esac
 
-    if locale -a 2>/dev/null | grep -qiE "^${lang}\.utf-?8$"; then
+    if locale -a 2>/dev/null | grep -iE "^${lang}\.utf-?8$" >/dev/null; then
         echo "installed: locale $LOCALE"
     else
         echo "warning: locale $LOCALE still missing — shells will fall back to C.UTF-8" >&2
@@ -849,6 +990,7 @@ main() {
 
     install_nano
     install_tmux
+    ensure_nerd_font
     install_kitty
     install_nvim
     install_starship

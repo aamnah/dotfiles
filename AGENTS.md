@@ -35,6 +35,7 @@ XDG-style configs (kitty, nvim) live under `.config/<tool>/` in the repo, mirror
   - `PKG_MGR` — one of `apt`, `dnf`, `yum`, `pacman`, `zypper`, `apk`, `brew` (macOS only), or empty if none found
 - `backup_if_exists` is shared — any existing target is moved to `<dest>.bak.<timestamp>` before the new file is written.
 - `as_root <cmd>...` is shared — runs a command directly when already root (Docker), else via `sudo`. Use it for any root-only step (editing `/etc`, `locale-gen`).
+- Never pipe into `grep -q` (or `head`) inside `install.sh`: it runs with `set -o pipefail`, and when grep quits early the writing command gets SIGPIPE, which makes the check fail even on a match. Use `grep … >/dev/null` instead.
 - `pkg_install <package>...` is shared — installs through `$PKG_MGR` via `as_root`. Returns non-zero on failure; callers warn and continue rather than abort. `ensure_<tool>` functions use it to install missing binaries; never call a package manager directly.
 - One `install_<tool>` function per config file. Each function is self-contained: it checks for the source, warns if the tool is missing, backs up, then installs.
 

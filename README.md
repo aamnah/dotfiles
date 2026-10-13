@@ -18,7 +18,7 @@ Or without cloning:
 curl -fsSL https://raw.githubusercontent.com/aamnah/dotfiles/main/install.sh | bash -s -- --remote
 ```
 
-The installer asks for your login shell (zsh by default) and locale (`en_US.UTF-8` by default), shows a plan, and backs up every file it replaces. `-y` skips the questions. Details: [Install](https://aamnah.github.io/dotfiles/start/install/) · [What gets installed](https://aamnah.github.io/dotfiles/start/what-gets-installed/).
+The installer asks for your login shell (zsh by default), locale (`en_US.UTF-8` by default) and, on desktops, a Nerd Font for the terminal (Hasklug by default), shows a plan, and backs up every file it replaces. `-y` skips the questions. Details: [Install](https://aamnah.github.io/dotfiles/start/install/) · [What gets installed](https://aamnah.github.io/dotfiles/start/what-gets-installed/).
 
 ## What's inside
 

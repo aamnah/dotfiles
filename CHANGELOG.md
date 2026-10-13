@@ -18,6 +18,7 @@ The installer grew up. It now asks two questions (your login shell and your loca
 - `install.sh` asks for your locale (`en_US.UTF-8` by default) and generates it if it's missing. Your choice is saved to `~/.config/locale.conf`.
 - `-y` skips all questions. `--shell=` and `--locale=` answer them up front. With no terminal (Docker builds, CI) the defaults are used automatically.
 - The installer shows a plan and asks `Proceed? [Y/n]` before changing anything.
+- On desktops the installer asks for a Nerd Font (Hasklug by default; JetBrains Mono, Fira Code, Meslo, Caskaydia Cove or Hack) and installs it for you, so prompt and tmux icons show instead of boxes. `--font=` picks one up front; kitty's config follows your choice.
 - kitty's theme files (Lasik and Catppuccin Mocha) are installed with `kitty.conf`, so kitty starts with the Lasik colours.
 - Missing tools are installed: zsh, `less`, `bash-completion`, `notify-send` (desktops only) and kitty's terminfo (servers, so SSH from kitty works).
 - Bash support: `install.sh` installs `.bash_profile`, `.inputrc` and a small `.bashrc` that loads `.bash_profile`, so new terminal tabs get your aliases too.
@@ -46,6 +47,7 @@ The installer grew up. It now asks two questions (your login shell and your loca
 - Installing on a fresh Arch system failed with "target not found".
 - A cut-off download of `install.sh` through `curl | bash` could run half an install. Now nothing runs until the whole script has arrived.
 - On Fedora the login shell was set to an odd path (`/usr/sbin/zsh`).
+- Some "is it installed?" checks could wrongly answer no on systems with a lot of output (many fonts or locales).
 
 **Theme**
 

@@ -21,6 +21,7 @@ main
 ├── confirm_plan         print plan, "Proceed? [Y/n]"
 ├── install_nano
 ├── install_tmux         + TPM, Catppuccin (git clone)
+├── ensure_nerd_font     desktops only, chosen font → ~/.local/share/fonts
 ├── install_kitty        + theme files, ensure_kitty_terminfo
 ├── install_nvim
 ├── install_starship
@@ -49,6 +50,8 @@ swallow the rest of the script by reading from stdin.
 | `MODE` | flags | `local` or `remote` |
 | `SHELL_CHOICE` | flags / `ask_questions` | `zsh`, `bash`, `keep` |
 | `LOCALE` | flags / `ask_questions` | e.g. `en_US.UTF-8` |
+| `FONT_CHOICE` | flags / `ask_questions` | Nerd Font archive name (`Hasklig`, `FiraCode`…) or `none`; always `none` when not a desktop |
+| `NERD_FONTS_VERSION` | top of file | pinned Nerd Fonts release to download from |
 | `ASSUME_YES` | `-y` | `0` / `1` |
 | `DEFAULT_SHELL`, `DEFAULT_LOCALE` | top of file | defaults for `-y` and no-terminal runs |
 
