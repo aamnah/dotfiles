@@ -13,19 +13,43 @@
 set -euo pipefail
 
 REPO_SLUG="aamnah/dotfiles"
-REPO_BRANCH="master"
+REPO_BRANCH="main"
 RAW_BASE="https://raw.githubusercontent.com/$REPO_SLUG/$REPO_BRANCH"
 
 MODE="local"
+
+# Defaults for the install questions. Used as-is with -y, or when there's
+# no terminal to ask on (Docker builds, CI).
+DEFAULT_SHELL="zsh"
+DEFAULT_LOCALE="en_US.UTF-8"
+
+# Answers — set by flags (--shell=, --locale=) or by the prompts.
+# Empty = not decided yet, ask_questions fills them in.
+SHELL_CHOICE=""   # zsh | bash | keep (don't change the login shell)
+LOCALE=""         # UTF-8 locale to generate and save, e.g. en_US.UTF-8
+ASSUME_YES=0      # 1 = -y: accept defaults, never prompt
+
 for arg in "$@"; do
     case "$arg" in
         --remote) MODE="remote" ;;
+        -y|--yes) ASSUME_YES=1 ;;
+        --shell=*) SHELL_CHOICE="${arg#--shell=}" ;;
+        --locale=*) LOCALE="${arg#--locale=}" ;;
         -h|--help)
             cat <<EOF
-Usage: install.sh [--remote]
+Usage: install.sh [--remote] [-y] [--shell=zsh|bash|keep] [--locale=LOCALE]
 
-  (default)  Copy configs from this checkout to \$HOME.
-  --remote   Fetch configs from $RAW_BASE and install to \$HOME (no clone needed).
+  (default)        Copy configs from this checkout to \$HOME, asking a few
+                   questions first (login shell, locale).
+  --remote         Fetch configs from $RAW_BASE and install to \$HOME (no clone needed).
+  -y, --yes        Don't ask — use defaults (or the values from the flags below).
+  --shell=SHELL    Login shell: zsh (default), bash, or keep (leave it as is).
+                   Configs for both zsh and bash are always installed.
+  --locale=LOCALE  UTF-8 locale to generate and use, e.g. ja_JP.UTF-8
+                   (default: $DEFAULT_LOCALE). Saved to ~/.config/locale.conf.
+
+Example (fresh VPS, no questions):
+  curl -fsSL $RAW_BASE/install.sh | bash -s -- --remote -y
 EOF
             exit 0
             ;;
@@ -98,7 +122,25 @@ detect_system() {
             exit 1
             ;;
     esac
-    echo "detected: $SYSTEM"
+
+    # Package manager used by pkg_install. Detected once here so every
+    # ensure_* function shares the same logic. Empty = none found.
+    # On macOS only brew counts — Linuxbrew is ignored on Linux so system
+    # packages go through the distro's own manager.
+    PKG_MGR=""
+    if [[ "$SYSTEM" == macos-* ]]; then
+        command -v brew >/dev/null 2>&1 && PKG_MGR="brew"
+    else
+        local m
+        for m in apt-get dnf yum pacman zypper apk; do
+            if command -v "$m" >/dev/null 2>&1; then
+                PKG_MGR="${m%-get}"  # apt-get -> apt
+                break
+            fi
+        done
+    fi
+
+    echo "detected: $SYSTEM (package manager: ${PKG_MGR:-none})"
 }
 
 backup_if_exists() {
@@ -110,8 +152,262 @@ backup_if_exists() {
     fi
 }
 
+#-----------------------------------------------------------------------
+# Install questions
+#-----------------------------------------------------------------------
+
+# True when a keyboard is reachable.
+# Reads go to /dev/tty, not stdin — with `curl … | bash` stdin IS the
+# script, so a plain `read` would eat the next line of the script as the
+# answer. Opening /dev/tty is the real test: in Docker/CI the file exists
+# but can't be opened.
+has_tty() {
+    { : </dev/tty; } 2>/dev/null
+}
+
+# True when we should ask questions: not -y, and a keyboard is reachable
+can_prompt() {
+    [[ "$ASSUME_YES" -eq 0 ]] && has_tty
+}
+
+# Numbered menu. Stores the chosen option's text in REPLY_CHOICE.
+# Enter picks the default; anything invalid asks again.
+# Usage: ask_choice "<question>" <default-number> <option>...
+REPLY_CHOICE=""
+ask_choice() {
+    local question="$1" default="$2"; shift 2
+    local options=("$@") i ans mark
+    printf '\n%s\n' "$question" >/dev/tty
+    for i in "${!options[@]}"; do
+        mark=""
+        [[ $((i + 1)) -eq "$default" ]] && mark="  (default)"
+        printf '  %d) %s%s\n' $((i + 1)) "${options[i]}" "$mark" >/dev/tty
+    done
+    while true; do
+        printf 'Choose [%d]: ' "$default" >/dev/tty
+        read -r ans </dev/tty || ans=""   # Ctrl-D counts as Enter
+        ans="${ans:-$default}"
+        if [[ "$ans" =~ ^[0-9]+$ ]] && (( ans >= 1 && ans <= ${#options[@]} )); then
+            REPLY_CHOICE="${options[ans - 1]}"
+            return 0
+        fi
+        printf 'Please enter a number from 1 to %d.\n' "${#options[@]}" >/dev/tty
+    done
+}
+
+# Turn ja_JP / ja_JP.utf8 / ja_JP.UTF-8 into ja_JP.UTF-8.
+# Returns 1 (prints nothing) if it doesn't look like a locale name.
+# Always UTF-8: the shell configs and tools assume it.
+normalize_locale() {
+    local base="${1%%.*}"
+    local re='^[a-z]{2,3}_[A-Z]{2}$'
+    [[ "$base" =~ $re ]] || return 1
+    echo "$base.UTF-8"
+}
+
+# Fill in SHELL_CHOICE and LOCALE. Flags win; prompts cover the rest;
+# defaults are used with -y or when there's no terminal.
+ask_questions() {
+    # Validate flags first, so a typo fails before anything is changed
+    case "$SHELL_CHOICE" in
+        ""|zsh|bash|keep) ;;
+        *)
+            echo "error: --shell must be zsh, bash or keep (got: $SHELL_CHOICE)" >&2
+            exit 1
+            ;;
+    esac
+    if [[ -n "$LOCALE" ]]; then
+        local given="$LOCALE"
+        if ! LOCALE="$(normalize_locale "$given")"; then
+            echo "error: --locale must look like en_US or en_US.UTF-8 (got: $given)" >&2
+            exit 1
+        fi
+    fi
+
+    if ! can_prompt; then
+        SHELL_CHOICE="${SHELL_CHOICE:-$DEFAULT_SHELL}"
+        LOCALE="${LOCALE:-$DEFAULT_LOCALE}"
+        return 0
+    fi
+
+    if [[ -z "$SHELL_CHOICE" ]]; then
+        # zsh is the default for everyone. "keep" only appears when the
+        # current login shell is something else (fish, tcsh…), so those
+        # users can install the configs without being moved off it.
+        local current; current="$(basename "${SHELL:-}")"
+        local opts=("zsh" "bash")
+        if [[ -n "$current" && "$current" != "zsh" && "$current" != "bash" ]]; then
+            opts+=("keep $current")
+        fi
+        ask_choice "Login shell? (configs for both zsh and bash are installed either way)" 1 "${opts[@]}"
+        SHELL_CHOICE="${REPLY_CHOICE%% *}"   # "keep fish" -> keep
+    fi
+
+    if [[ -z "$LOCALE" ]]; then
+        ask_choice "Locale? (language and formats for dates, numbers, sorting)" 1 \
+            "$DEFAULT_LOCALE" "en_GB.UTF-8" "other (type it, e.g. ja_JP.UTF-8)"
+        if [[ "$REPLY_CHOICE" == other* ]]; then
+            local typed
+            while true; do
+                printf 'Locale: ' >/dev/tty
+                # Ctrl-D gives up and uses the default instead of looping forever
+                read -r typed </dev/tty || { LOCALE="$DEFAULT_LOCALE"; break; }
+                LOCALE="$(normalize_locale "$typed")" && break
+                printf "That doesn't look like a locale. Use the form ja_JP or ja_JP.UTF-8.\n" >/dev/tty
+            done
+        else
+            LOCALE="$REPLY_CHOICE"
+        fi
+    fi
+}
+
+# Show what's about to happen and ask before changing anything.
+# With -y or no terminal it just prints the plan and continues.
+confirm_plan() {
+    local shell_line="$SHELL_CHOICE"
+    [[ "$SHELL_CHOICE" == "keep" ]] && shell_line="keep current (${SHELL:-unknown})"
+
+    cat <<PLAN
+
+Plan:
+  login shell  $shell_line
+  locale       $LOCALE (saved to $HOME/.config/locale.conf)
+  configs      nano, tmux, kitty, nvim, starship, zsh, bash
+               (existing files are backed up as <file>.bak.<timestamp>)
+  source       $MODE
+PLAN
+
+    can_prompt || return 0
+    local ans
+    printf '\nProceed? [Y/n] ' >/dev/tty
+    read -r ans </dev/tty || ans=""
+    case "$ans" in
+        ""|y|Y|yes|Yes|YES) ;;
+        *)
+            echo "aborted — nothing was changed"
+            exit 0
+            ;;
+    esac
+}
+
+# Save the chosen locale to ~/.config/locale.conf. .zshenv and
+# .bash_profile read LANG from it; without it they use en_US.UTF-8.
+# Same file and format Arch's /etc/profile.d/locale.sh reads.
+write_locale_conf() {
+    local dest="$HOME/.config/locale.conf"
+    if [[ -f "$dest" ]] && grep -qx "LANG=$LOCALE" "$dest"; then
+        echo "found: $dest (LANG=$LOCALE)"
+        return 0
+    fi
+    mkdir -p "$(dirname "$dest")"
+    backup_if_exists "$dest"
+    printf 'LANG=%s\n' "$LOCALE" > "$dest"
+    echo "installed: $dest (LANG=$LOCALE)"
+}
+
+# Make $SHELL_CHOICE the login shell (the one you get on login/SSH).
+# Never fails the script: on any problem it prints the manual command.
+set_login_shell() {
+    [[ "$SHELL_CHOICE" == "keep" ]] && return 0
+
+    local shell_path
+    if ! shell_path="$(command -v "$SHELL_CHOICE")"; then
+        echo "warning: $SHELL_CHOICE not installed — login shell not changed" >&2
+        return 0
+    fi
+
+    # Prefer the path /etc/shells already lists. command -v can return an
+    # odd but valid path — Fedora merged /usr/sbin into /usr/bin, so it
+    # finds /usr/sbin/zsh — which would otherwise get added to /etc/shells.
+    if [[ -f /etc/shells ]]; then
+        local listed
+        while read -r listed; do
+            if [[ "$listed" == /* && "$(basename "$listed")" == "$SHELL_CHOICE" && -x "$listed" ]]; then
+                shell_path="$listed"
+                break
+            fi
+        done < /etc/shells
+    fi
+
+    # Compare names, not paths: /bin/zsh and /usr/bin/zsh are the same
+    # file on most distros. getent reads the real login shell from the
+    # user database; $SHELL is the fallback (macOS has no getent).
+    local user current
+    user="$(id -un)"
+    current="$(getent passwd "$user" 2>/dev/null | cut -d: -f7)" || true
+    current="${current:-${SHELL:-}}"
+    if [[ "$(basename "$current")" == "$SHELL_CHOICE" ]]; then
+        echo "found: login shell is already $SHELL_CHOICE"
+        return 0
+    fi
+
+    # chsh isn't in every minimal image: Fedora keeps it in
+    # util-linux-user, Alpine in shadow (BusyBox doesn't have one)
+    if ! command -v chsh >/dev/null 2>&1; then
+        case "$PKG_MGR" in
+            dnf|yum) pkg_install util-linux-user || true ;;
+            apk)     pkg_install shadow || true ;;
+        esac
+    fi
+    if ! command -v chsh >/dev/null 2>&1; then
+        echo "warning: chsh not found — set your login shell to $shell_path manually" >&2
+        return 0
+    fi
+
+    # chsh only accepts shells listed in /etc/shells. Homebrew's zsh isn't
+    # there by default (fix from the Oh My Zsh install guide).
+    if [[ -f /etc/shells ]] && ! grep -qx "$shell_path" /etc/shells; then
+        echo "$shell_path" | as_root tee -a /etc/shells >/dev/null || true
+    fi
+
+    # As root (Docker) chsh needs no password. Otherwise it asks for yours,
+    # read from /dev/tty so it works under curl | bash too.
+    echo "setting login shell: $shell_path"
+    if [[ "$(id -u)" -eq 0 ]]; then
+        chsh -s "$shell_path" "$user" || { echo "warning: chsh failed — run: chsh -s $shell_path" >&2; return 0; }
+    elif has_tty; then
+        chsh -s "$shell_path" </dev/tty || { echo "warning: chsh failed — run: chsh -s $shell_path" >&2; return 0; }
+    else
+        echo "note: no terminal to ask for your password — run: chsh -s $shell_path" >&2
+        return 0
+    fi
+    echo "note: log out and back in for the new login shell to take effect"
+}
+
+# True on a machine with a graphical session — i.e. one you sit in front
+# of, as opposed to a VPS or container you SSH into. Used to skip things
+# only useful on a desktop (GUI apps, notifications).
+# macOS always counts. On Linux, DISPLAY (X11) or WAYLAND_DISPLAY is set
+# by the graphical session; both are empty over plain SSH and in Docker.
+is_desktop() {
+    [[ "$SYSTEM" == macos-* || -n "${DISPLAY:-}${WAYLAND_DISPLAY:-}" ]]
+}
+
+# Servers you SSH into from kitty receive TERM=xterm-kitty. Without
+# kitty's terminfo entry (its description of what the terminal can do),
+# nano, htop, less and clear fail with "unknown terminal type".
+# kitty itself bundles it, so this is only needed where kitty isn't
+# installed. Skipped on macOS — that's the client side, not a server.
+ensure_kitty_terminfo() {
+    [[ "$SYSTEM" == macos-* ]] && return 0
+    command -v kitty >/dev/null 2>&1 && return 0
+
+    # Checks files, not `infocmp`: Fedora and Alpine images don't ship it
+    local d
+    for d in /usr/share/terminfo /lib/terminfo /usr/lib/terminfo /etc/terminfo; do
+        if [[ -e "$d/x/xterm-kitty" ]]; then
+            echo "found: kitty terminfo"
+            return 0
+        fi
+    done
+
+    echo "installing: kitty terminfo"
+    pkg_install kitty-terminfo \
+        || echo "warning: failed to install kitty-terminfo — connect with 'kitten ssh <host>' instead, it copies the terminfo over" >&2
+}
+
 install_nano() {
-    local src; src="$(fetch_source ".nanorc")"
+    local src; src="$(fetch_source ".config/nano/nanorc")"
     local dest="$HOME/.nanorc"
 
     if [[ ! -f "$src" ]]; then
@@ -228,13 +524,18 @@ install_kitty() {
         return 1
     fi
 
-    if ! command -v kitty >/dev/null 2>&1; then
+    # Desktops only: kitty is a GUI app that runs on the machine you type
+    # on. On a VPS it'd never be used — you SSH in from your local kitty —
+    # so the warning there is just noise. The config is still copied.
+    if is_desktop && ! command -v kitty >/dev/null 2>&1; then
         if [[ "$SYSTEM" == macos-* ]]; then
             echo "warning: kitty not found. Install with: brew install --cask kitty" >&2
         else
             echo "warning: kitty not found. Install from https://sw.kovidgoyal.net/kitty/binary/ or your package manager" >&2
         fi
     fi
+
+    ensure_kitty_terminfo
 
     mkdir -p "$(dirname "$dest")"
     backup_if_exists "$dest"
@@ -291,19 +592,203 @@ install_nvim() {
     echo "installed: $dest"
 }
 
-install_zsh() {
-    local files=(.zshrc .zshenv .zprofile .zsh_aliases .zsh_functions)
+# Run a command as root: directly if we already are, else through sudo.
+# Docker containers often run as root with no sudo installed, so sudo is
+# only added when needed. Returns 1 (with a warning) if neither works.
+# Usage: as_root <command> [args...]
+as_root() {
+    if [[ "$(id -u)" -eq 0 ]]; then
+        "$@"
+    elif command -v sudo >/dev/null 2>&1; then
+        sudo "$@"
+    else
+        echo "warning: cannot run '$1' — not root and sudo not found" >&2
+        return 1
+    fi
+}
 
-    if ! command -v zsh >/dev/null 2>&1; then
-        if [[ "$SYSTEM" == macos-* ]]; then
-            : # zsh ships by default on macOS Catalina and later
-        else
-            echo "warning: zsh not found. Install with your package manager (e.g. apt install zsh)" >&2
-            echo "         then run: chsh -s \"\$(which zsh)\" \"\$USER\"" >&2
-        fi
+# Install packages with $PKG_MGR (set by detect_system).
+# Commands follow https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH
+# Returns non-zero on failure — callers warn and carry on, so a failed
+# package install never stops the config files from being installed.
+# Usage: pkg_install <package>...
+APT_UPDATED=""
+pkg_install() {
+    case "$PKG_MGR" in
+        apt)
+            # update first: fresh Debian/Ubuntu images ship with empty package
+            # lists, so install would fail with "Unable to locate package".
+            # Only once per run — it's slow and the lists don't change mid-run.
+            if [[ -z "$APT_UPDATED" ]]; then
+                as_root apt-get update || return 1
+                APT_UPDATED=1
+            fi
+            # noninteractive: some packages (locales, tzdata) can open a
+            # full-screen config dialog mid-install and hang the script.
+            # Passed through env because sudo drops most env vars.
+            as_root env DEBIAN_FRONTEND=noninteractive apt-get install -y "$@"
+            ;;
+        dnf)    as_root dnf install -y "$@" ;;
+        yum)    as_root yum -y install "$@" ;;
+        pacman)
+            # Fresh Arch images have no package database (like apt's empty
+            # lists), so every install fails with "target not found".
+            # Synced with -Syu, not -Sy: Arch doesn't support partial
+            # upgrades — installing from a newer database than the system
+            # can break it. Only when the database is missing, so a real
+            # machine never gets a full upgrade behind your back.
+            if ! compgen -G "/var/lib/pacman/sync/*.db" >/dev/null; then
+                as_root pacman -Syu --noconfirm || return 1
+            fi
+            as_root pacman -S --noconfirm --needed "$@"
+            ;;
+        zypper) as_root zypper --non-interactive install "$@" ;;
+        apk)    as_root apk add "$@" ;;
+        # brew refuses to run as root, so it never goes through as_root
+        brew)   brew install "$@" ;;
+        *)
+            if [[ "$SYSTEM" == macos-* ]]; then
+                echo "warning: cannot install $* — install Homebrew, then run: brew install $*" >&2
+            else
+                echo "warning: cannot install $* — no supported package manager found" >&2
+            fi
+            return 1
+            ;;
+    esac
+}
+
+# Install the zsh binary if it's missing.
+# Without this, a fresh VPS/Docker box gets the zsh configs copied over but
+# has no shell to read them.
+# Never fails the script: on any problem it warns and returns, so the
+# config files still get installed.
+ensure_zsh() {
+    if command -v zsh >/dev/null 2>&1; then
+        echo "found: $(zsh --version)"
+        return 0
     fi
 
-    for f in "${files[@]}"; do
+    # On macOS zsh ships by default (Catalina and later), so this only
+    # triggers on very old macOS or a stripped-down system
+    echo "zsh not found, installing..."
+    if ! pkg_install zsh; then
+        echo "warning: zsh install failed — install it manually" >&2
+        return 0
+    fi
+
+    # Installing zsh doesn't make it the login shell — set_login_shell does that
+    if command -v zsh >/dev/null 2>&1; then
+        echo "installed: $(zsh --version)"
+    fi
+}
+
+# Install CLI tools the shell configs rely on, if missing:
+#   less            — pager; .bash_profile/.zshrc hook lesspipe into it
+#   bash-completion — sourced by .bash_profile for Tab completion
+#   notify-send     — used by the `alert` alias in .aliases
+# Ubuntu Desktop ships all three and Ubuntu Server ships less +
+# bash-completion, but Docker images (ubuntu, debian, fedora) have none.
+# Without them the configs still load (every use is guarded), the features
+# are just silently missing.
+ensure_shell_tools() {
+    # macOS: less ships with the OS. bash-completion is skipped — Homebrew's
+    # version needs bash 4+, macOS ships 3.2 and defaults to zsh anyway.
+    # notify-send is Linux-only, so `alert` simply isn't defined there.
+    if [[ "$SYSTEM" == macos-* ]]; then
+        return 0
+    fi
+
+    local pkgs=()
+    command -v less >/dev/null 2>&1 || pkgs+=(less)
+
+    # Checks the same paths .bash_profile sources, not a command — the
+    # package only provides a script, no binary
+    if [[ ! -f /usr/share/bash-completion/bash_completion && ! -f /etc/bash_completion ]]; then
+        pkgs+=(bash-completion)
+    fi
+
+    # Only on a desktop: notifications need a graphical session to show up,
+    # so on a headless VPS or container notify-send would be dead weight.
+    # Package name differs per distro.
+    if is_desktop && ! command -v notify-send >/dev/null 2>&1; then
+        case "$PKG_MGR" in
+            apt)    pkgs+=(libnotify-bin) ;;
+            zypper) pkgs+=(libnotify-tools) ;;
+            *)      pkgs+=(libnotify) ;;
+        esac
+    fi
+
+    if [[ ${#pkgs[@]} -eq 0 ]]; then
+        echo "found: shell tools (less, bash-completion$(command -v notify-send >/dev/null 2>&1 && echo ", notify-send"))"
+        return 0
+    fi
+
+    echo "installing shell tools: ${pkgs[*]}"
+    pkg_install "${pkgs[@]}" || echo "warning: failed to install ${pkgs[*]} — install manually" >&2
+}
+
+# Make sure $LOCALE (e.g. en_US.UTF-8) exists on this system, generating or
+# installing it if missing. .bash_profile/.zshenv fall back to C.UTF-8 when
+# en_US.UTF-8 is missing, so without this you'd get working-but-plain
+# C.UTF-8 (ISO dates, byte-order sorting) instead of US English formats.
+# Never fails the script: warns and returns on any problem.
+ensure_locale() {
+    # e.g. en_US.UTF-8 -> lang=en_US
+    local lang="${LOCALE%%.*}"
+
+    # macOS ships every locale; Alpine/musl has no `locale` command and
+    # accepts any locale name, so there's nothing to install on either
+    if [[ "$SYSTEM" == macos-* ]] || ! command -v locale >/dev/null 2>&1; then
+        return 0
+    fi
+
+    # `locale -a` spells it en_US.utf8 on Linux — hence -i and optional dash
+    if locale -a 2>/dev/null | grep -qiE "^${lang}\.utf-?8$"; then
+        echo "found: locale $LOCALE"
+        return 0
+    fi
+
+    echo "locale $LOCALE not found, installing..."
+    case "$PKG_MGR" in
+        apt|pacman)
+            # Debian, Ubuntu and Arch build locales from source data with
+            # locale-gen. /etc/locale.gen lists every locale commented out;
+            # uncommenting ours makes it survive later `locale-gen` runs
+            # (e.g. on glibc upgrades). Ubuntu also accepts the name as an
+            # argument; Debian and Arch ignore it and read the file.
+            if [[ "$PKG_MGR" == "apt" ]]; then
+                pkg_install locales || { echo "warning: failed to install locales package" >&2; return 0; }
+            fi
+            if [[ -f /etc/locale.gen ]]; then
+                as_root sed -i "s/^# *\(${LOCALE} UTF-8\)/\1/" /etc/locale.gen
+            fi
+            as_root locale-gen "$LOCALE" || { echo "warning: locale-gen failed" >&2; return 0; }
+            ;;
+        dnf|yum)
+            # Fedora/RHEL ship locales as per-language packs, e.g. en_US -> glibc-langpack-en
+            pkg_install "glibc-langpack-${lang%%_*}" || { echo "warning: failed to install glibc-langpack-${lang%%_*}" >&2; return 0; }
+            ;;
+        zypper)
+            # openSUSE bundles all locales in one package
+            pkg_install glibc-locale || { echo "warning: failed to install glibc-locale" >&2; return 0; }
+            ;;
+        *)
+            echo "warning: don't know how to install locales with '${PKG_MGR:-no package manager}' — shells will fall back to C.UTF-8" >&2
+            return 0
+            ;;
+    esac
+
+    if locale -a 2>/dev/null | grep -qiE "^${lang}\.utf-?8$"; then
+        echo "installed: locale $LOCALE"
+    else
+        echo "warning: locale $LOCALE still missing — shells will fall back to C.UTF-8" >&2
+    fi
+}
+
+# Copy repo-relative files to the same path under $HOME, backing up each.
+# Shared by the shell installers, which all install a flat list of dotfiles.
+install_home_files() {
+    for f in "$@"; do
         local src; src="$(fetch_source "$f")"
         local dest="$HOME/$f"
 
@@ -318,10 +803,56 @@ install_zsh() {
     done
 }
 
-detect_system
-install_nano
-install_tmux
-install_kitty
-install_nvim
-install_starship
-install_zsh
+# Files sourced by both .zshrc and .bash_profile (shell-specific bits are
+# guarded by $ZSH_VERSION / $BASH_VERSION inside the files).
+# Installed once here rather than in install_zsh and install_bash — otherwise
+# the second installer would back up the copy the first one just made.
+install_shell_common() {
+    install_home_files .aliases .functions
+}
+
+# Configs only — the zsh binary is installed by ensure_zsh when zsh is
+# the chosen login shell. Configs are installed regardless, so switching
+# shells later just works.
+install_zsh() {
+    install_home_files .zshrc .zshenv .zprofile
+}
+
+install_bash() {
+    # No ensure_bash: bash is present on every supported system (it runs
+    # this script). macOS ships bash 3.2, which is old but enough here.
+    # .bashrc only loads .bash_profile, so non-login shells (new terminal
+    # tabs, docker exec) get the same setup as login shells
+    install_home_files .bash_profile .bashrc .inputrc
+}
+
+# Everything runs from main, called on the very last line. With
+# `curl … | bash`, bash runs the script while it's still downloading.
+# Wrapped like this, nothing runs until the whole file has arrived — a
+# cut-off download can't run half an install, and no command (apt, chsh…)
+# can swallow the rest of the script by reading stdin.
+main() {
+    detect_system
+    ask_questions
+    confirm_plan
+
+    install_nano
+    install_tmux
+    install_kitty
+    install_nvim
+    install_starship
+    ensure_shell_tools
+    ensure_locale
+    write_locale_conf
+    # zsh binary only when it's the chosen login shell; its configs are
+    # installed either way (install_zsh)
+    if [[ "$SHELL_CHOICE" == "zsh" ]]; then
+        ensure_zsh
+    fi
+    install_shell_common
+    install_zsh
+    install_bash
+    set_login_shell
+}
+
+main "$@"
