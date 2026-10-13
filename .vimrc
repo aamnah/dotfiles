@@ -6,7 +6,7 @@
 "        Author: Aamnah
 "          Link: https://aamnah.com
 "          Date: 2018-08-16
-"       Lastmod: 2026-04-24
+"       Lastmod: 2026-10-13
 "-----------------------------------------------------------------------
 
 " -- Basics -------------------------------------------------------------
@@ -88,9 +88,9 @@ set timeout timeoutlen=1000 ttimeoutlen=50
 
 " -- Tabs & Spacing -------------------------------------------------------
 
-set tabstop=2 		" a tab is 2 spaces
-set softtabstop=2 	" when hitting <BS>, pretend like a tab is removed, even if spaces
-set shiftwidth=2 	" no. of spaces to use for auto-indenting
+set tabstop=4 		" a tab is 4 spaces (same as the nano config)
+set softtabstop=4 	" when hitting <BS>, pretend like a tab is removed, even if spaces
+set shiftwidth=4 	" no. of spaces to use for auto-indenting
 set expandtab 		" convert Tabs to Spaces (e.g. Python)
 set smarttab 		" insert tabs on the start of a line according to shiftwidth, not tabstop
 

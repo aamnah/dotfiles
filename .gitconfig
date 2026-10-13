@@ -1,17 +1,31 @@
 #-----------------------------------------------------------------------
 #          File: ~/.gitconfig
-#   Description: Git identity and aliases (lg pretty log, s status)
+#   Description: Git identity, defaults (main branch, LF endings, pull --rebase) and aliases (lg, s)
 # Compatibility: Debian, Ubuntu, Armbian, macOS
 #       Version: 0.1.0
 #        Author: Aamnah
 #          Link: https://aamnah.com
 #          Date: 2018-12-20
-#       Lastmod: 2026-04-24
+#       Lastmod: 2026-10-13
 #-----------------------------------------------------------------------
 
 [user]
-  email = 
-  name = 
+  email =
+  name =
+
+[init]
+  # New repos start on `main` instead of `master` (matches GitHub's default)
+  defaultBranch = main
+
+[core]
+  # Convert Windows CRLF line endings to LF when committing, never the other
+  # way round. Stops files edited on Windows from showing every line as changed.
+  autocrlf = input
+
+[pull]
+  # `git pull` replays your local commits on top of the remote ones instead of
+  # creating a merge commit, so history stays a straight line
+  rebase = true
 
 [alias]
   lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --branches

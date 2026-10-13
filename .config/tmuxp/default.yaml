@@ -3,22 +3,49 @@
 # load layout: tmuxp load tmuxp.yaml
 windows:
   - window_name: main
-    layout: d861,305x53,0,0{112x53,0,0,0,106x53,113,0,5,85x53,220,0[85x26,220,0,6,85x26,220,27,7]}
+    layout: bd3c,305x53,0,0{108x53,0,0,46,101x53,109,0,47,94x53,211,0[94x34,211,0,48,94x18,211,35{66x18,211,35,49,27x18,278,35[27x9,278,35,50,27x8,278,45,51]}]}
     panes:
       - shell_command: 
         focus: true
       - 
+      - 
       - shell-command:
-  #  You can run multiple commands like this
-  #    - export NODE_ENV=development
-  #    - nvm use lts
-      -
+      - peaclock
+      - watch -n 3600 'curl --compressed -s "wttr.in/{jkl}?format=%c%C\n%t%20%28%f%29\n%w%20%20%p\n%m%20%20UV%3A%20%u\n"'
+      # - shell_command: 
+      #   focus: true
+      # You can run multiple commands like this
+      #   - export NODE_ENV=development
+      #   - nvm use lts
 
 
-# 3 vertical panes of equal size. 
-# last vertical pane is split once horizontally
-# ┌─────────┬─────────┬─────────┐
-# │         │         │    3    │
-# │    1    │    2    ├─────────┤
-# │         │         │    4    │
-# └─────────┴─────────┴─────────┘
+# tmux layout: 305x53
+# ┌──────────────────────┬────────────────────┬───────────────────┐
+# │                      │                    │                   │
+# │                      │                    │                   │
+# │                      │                    │                   │
+# │                      │                    │                   │
+# │                      │                    │      pane 48      │
+# │       pane 46        │      pane 47       │      94x34        │
+# │       108x53         │      101x53        │                   │
+# │                      │                    │                   │
+# │                      │                    │                   │
+# │                      │                    │                   │
+# │                      │                    ├─────────────┬─────┤
+# │                      │                    │             │ p50 │
+# │                      │                    │   pane 49   │27x9 │
+# │                      │                    │   66x18     ├─────┤
+# │                      │                    │             │ p51 │
+# │                      │                    │             │27x8 │
+# └──────────────────────┴────────────────────┴─────────────┴─────┘
+
+# root 305x53
+# ├─ pane 46: 108x53
+# ├─ pane 47: 101x53
+# └─ right column: 94x53
+#   ├─ pane 48: 94x34
+#   └─ bottom area: 94x18
+#       ├─ pane 49: 66x18
+#       └─ right stack: 27x18
+#         ├─ pane 50: 27x9
+#         └─ pane 51: 27x8
