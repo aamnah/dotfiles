@@ -13,7 +13,7 @@ Personal dotfiles — shell, editor, and terminal configs intended to be deploye
 - Shell (bash): `.bash_profile`, `.bashrc` (non-login shim that loads `.bash_profile`), `.inputrc`
 - Shell (zsh): `.zshrc`, `.zshenv`, `.zprofile`
 - Shell (shared): `.aliases`, `.functions` — sourced by both bash and zsh; shell-specific bits guarded by `$ZSH_VERSION` / `$BASH_VERSION`
-- Editors: `.config/nano/nanorc`, `.vimrc`, `.config/nvim/init.lua`
+- Editors: `.config/nano/nanorc`, `.vimrc` plus its bundled colour scheme `.vim/colors/sublimemonokai.vim` (third-party, MIT: keep its licence header), `.config/nvim/init.lua`
 - Terminal / multiplexer: `.config/kitty/kitty.conf`, `.config/tmux/tmux.conf` plus `.tmux.conf` shim
 - Prompt: `.config/starship.toml` (cross-shell; two-line Kali-style layout with the Lasik palette)
 - Tools: `.gitconfig`, `.gitignore_global`, `.config/tmuxp/default.yaml`, `.config/peaclock/config`

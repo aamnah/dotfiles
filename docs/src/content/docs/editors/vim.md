@@ -9,21 +9,12 @@ Vim itself (`sudo apt install vim` or `brew install vim`). For Neovim, see
 
 ## Colour scheme
 
-`.vimrc` uses **`sublimemonokai`** when it's installed. It isn't part of these dotfiles, so
-without it Vim uses the built-in **`habamax`** (Vim 9+), or **`desert`** on older Vims. No error
-either way.
+Vim uses **[Sublime Monokai](https://github.com/ErichDonGubler/vim-sublime-monokai)**. It's
+included in the repo (`.vim/colors/sublimemonokai.vim`, MIT licence) and the installer copies it
+to `~/.vim/colors/`, so there's nothing to download.
 
-To get sublimemonokai:
-
-```sh
-mkdir -p ~/.vim/colors
-curl -fsSLo ~/.vim/colors/sublimemonokai.vim \
-  https://raw.githubusercontent.com/ErichDonGubler/vim-sublime-monokai/master/colors/sublimemonokai.vim
-```
-
-- `mkdir -p`: create the folder (and any missing parent folders); no error if it exists.
-- `curl -fsSLo <file> <url>`: download quietly (`-sS`), fail on HTTP errors (`-f`), follow
-  redirects (`-L`), and save to `<file>` (`-o`).
+If you copy only `.vimrc` to a machine, without the colour scheme file, Vim falls back to the
+built-in **`habamax`** (Vim 9+) or **`desert`** (older Vims) instead of showing an error.
 
 ## Settings
 

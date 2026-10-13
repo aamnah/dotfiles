@@ -157,10 +157,12 @@ A session for this folder already exists: `tmux attach -t <folder-name>`.
 Your nano is too old — macOS ships 2.0.6. `brew install nano`. See
 [nano](/dotfiles/editors/nano/#edge-cases).
 
-### Vim looks different from the screenshots
+### Vim uses a plain colour scheme instead of Monokai
 
-The `sublimemonokai` colour scheme isn't included, so Vim uses a built-in one instead. See
-[Vim](/dotfiles/editors/vim/#colour-scheme) to download it.
+`~/.vim/colors/sublimemonokai.vim` is missing (for example, only `.vimrc` was copied), so Vim
+falls back to a built-in scheme. Re-run the installer, or copy the file from the repo:
+`mkdir -p ~/.vim/colors && cp .vim/colors/sublimemonokai.vim ~/.vim/colors/`. See
+[Vim](/dotfiles/editors/vim/#colour-scheme).
 
 ### Neovim doesn't copy to the system clipboard
 

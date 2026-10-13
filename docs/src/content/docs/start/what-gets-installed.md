@@ -19,6 +19,7 @@ backed up first as `<file>.bak.<timestamp>`.
 | `.config/kitty/kitty.conf` | `~/.config/kitty/kitty.conf` | [kitty](/dotfiles/terminal/kitty/) |
 | `.config/kitty/themes/*.conf` | `~/.config/kitty/themes/` (Lasik, Catppuccin Mocha) | [kitty](/dotfiles/terminal/kitty/#theme) |
 | `.vimrc` | `~/.vimrc` | [Vim](/dotfiles/editors/vim/) |
+| `.vim/colors/sublimemonokai.vim` | `~/.vim/colors/` (Vim's colour scheme) | [Vim](/dotfiles/editors/vim/#colour-scheme) |
 | `.config/nvim/init.lua` | `~/.config/nvim/init.lua` | [Neovim](/dotfiles/editors/neovim/) |
 | `.config/tmuxp/default.yaml` | `~/.config/tmuxp/default.yaml` | [tmuxp](/dotfiles/tools/tmuxp/) |
 | `.config/peaclock/config` | `~/.config/peaclock/config` | [peaclock](/dotfiles/tools/peaclock/) |

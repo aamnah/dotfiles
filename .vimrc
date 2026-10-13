@@ -35,10 +35,11 @@ set t_Co=256 " Use 256 colors in Terminals that support them (xterm does)
 						 " in `~/.config/tmux/tmux.conf` 
 syntax on 
 syntax enable
-" sublimemonokai isn't part of these dotfiles: put sublimemonokai.vim in
-" ~/.vim/colors/ to use it. Without this try/catch, a machine that doesn't
-" have it shows "E185: Cannot find color scheme" on every Vim start. Falls
-" back to habamax (built in since Vim 9), then desert (built into every Vim).
+" sublimemonokai is bundled with these dotfiles and installed to
+" ~/.vim/colors/ by install.sh. The try/catch is for a .vimrc copied on its
+" own without the scheme: instead of "E185: Cannot find color scheme" on
+" every Vim start, it falls back to habamax (built in since Vim 9), then
+" desert (built into every Vim).
 try
   colorscheme sublimemonokai
 catch /E185/

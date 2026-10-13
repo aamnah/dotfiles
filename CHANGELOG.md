@@ -55,7 +55,7 @@ The installer grew up. It now asks two questions (your login shell and your loca
 - On Fedora the login shell was set to an odd path (`/usr/sbin/zsh`).
 - Some "is it installed?" checks could wrongly answer no on systems with a lot of output (many fonts or locales).
 - One failed step (for example no network while installing starship) no longer stops the whole installer. The other steps still run, and the failed ones are listed at the end.
-- Vim no longer shows an error when the `sublimemonokai` colour scheme is missing. It uses a built-in one instead.
+- Vim's colour scheme, Sublime Monokai, is now included and installed, so Vim no longer shows an error at start-up. If it's ever missing, Vim uses a built-in scheme instead.
 - kitty's Catppuccin theme file had a typo in its name (`catppucin`), so switching to it failed.
 - The tmux comment about installing plugins now says the right key: Prefix + Shift+I.
 

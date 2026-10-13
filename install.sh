@@ -750,7 +750,9 @@ install_vim() {
             echo "warning: vim not found. Install with your package manager (e.g. apt install vim)" >&2
         fi
     fi
-    install_home_files .vimrc
+    # The colour scheme .vimrc uses, bundled so there's nothing to download
+    # by hand. Vim finds colour schemes in ~/.vim/colors/.
+    install_home_files .vimrc .vim/colors/sublimemonokai.vim
 }
 
 # Git: the global ignore list, plus the defaults and aliases from the repo's
