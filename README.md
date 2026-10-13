@@ -6,6 +6,8 @@ Cross-platform: aliases that wrap commands with Linux/macOS differences (GNU vs 
 
 **Documentation: [aamnah.github.io/dotfiles](https://aamnah.github.io/dotfiles/)** — one page per config, with search, troubleshooting and known issues.
 
+The defaults are opinionated (zsh, tabs, the Lasik colours, `git pull` rebasing…) because these are my own settings. Every one can be changed: see [Opinionated defaults](https://aamnah.github.io/dotfiles/#opinionated-defaults).
+
 ## Install
 
 ```sh

@@ -40,6 +40,25 @@ git clone https://github.com/aamnah/dotfiles && cd dotfiles && ./install.sh
 	</Card>
 </CardGrid>
 
+## Opinionated defaults
+
+These are one person's settings, so the defaults are **opinionated**: they're the choices the
+author likes, not neutral ones. Everything can be changed:
+
+| Default | Change it with |
+|---|---|
+| **zsh** as login shell | `--shell=bash` or `--shell=keep` — see [Install](/dotfiles/start/install/#skip-the-questions) |
+| **`en_US.UTF-8`** locale | `--locale=…` — see [Locale](/dotfiles/shell/locale/) |
+| **Hasklug** Nerd Font | `--font=…` or `--font=none` — see [kitty](/dotfiles/terminal/kitty/#font-and-window) |
+| **Tabs** for indenting, shown 4 wide (Vim, Neovim, nano) | the indent settings on each editor page: [Vim](/dotfiles/editors/vim/), [Neovim](/dotfiles/editors/neovim/), [nano](/dotfiles/editors/nano/) |
+| **Lasik** colours (kitty, prompt, nano), **Sublime Monokai** in Vim | the theme lines on [kitty](/dotfiles/terminal/kitty/#theme), [Starship](/dotfiles/terminal/starship/#colours), [Vim](/dotfiles/editors/vim/#colour-scheme) |
+| **Git:** `git pull` rebases, new repos start on `main` | settings you already have are kept — see [Git](/dotfiles/tools/git/#what-the-installer-does) |
+| **kitty** split shortcuts replace some default Ctrl+Shift keys | [kitty](/dotfiles/terminal/kitty/#splits-like-tmux) |
+| Aliases and functions | override or remove them in `~/.aliases.local` / `~/.functions.local` — see [Local files](/dotfiles/shell/local-files/) |
+
+Your own changes belong in the `.local` files, which the installer never touches. Every file it
+replaces is backed up first.
+
 ## Configs
 
 <CardGrid>
