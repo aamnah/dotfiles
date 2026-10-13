@@ -58,6 +58,15 @@ Source resolution is centralized in `fetch_source <repo-relative-path>`. Local m
 3. Call it inside `main` at the bottom of `install.sh` (after `confirm_plan`).
 4. If the config references absolute system paths that differ across Linux / macOS Intel / macOS ARM, extend `detect_system` to set a new path global and rewrite with `sed` inside the install function.
 
+## After every user-facing change
+
+Do all of these before committing, in this order:
+
+1. **Docs:** update the matching page in `docs/src/content/docs/` (details in Notes below).
+2. **Changelog:** add the change to `CHANGELOG.md` under today's date. The docs site's [Changelog](https://aamnah.github.io/dotfiles/reference/changelog/) page shows this same file.
+3. **Build:** run `npm run build` in `docs/`. It fails on broken links, so a passing build means the site is fine.
+4. **Commit**, then push when the owner says so. The push redeploys the site automatically (`.github/workflows/docs.yml`, for changes in `docs/` or `CHANGELOG.md`). No manual deploy step.
+
 ## Notes
 
 - Use Conventional Commits for commit messages (for example, `feat(tmux): add TPM plugin install`, `fix(shell): quote path expansion`).

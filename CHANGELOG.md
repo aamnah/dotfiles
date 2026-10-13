@@ -29,6 +29,7 @@ The installer grew up. It now asks two questions (your login shell and your loca
 - Git defaults: new repos start on `main`, Windows line endings are converted on commit, and `git pull` rebases.
 - A 6-pane tmuxp layout with a clock (`peaclock`) and the weather.
 - A docs site with one page per config, search, troubleshooting, known issues, and Light / Dark / High contrast themes.
+- The changelog is on the docs site too: [Changelog](https://aamnah.github.io/dotfiles/reference/changelog/).
 
 **Changed**
 

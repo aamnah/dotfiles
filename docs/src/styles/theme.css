@@ -121,3 +121,46 @@
 :root[data-contrast='high'] site-search dialog {
 	border: 2px solid var(--hc-fg);
 }
+
+/* Changelog page (reference/changelog.mdx) shows CHANGELOG.md, which starts
+   with its own "# Changelog" heading for GitHub. Hide it here, or the page
+   would show the title twice (Starlight already prints the page title). */
+.changelog > h1:first-child {
+	display: none;
+}
+
+/* Changelog layout, loosely after Zen Browser's release notes: big version
+   numbers, a quiet date line, and the Added / Changed / Fixed labels as small
+   tags. Uses Starlight's colour variables, so it follows Light / Dark / High
+   contrast automatically. Without this the page is one long wall of text. */
+.changelog h2 {
+	font-size: var(--sl-text-3xl);
+	margin-top: 0;
+}
+/* The --- between releases in CHANGELOG.md: more room, so each release reads
+   as its own block */
+.changelog hr {
+	margin: 3rem 0 2rem;
+}
+/* The line under each version: "October 13, 2026 · Compare changes" */
+.changelog h2 + p {
+	color: var(--sl-color-gray-3);
+	font-size: var(--sl-text-sm);
+	margin-top: 0.25rem;
+}
+/* A paragraph that is only a bold word = a group label (**Added** etc.).
+   The date line also starts with bold text, but has a link next to it, so
+   :only-child keeps it out. */
+.changelog p:has(> strong:only-child) {
+	margin-top: 1.5rem;
+}
+.changelog p > strong:only-child {
+	display: inline-block;
+	padding: 0.1rem 0.6rem;
+	border: 1px solid var(--sl-color-accent);
+	border-radius: 999px;
+	color: var(--sl-color-accent-high);
+	font-size: var(--sl-text-xs);
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}

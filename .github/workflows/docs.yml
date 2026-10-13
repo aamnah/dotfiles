@@ -12,6 +12,9 @@ on:
     # commits don't need a new site
     paths:
       - 'docs/**'
+      # The changelog page renders this file, so a changelog-only commit
+      # needs a new site too
+      - 'CHANGELOG.md'
       - '.github/workflows/docs.yml'
   # "Run workflow" button in the Actions tab, for manual rebuilds
   workflow_dispatch:

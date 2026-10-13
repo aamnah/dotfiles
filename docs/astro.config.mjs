@@ -10,11 +10,23 @@ export default defineConfig({
 	// site works locally but CSS, JS and search 404 on GitHub Pages.
 	site: 'https://aamnah.github.io',
 	base: '/dotfiles',
+	// The changelog page imports ../CHANGELOG.md from the repo root. The dev
+	// server only serves files inside docs/ by default, so without this the
+	// page errors in `npm run dev` (the production build works either way).
+	vite: { server: { fs: { allow: ['..'] } } },
 	integrations: [
 		starlight({
 			// Fails the build on broken internal links or #anchors, so a renamed
 			// heading can't silently break links from other pages
-			plugins: [starlightLinksValidator()],
+			plugins: [
+				starlightLinksValidator({
+					// Skip the "Jump to" links inside CHANGELOG.md (#20261013…). The
+					// checker can't see the headings of a file imported into a page,
+					// so it reports them all as broken, though they work on the site.
+					// Every other link, in every file, is still checked.
+					exclude: ({ file, link }) => file.endsWith('CHANGELOG.md') && link.startsWith('#'),
+				}),
+			],
 			title: 'Dotfiles',
 			description: 'Shell, editor and terminal configs for Linux and macOS, with an installer.',
 			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/aamnah/dotfiles' }],
@@ -65,6 +77,7 @@ export default defineConfig({
 						'reference/known-issues',
 						'reference/installer-internals',
 						'reference/contributing',
+						'reference/changelog',
 					],
 				},
 			],

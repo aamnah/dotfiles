@@ -1,0 +1,20 @@
+---
+title: Changelog
+description: Every change to these dotfiles since 2014, newest first.
+# The "Jump to" line at the top of the changelog does this job. Starlight's
+# "On this page" list only sees headings written in this file, not the
+# imported ones, so it would be empty anyway.
+tableOfContents: false
+---
+
+{/*
+  The changelog lives in CHANGELOG.md at the repo root, so it shows on GitHub
+  too. Importing it here renders the same file on the site: one source, no copy
+  to keep in sync. Editing CHANGELOG.md redeploys the site (see the paths list
+  in .github/workflows/docs.yml).
+*/}
+import { Content as Changelog } from '../../../../../CHANGELOG.md';
+
+<div class="changelog">
+	<Changelog />
+</div>
