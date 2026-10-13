@@ -1,0 +1,64 @@
+---
+// Replaces Starlight's ThemeSelect: Auto / Light / Dark / High contrast.
+// All state logic lives in ThemeProvider.astro (window.StarlightThemeProvider)
+// so the pre-paint script and this dropdown can't disagree.
+import Select from '@astrojs/starlight/components/Select.astro';
+---
+
+<starlight-theme-select>
+	<Select
+		icon="laptop"
+		label="Select theme"
+		options={[
+			{ label: 'Auto', selected: true, value: 'auto' },
+			{ label: 'Light', selected: false, value: 'light' },
+			{ label: 'Dark', selected: false, value: 'dark' },
+			{ label: 'High contrast', selected: false, value: 'contrast' },
+		]}
+		width="10em"
+	/>
+</starlight-theme-select>
+
+{/* Inlined so the dropdown shows the right value before first paint */}
+<script is:inline>
+	StarlightThemeProvider.updatePickers();
+</script>
+
+<script>
+	declare global {
+		interface Window {
+			StarlightThemeProvider: {
+				load(): string;
+				store(choice: string): void;
+				apply(choice: string): void;
+				parse(value: unknown): string;
+				updatePickers(choice?: string): void;
+			};
+		}
+	}
+
+	const provider = window.StarlightThemeProvider;
+
+	function onChoice(choice: string): void {
+		provider.store(choice);
+		provider.apply(choice);
+		provider.updatePickers(choice);
+	}
+
+	// 'auto' and 'contrast' follow OS settings — re-apply when they change
+	for (const query of ['(prefers-color-scheme: light)', '(prefers-contrast: more)']) {
+		matchMedia(query).addEventListener('change', () => provider.apply(provider.load()));
+	}
+
+	class StarlightThemeSelect extends HTMLElement {
+		constructor() {
+			super();
+			this.querySelector('select')?.addEventListener('change', (e) => {
+				if (e.currentTarget instanceof HTMLSelectElement) {
+					onChoice(provider.parse(e.currentTarget.value));
+				}
+			});
+		}
+	}
+	customElements.define('starlight-theme-select', StarlightThemeSelect);
+</script>

@@ -1,0 +1,132 @@
+---
+title: Install
+description: Run install.sh from a clone or straight from GitHub, answer two questions, or skip them with -y.
+---
+
+import { Steps, Tabs, TabItem, Aside } from '@astrojs/starlight/components';
+
+`install.sh` copies the configs into your home folder, installs what they need, and backs up
+anything it replaces. It asks two questions first and shows a plan before changing anything.
+
+## Quick start
+
+<Tabs>
+	<TabItem label="Clone and run">
+		```sh
+		git clone https://github.com/aamnah/dotfiles && cd dotfiles && ./install.sh
+		```
+		Use this on your own machines — you can `git pull` later to get updates.
+	</TabItem>
+	<TabItem label="Without cloning">
+		```sh
+		curl -fsSL https://raw.githubusercontent.com/aamnah/dotfiles/main/install.sh | bash -s -- --remote
+		```
+		Downloads each config straight from GitHub. Handy on a fresh VPS where `git` isn't
+		installed yet.
+
+		- `curl -fsSL`: download quietly (`-sS`), fail on HTTP errors instead of saving the error
+		  page (`-f`), and follow redirects (`-L`).
+		- `| bash -s --`: run what was downloaded with bash. `-s` reads the script from the pipe;
+		  `--` means "everything after this is for the script, not for bash".
+		- `--remote`: fetch the config files from GitHub too (there's no local checkout to copy from).
+	</TabItem>
+</Tabs>
+
+## What happens when you run it
+
+<Steps>
+
+1. **It detects your system** — Linux or macOS (Intel / Apple Silicon), and which package
+   manager you have (`apt`, `dnf`, `yum`, `pacman`, `zypper`, `apk` or `brew`).
+
+2. **It asks for your login shell.**
+
+   ```
+   Login shell? (configs for both zsh and bash are installed either way)
+     1) zsh  (default)
+     2) bash
+   Choose [1]:
+   ```
+
+   Your *login shell* is the one you get when you log in or SSH in. A third option,
+   **keep current**, appears when your current shell is something else (fish, tcsh…), so you
+   can install the configs without being moved off it.
+
+3. **It asks for your locale** — the language and formats for dates, numbers and sorting.
+
+   ```
+   Locale? (language and formats for dates, numbers, sorting)
+     1) en_US.UTF-8  (default)
+     2) en_GB.UTF-8
+     3) other (type it, e.g. ja_JP.UTF-8)
+   ```
+
+   For "other", type `ja_JP` or `ja_JP.UTF-8` — both work. See [Locale](/dotfiles/shell/locale/).
+
+4. **It shows the plan and asks `Proceed? [Y/n]`.** Press Enter to go ahead. Anything else stops
+   the script — nothing has been changed at that point.
+
+5. **It installs** — configs, missing tools, the locale — and sets your login shell. See
+   [What gets installed](/dotfiles/start/what-gets-installed/) for the full list.
+
+6. **Log out and back in** so the new login shell takes effect.
+
+</Steps>
+
+Press **Enter** at any question to take the default. Typing something invalid just asks again.
+
+## Skip the questions
+
+| Flag | What it does |
+|---|---|
+| `-y`, `--yes` | Don't ask anything — use the defaults (or the values from the flags below). |
+| `--shell=zsh\|bash\|keep` | Login shell. Default: `zsh`. Configs for both shells are installed either way. |
+| `--locale=LOCALE` | UTF-8 locale to generate and use, e.g. `fi_FI` or `ja_JP.UTF-8`. Default: `en_US.UTF-8`. |
+| `--remote` | Fetch configs from GitHub instead of the local checkout. |
+| `-h`, `--help` | Show all options. |
+
+```sh
+./install.sh -y                               # accept all defaults
+./install.sh --shell=bash --locale=fi_FI      # answer up front, still shows the plan
+curl -fsSL https://raw.githubusercontent.com/aamnah/dotfiles/main/install.sh | bash -s -- --remote -y
+```
+
+A wrong value (for example `--shell=fish` or `--locale=japanese`) stops the script with an error
+**before** anything is changed.
+
+<Aside title="No terminal? Defaults are used automatically">
+	In a Docker build, CI pipeline or anything else without a keyboard attached, the script can't
+	ask questions, so it behaves as if you passed `-y`. It never hangs waiting for input.
+</Aside>
+
+## Backups
+
+Every file the installer would overwrite is first moved to `<file>.bak.<timestamp>`, for example
+`~/.zshrc.bak.20261013143005`. To undo a change, move the backup back:
+
+```sh
+mv ~/.zshrc.bak.20261013143005 ~/.zshrc
+```
+
+Backups are never deleted automatically — clean them up when you're happy.
+
+## Running it again
+
+It's safe to re-run. Things that are already in place are reported as `found:` and skipped —
+packages, the locale, the login shell. Config files **are** copied again (with a new backup each
+time), so that's how you pull in updated configs after a `git pull`.
+
+## Updating
+
+```sh
+cd dotfiles && git pull && ./install.sh -y
+```
+
+`-y` keeps the defaults. If you chose something else the first time, pass the same flags again
+(for example `--shell=bash --locale=fi_FI`), or run without `-y` and answer the questions.
+
+## Related
+
+- [Supported systems](/dotfiles/start/systems/) — what's been tested, root vs. sudo
+- [Installer internals](/dotfiles/reference/installer-internals/) — how the script works
+- [Troubleshooting](/dotfiles/reference/troubleshooting/)

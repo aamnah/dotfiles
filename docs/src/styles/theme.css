@@ -1,0 +1,123 @@
+/*
+ * High-contrast mode, applied on top of Starlight's light or dark theme via
+ * <html data-contrast="high"> (set by src/components/ThemeProvider.astro).
+ *
+ * Goal: WCAG AAA (7:1) for all text. Pure black/white, no grey text, visible
+ * borders everywhere, underlined links, thick focus rings.
+ *
+ * Starlight's "white"/"gray-N"/"black" names are relative: in dark mode
+ * "white" is the brightest text; in light mode the scale is flipped, so
+ * "white" is the darkest text. Hence the two blocks below mirror each other.
+ *
+ * Not in a CSS @layer on purpose: Starlight's colours live in
+ * @layer starlight.base, and unlayered rules always beat layered ones.
+ */
+
+:root[data-contrast='high'][data-theme='dark'] {
+	--sl-color-white: #fff;
+	--sl-color-gray-1: #fff;
+	--sl-color-gray-2: #fff;
+	--sl-color-gray-3: #fff;
+	--sl-color-gray-4: #fff;
+	--sl-color-gray-5: #000;
+	--sl-color-gray-6: #000;
+	--sl-color-black: #000;
+
+	/* Yellow on black: 19.6:1 — the classic high-contrast link colour */
+	--sl-color-accent-low: #000;
+	--sl-color-accent: #ff0;
+	--sl-color-accent-high: #ff0;
+
+	--hc-fg: #fff;
+	--hc-bg: #000;
+	--hc-accent: #ff0;
+}
+
+:root[data-contrast='high'][data-theme='light'] {
+	--sl-color-white: #000;
+	--sl-color-gray-1: #000;
+	--sl-color-gray-2: #000;
+	--sl-color-gray-3: #000;
+	--sl-color-gray-4: #000;
+	--sl-color-gray-5: #fff;
+	--sl-color-gray-6: #fff;
+	--sl-color-gray-7: #fff;
+	--sl-color-black: #fff;
+
+	/* Dark blue on white: 13.9:1 */
+	--sl-color-accent-low: #fff;
+	--sl-color-accent: #00008b;
+	--sl-color-accent-high: #00008b;
+
+	--hc-fg: #000;
+	--hc-bg: #fff;
+	--hc-accent: #00008b;
+}
+
+:root[data-contrast='high'] {
+	--sl-color-text: var(--hc-fg);
+	--sl-color-text-accent: var(--hc-accent);
+	--sl-color-text-invert: var(--hc-bg);
+	--sl-color-bg: var(--hc-bg);
+	--sl-color-bg-nav: var(--hc-bg);
+	--sl-color-bg-sidebar: var(--hc-bg);
+	--sl-color-bg-inline-code: var(--hc-bg);
+	--sl-color-bg-accent: var(--hc-accent);
+	/* Hairlines are Starlight's borders/dividers — make them solid */
+	--sl-color-hairline-light: var(--hc-fg);
+	--sl-color-hairline: var(--hc-fg);
+	--sl-color-hairline-shade: var(--hc-fg);
+	--sl-color-backdrop-overlay: rgb(0 0 0 / 0.9);
+}
+
+/* Links: never rely on colour alone */
+:root[data-contrast='high'] a:not(.site-title):not([aria-current]) {
+	text-decoration: underline;
+	text-underline-offset: 0.2em;
+}
+
+/* Current page in the sidebar: inverted, so it's obvious without colour */
+:root[data-contrast='high'] .sidebar a[aria-current='page'] {
+	background: var(--hc-fg);
+	color: var(--hc-bg);
+	outline: 2px solid var(--hc-fg);
+}
+
+/* Thick, always-visible focus ring for keyboard users */
+:root[data-contrast='high'] :focus-visible {
+	outline: 3px solid var(--hc-accent);
+	outline-offset: 2px;
+}
+
+/* Inline code and code blocks: outlined, since their background now
+   matches the page */
+:root[data-contrast='high'] :not(pre) > code {
+	border: 1px solid var(--hc-fg);
+}
+:root[data-contrast='high'] .expressive-code .frame {
+	border: 2px solid var(--hc-fg);
+}
+
+/* Search results: their card background matches the page in high contrast,
+   so outline each result to keep them visually separate */
+:root[data-contrast='high'] .pagefind-ui__result {
+	border: 1px solid var(--hc-fg);
+}
+
+/* Search field in the header: Starlight draws its border in gray-5, which
+   high contrast sets to the page colour — so the field had no visible edge.
+   Only on wide screens; on phones the search is an icon button. */
+@media (min-width: 50rem) {
+	:root[data-contrast='high'] site-search button[data-open-modal] {
+		border: 2px solid var(--hc-fg);
+	}
+	:root[data-contrast='high'] site-search button[data-open-modal]:hover {
+		border-color: var(--hc-accent);
+	}
+}
+
+/* The search window's edge had the same problem. (The "Ctrl K" hint is left
+   without a border on purpose: it's too small, a border crowds the text.) */
+:root[data-contrast='high'] site-search dialog {
+	border: 2px solid var(--hc-fg);
+}

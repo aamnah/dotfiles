@@ -1,0 +1,57 @@
+---
+title: Dotfiles
+description: Shell, editor and terminal configs for Linux and macOS, with an installer that asks before it changes anything.
+template: splash
+hero:
+  tagline: Shell, editor and terminal configs for Linux and macOS — one installer, same setup on a laptop, a VPS or a Docker container.
+  actions:
+    - text: Install
+      link: /dotfiles/start/install/
+      icon: right-arrow
+    - text: What gets installed
+      link: /dotfiles/start/what-gets-installed/
+      variant: minimal
+---
+
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+```sh
+git clone https://github.com/aamnah/dotfiles && cd dotfiles && ./install.sh
+```
+
+<CardGrid>
+	<Card title="bash and zsh, kept in sync" icon="seti:shell">
+		The same aliases and functions load in both shells. Use zsh on your laptop and bash on a
+		server — nothing to relearn. [Shell overview →](/dotfiles/shell/overview/)
+	</Card>
+	<Card title="Linux and macOS" icon="laptop">
+		Commands that differ between GNU (Linux) and BSD (macOS) pick the right version
+		automatically — same alias name, right command behind it.
+	</Card>
+	<Card title="Asks first, backs up always" icon="approve-check">
+		The installer asks for your login shell and locale, shows a plan, and backs up every file
+		it replaces. `-y` skips the questions. [Install →](/dotfiles/start/install/)
+	</Card>
+	<Card title="Works on minimal systems" icon="seti:docker">
+		Tested on Ubuntu, Debian, Fedora, Arch, openSUSE and Alpine. Missing tools and locales are
+		installed; anything optional is skipped quietly.
+	</Card>
+</CardGrid>
+
+## Configs
+
+<CardGrid>
+	<LinkCard title="zsh" href="/dotfiles/shell/zsh/" description=".zshenv, .zprofile, .zshrc" />
+	<LinkCard title="bash" href="/dotfiles/shell/bash/" description=".bash_profile, .bashrc, .inputrc" />
+	<LinkCard title="Aliases" href="/dotfiles/shell/aliases/" description="Shortcuts shared by both shells" />
+	<LinkCard title="Functions" href="/dotfiles/shell/functions/" description="take, ii, spy, t, getwebsite" />
+	<LinkCard title="kitty" href="/dotfiles/terminal/kitty/" description="Terminal: splits, Lasik theme" />
+	<LinkCard title="tmux" href="/dotfiles/terminal/tmux/" description="Multiplexer: TPM, Catppuccin, Lasik" />
+	<LinkCard title="Starship" href="/dotfiles/terminal/starship/" description="Two-line prompt for both shells" />
+	<LinkCard title="nano" href="/dotfiles/editors/nano/" description="Line numbers, colours, spell check" />
+	<LinkCard title="Neovim" href="/dotfiles/editors/neovim/" description="init.lua basics" />
+	<LinkCard title="Git" href="/dotfiles/tools/git/" description="lg log alias, global ignore" />
+</CardGrid>
+
+Something not working? See [Troubleshooting](/dotfiles/reference/troubleshooting/) and
+[Known issues](/dotfiles/reference/known-issues/).

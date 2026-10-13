@@ -1,0 +1,69 @@
+# Build the Starlight docs in docs/ and publish them to GitHub Pages
+# (https://aamnah.github.io/dotfiles/).
+#
+# One-time setup: repo Settings → Pages → Build and deployment → Source:
+# "GitHub Actions". Until then the deploy job fails with a 404.
+name: Docs
+
+on:
+  push:
+    branches: [main]
+    # Only rebuild when the docs (or this workflow) change — config-only
+    # commits don't need a new site
+    paths:
+      - 'docs/**'
+      - '.github/workflows/docs.yml'
+  # "Run workflow" button in the Actions tab, for manual rebuilds
+  workflow_dispatch:
+
+# Minimum permissions the Pages deploy needs: read the repo, write to Pages,
+# and an OIDC token so GitHub can verify the deployment came from this repo
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Only one deploy at a time. A newer push waits instead of cancelling a
+# deploy that's halfway through publishing.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: docs
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history so Starlight's "Last updated" dates come from git
+          # (a shallow clone would date every page to the latest commit)
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: docs/package-lock.json
+
+      # npm ci installs exactly what's in package-lock.json — reproducible
+      # builds, unlike npm install which may pick newer versions
+      - run: npm ci
+      # Also builds the Pagefind search index and checks every internal link
+      - run: npm run build
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

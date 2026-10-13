@@ -1,0 +1,86 @@
+---
+// Replaces Starlight's ThemeProvider to add a high-contrast mode.
+// Starlight only knows light/dark (via <html data-theme>). High contrast is
+// layered on top as <html data-contrast="high">, so Starlight's own parts
+// (code blocks, search) keep working unchanged in either light or dark.
+// Registered in astro.config.mjs under starlight.components.
+import { Icon } from '@astrojs/starlight/components';
+---
+
+{/* Inlined (not bundled) so it runs before the first paint — otherwise the
+    page would flash in the wrong theme on every load. */}
+<script is:inline>
+	window.StarlightThemeProvider = (() => {
+		// 'auto' follows the OS: light/dark from prefers-color-scheme, and high
+		// contrast when the OS "increase contrast" setting is on.
+		// 'contrast' forces high contrast, still following the OS light/dark.
+		const CHOICES = ['auto', 'light', 'dark', 'contrast'];
+		// Own key, not Starlight's 'starlight-theme', so an old stored value
+		// from the default switcher can't be misread.
+		const KEY = 'dotfiles-theme';
+
+		const parse = (value) => (CHOICES.includes(value) ? value : 'auto');
+
+		// localStorage can throw (private mode, blocked storage) — fall back to auto
+		const load = () => {
+			try {
+				return parse(localStorage.getItem(KEY));
+			} catch {
+				return 'auto';
+			}
+		};
+		const store = (choice) => {
+			try {
+				localStorage.setItem(KEY, choice);
+			} catch {}
+		};
+
+		const apply = (choice) => {
+			const root = document.documentElement;
+			const osLight = matchMedia('(prefers-color-scheme: light)').matches;
+			const osMoreContrast = matchMedia('(prefers-contrast: more)').matches;
+			const contrast = choice === 'contrast' || (choice === 'auto' && osMoreContrast);
+			const theme = choice === 'light' || choice === 'dark' ? choice : osLight ? 'light' : 'dark';
+			root.dataset.theme = theme;
+			if (contrast) root.dataset.contrast = 'high';
+			else delete root.dataset.contrast;
+		};
+
+		apply(load());
+
+		return {
+			load,
+			store,
+			apply,
+			parse,
+			// Sync every theme <select> and its icon with the current choice
+			updatePickers(choice = load()) {
+				document.querySelectorAll('starlight-theme-select').forEach((picker) => {
+					const select = picker.querySelector('select');
+					if (select) select.value = choice;
+					const tmpl = document.querySelector('#theme-icons');
+					const newIcon = tmpl && tmpl.content.querySelector('.' + choice);
+					const oldIcon = picker.querySelector('svg.label-icon');
+					if (newIcon && oldIcon) {
+						oldIcon.replaceChildren(...newIcon.cloneNode(true).childNodes);
+					}
+				});
+			},
+		};
+	})();
+</script>
+
+<template id="theme-icons">
+	<Icon name="sun" class="light" />
+	<Icon name="moon" class="dark" />
+	<Icon name="laptop" class="auto" />
+	{/* Half-filled circle — the usual "contrast" symbol. Starlight's icon set
+	    has none. Same 24×24 viewBox as Starlight's icons, since only the
+	    inner shapes get copied into the existing <svg>. */}
+	<svg class="contrast" viewBox="0 0 24 24" aria-hidden="true">
+		<path
+			d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 2v16a8 8 0 0 1 0-16Z"
+			fill="currentColor"
+		/>
+	</svg>
+</template>
