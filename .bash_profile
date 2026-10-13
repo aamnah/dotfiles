@@ -7,7 +7,7 @@
 #        Author: Aamnah
 #          Link: https://aamnah.com
 #          Date: 2020-07-15
-#       Lastmod: 2026-05-04
+#       Lastmod: 2026-10-13
 #-----------------------------------------------------------------------
 #
 # Sourced for LOGIN shells. Doubles as ~/.bashrc (interactive) here —

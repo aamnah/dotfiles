@@ -7,7 +7,7 @@
 #        Author: Aamnah
 #          Link: https://aamnah.com
 #          Date: 2026-04-24
-#       Lastmod: 2026-05-05
+#       Lastmod: 2026-10-13
 #-----------------------------------------------------------------------
 # Sourced for EVERY zsh invocation: interactive, login, scripts, cron, GUI launches.
 # .zshenv is sourced every time zsh starts, no matter the mode:
