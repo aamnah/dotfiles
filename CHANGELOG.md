@@ -8,7 +8,7 @@ Every change to these dotfiles since the first commit in June 2014, newest first
 
 ## 2026.10.13
 
-**October 13, 2026**
+**October 13, 2026** · [Compare changes](https://github.com/aamnah/dotfiles/compare/d0f78d8...8340364)
 
 The installer grew up. It now asks two questions (your login shell and your locale), shows a plan before touching anything, and installs what the configs need, on Ubuntu, Debian, Fedora, Arch, openSUSE and Alpine. Everything is documented on a new docs site with search and a high-contrast mode.
 
