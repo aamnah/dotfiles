@@ -3,8 +3,14 @@
 // All state logic lives in ThemeProvider.astro (window.StarlightThemeProvider)
 // so the pre-paint script and this dropdown can't disagree.
 import Select from '@astrojs/starlight/components/Select.astro';
+// Text size buttons sit next to the theme menu. Added here because this is
+// the one header component we already replace, and Starlight shows it both
+// in the header and in the phone menu.
+import TextSize from './TextSize.astro';
 ---
 
+<div class="display-settings">
+<TextSize />
 <starlight-theme-select>
 	<Select
 		icon="laptop"
@@ -18,6 +24,15 @@ import Select from '@astrojs/starlight/components/Select.astro';
 		width="10em"
 	/>
 </starlight-theme-select>
+</div>
+
+<style>
+	.display-settings {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+	}
+</style>
 
 {/* Inlined so the dropdown shows the right value before first paint */}
 <script is:inline>

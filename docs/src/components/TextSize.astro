@@ -1,0 +1,92 @@
+---
+// Text size buttons: A− (smaller) · current size (click to reset) · A+ (larger).
+// Shown next to the theme menu, in the header and in the phone menu.
+// The size itself is stored and applied by window.DotfilesTextSize in
+// ThemeProvider.astro, which runs before the first paint, so the page never
+// flashes at the wrong size. This file only draws the buttons.
+---
+
+<dotfiles-text-size>
+	<button type="button" data-step="-1" aria-label="Smaller text" title="Smaller text">A−</button>
+	<button type="button" data-step="0" aria-label="Reset text size" title="Reset text size" class="current">
+		100%
+	</button>
+	<button type="button" data-step="1" aria-label="Larger text" title="Larger text">A+</button>
+</dotfiles-text-size>
+
+{/* Inlined so the buttons show the right size before first paint */}
+<script is:inline>
+	DotfilesTextSize.updateControls();
+</script>
+
+<script>
+	declare global {
+		interface Window {
+			DotfilesTextSize: {
+				STEPS: number[];
+				load(): number;
+				store(scale: number): void;
+				apply(scale: number): void;
+				updateControls(scale?: number): void;
+			};
+		}
+	}
+
+	const textSize = window.DotfilesTextSize;
+
+	class DotfilesTextSizeControl extends HTMLElement {
+		constructor() {
+			super();
+			this.querySelectorAll('button').forEach((button) => {
+				button.addEventListener('click', () => {
+					// -1 = one step smaller, 1 = one step larger, 0 = back to 100%
+					const step = Number(button.dataset.step);
+					const { STEPS } = textSize;
+					let scale = 1;
+					if (step !== 0) {
+						const index = STEPS.indexOf(textSize.load()) + step;
+						scale = STEPS[Math.min(Math.max(index, 0), STEPS.length - 1)];
+					}
+					textSize.store(scale);
+					textSize.apply(scale);
+					textSize.updateControls(scale);
+				});
+			});
+		}
+	}
+	customElements.define('dotfiles-text-size', DotfilesTextSizeControl);
+</script>
+
+<style>
+	dotfiles-text-size {
+		display: flex;
+		align-items: center;
+		gap: 0.125rem;
+	}
+	button {
+		min-width: 2rem;
+		min-height: 2rem;
+		padding: 0 0.375rem;
+		border: 1px solid transparent;
+		border-radius: 0.25rem;
+		background: none;
+		color: var(--sl-color-gray-2);
+		font: inherit;
+		font-size: var(--sl-text-sm);
+		cursor: pointer;
+	}
+	button:hover:not(:disabled) {
+		border-color: var(--sl-color-gray-5);
+		color: var(--sl-color-white);
+	}
+	/* At the smallest or largest size, that button stops working */
+	button:disabled {
+		opacity: 0.4;
+		cursor: default;
+	}
+	/* Fixed width, so the buttons don't shift when "100%" becomes "87.5%" */
+	.current {
+		min-width: 3.5rem;
+		font-variant-numeric: tabular-nums;
+	}
+</style>

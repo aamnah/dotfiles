@@ -66,5 +66,9 @@ npm run build        # production build into docs/dist/, including the search in
 - Images go in `docs/src/assets/` and are linked relatively.
 - **Theme modes:** `src/components/ThemeProvider.astro` and `ThemeSelect.astro` replace
   Starlight's versions to add high contrast; the colours are in `src/styles/theme.css`.
+- **Text size:** the A− / A+ buttons are `src/components/TextSize.astro`, shown inside
+  `ThemeSelect.astro`. The size is stored and applied in `ThemeProvider.astro`, and
+  `src/styles/theme.css` scales Starlight's `--sl-text-*` sizes by it. Only text grows, not the
+  column widths, so the layout keeps working at 150%.
 - Search (Pagefind) only works in a **build** (`npm run build && npm run preview`), not in
   `npm run dev`.

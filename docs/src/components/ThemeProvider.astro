@@ -70,6 +70,57 @@ import { Icon } from '@astrojs/starlight/components';
 	})();
 </script>
 
+{/* Text size, same idea as the theme above: stored in localStorage and
+    applied before the first paint. The buttons are in TextSize.astro. */}
+<script is:inline>
+	window.DotfilesTextSize = (() => {
+		// Allowed sizes, as a multiple of the normal size (1 = 100%)
+		const STEPS = [0.875, 1, 1.125, 1.25, 1.5];
+		const KEY = 'dotfiles-text-size';
+
+		// Anything unexpected in storage (or nothing) means 100%
+		const parse = (value) => (STEPS.includes(Number(value)) ? Number(value) : 1);
+
+		// localStorage can throw (private mode, blocked storage) — fall back to 100%
+		const load = () => {
+			try {
+				return parse(localStorage.getItem(KEY));
+			} catch {
+				return 1;
+			}
+		};
+		const store = (scale) => {
+			try {
+				localStorage.setItem(KEY, String(scale));
+			} catch {}
+		};
+
+		// theme.css multiplies the page's base text size by --text-scale
+		const apply = (scale) => document.documentElement.style.setProperty('--text-scale', String(scale));
+
+		apply(load());
+
+		return {
+			STEPS,
+			load,
+			store,
+			apply,
+			// Sync every set of buttons (header and phone menu) with the size
+			updateControls(scale = load()) {
+				const index = STEPS.indexOf(scale);
+				document.querySelectorAll('dotfiles-text-size').forEach((control) => {
+					const smaller = control.querySelector('[data-step="-1"]');
+					const current = control.querySelector('[data-step="0"]');
+					const larger = control.querySelector('[data-step="1"]');
+					if (smaller) smaller.disabled = index <= 0;
+					if (larger) larger.disabled = index >= STEPS.length - 1;
+					if (current) current.textContent = scale * 100 + '%';
+				});
+			},
+		};
+	})();
+</script>
+
 <template id="theme-icons">
 	<Icon name="sun" class="light" />
 	<Icon name="moon" class="dark" />

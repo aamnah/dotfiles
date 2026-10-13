@@ -30,6 +30,7 @@ The installer grew up. It now asks two questions (your login shell and your loca
 - A 6-pane tmuxp layout with a clock (`peaclock`) and the weather.
 - A docs site with one page per config, search, troubleshooting, known issues, and Light / Dark / High contrast themes.
 - The changelog is on the docs site too, with a coloured tag on every change: [Changelog](https://aamnah.github.io/dotfiles/reference/changelog/).
+- Text size buttons on the docs site (A− / 100% / A+, from 87.5% to 150%), next to the theme menu. Your choice is remembered, and text grows a little on wider screens.
 
 **Changed**
 

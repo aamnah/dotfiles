@@ -221,3 +221,35 @@
 .changelog .cl-removed .cl-tag { color: var(--cl-removed); }
 .changelog .cl-theme .cl-tag { color: var(--cl-theme); }
 .changelog .cl-known .cl-tag { color: var(--cl-known); }
+
+/* Text size. Only the text grows, not the layout: Starlight takes every
+   text size from the --sl-text-* settings below, while column widths come
+   from other settings. (Scaling the whole page instead kept three columns at
+   150% and squeezed the text column to a few words per line.)
+
+   --text-unit is the base size: 16px on phones, growing with the screen to
+   17px on wide screens, times --text-scale, the size picked with the
+   A- / A+ buttons (set by ThemeProvider.astro; 1 = 100%). Every other size
+   keeps Starlight's own ratio to it. rem = the browser's default size, so a
+   reader's browser font setting still counts. */
+:root {
+	--text-unit: calc(var(--text-scale, 1) * clamp(1rem, 0.875rem + 0.25vw, 1.0625rem));
+	--sl-text-2xs: calc(0.75 * var(--text-unit));
+	--sl-text-xs: calc(0.8125 * var(--text-unit));
+	--sl-text-sm: calc(0.875 * var(--text-unit));
+	--sl-text-base: var(--text-unit);
+	--sl-text-lg: calc(1.125 * var(--text-unit));
+	--sl-text-xl: calc(1.25 * var(--text-unit));
+	--sl-text-2xl: calc(1.5 * var(--text-unit));
+	--sl-text-3xl: calc(1.8125 * var(--text-unit));
+	--sl-text-4xl: calc(2.1875 * var(--text-unit));
+	--sl-text-5xl: calc(2.625 * var(--text-unit));
+	--sl-text-6xl: calc(4 * var(--text-unit));
+}
+
+/* Normal paragraph text has no size in Starlight: it uses the browser's
+   default, so it wouldn't follow the text size above. This makes it use
+   --sl-text-body (= --sl-text-base) like everything else. */
+body {
+	font-size: var(--sl-text-body);
+}
