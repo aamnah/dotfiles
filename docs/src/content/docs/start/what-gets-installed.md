@@ -17,6 +17,7 @@ backed up first as `<file>.bak.<timestamp>`.
 | `.tmux.conf` | `~/.tmux.conf` | [tmux](/dotfiles/terminal/tmux/) |
 | `.config/tmux/*.tmux`, `tmux.conf` | `~/.config/tmux/` | [tmux](/dotfiles/terminal/tmux/) |
 | `.config/kitty/kitty.conf` | `~/.config/kitty/kitty.conf` | [kitty](/dotfiles/terminal/kitty/) |
+| `.config/kitty/themes/*.conf` | `~/.config/kitty/themes/` (Lasik, Catppuccin Mocha) | [kitty](/dotfiles/terminal/kitty/#theme) |
 | `.config/nvim/init.lua` | `~/.config/nvim/init.lua` | [Neovim](/dotfiles/editors/neovim/) |
 | `.config/starship.toml` | `~/.config/starship.toml` | [Starship](/dotfiles/terminal/starship/) |
 | *(generated)* | `~/.config/locale.conf` | [Locale](/dotfiles/shell/locale/) |
@@ -58,7 +59,6 @@ These are in the repo but the installer doesn't copy them (yet):
 
 | File | Why it matters | Page |
 |---|---|---|
-| `.config/kitty/themes/` | `kitty.conf` loads `themes/lasik.conf` — without it, no Lasik colours | [Known issues](/dotfiles/reference/known-issues/) |
 | `.vimrc` | Vim config | [Vim](/dotfiles/editors/vim/) |
 | `.gitconfig`, `.gitignore_global` | Git aliases, global ignore list | [Git](/dotfiles/tools/git/) |
 | `.config/tmuxp/default.yaml` | the [`t`](/dotfiles/shell/functions/#t) function's default layout | [tmuxp](/dotfiles/tools/tmuxp/) |
@@ -69,7 +69,7 @@ These are in the repo but the installer doesn't copy them (yet):
 Copy any of them by hand if you want them, for example:
 
 ```sh
-mkdir -p ~/.config/kitty/themes && cp .config/kitty/themes/* ~/.config/kitty/themes/
+mkdir -p ~/.config/tmuxp && cp .config/tmuxp/default.yaml ~/.config/tmuxp/
 ```
 
 `kitty`, `tmux` and `nvim` themselves are **not** installed — only their configs. You get a

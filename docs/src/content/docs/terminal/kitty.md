@@ -31,18 +31,12 @@ include themes/lasik.conf
 ```
 
 **Lasik** matches the author's [VSCode theme](https://github.com/aamnah/lasik-vscode-theme).
-A Catppuccin Mocha theme is in the repo too — swap the comment to use it.
+A Catppuccin Mocha theme is in the repo too — swap the comment to use it. The installer copies
+both theme files to `~/.config/kitty/themes/`.
 
-:::caution[The theme files aren't installed]
-The installer copies `kitty.conf` but not the `themes/` folder, so on a fresh install the
-`include` points at nothing and kitty uses its default colours. Copy the themes by hand:
-
-```sh
-mkdir -p ~/.config/kitty/themes && cp .config/kitty/themes/* ~/.config/kitty/themes/
-```
-
-Also, the Catppuccin file is named `catppucin-mocha.conf` (one `p`), but the commented-out line
-says `catppuccin-mocha.conf`. Fix one or the other before switching. See
+:::caution[Catppuccin file name]
+The Catppuccin file is named `catppucin-mocha.conf` (one `p`), but the commented-out line says
+`catppuccin-mocha.conf`. Fix one or the other before switching. See
 [Known issues](/dotfiles/reference/known-issues/).
 :::
 

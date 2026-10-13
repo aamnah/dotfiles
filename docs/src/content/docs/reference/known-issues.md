@@ -9,7 +9,6 @@ Things that don't work as they should yet. Each has a workaround.
 
 | Issue | Effect | Workaround |
 |---|---|---|
-| **kitty themes aren't copied** — only `kitty.conf` is | `include themes/lasik.conf` points at nothing; default colours | `cp -r .config/kitty/themes ~/.config/kitty/` |
 | **Some steps stop the whole install on failure** — starship install, TPM/Catppuccin `git clone`, a missing source file in `--remote` mode | a network hiccup there stops everything after it | re-run; finished steps are skipped |
 | **Not tested as a normal user with `sudo`** | password prompts from `sudo`/`chsh` haven't been tried end to end | run as root in a container to test, or report problems |
 | **macOS not re-tested** since the interactive installer was added | probably fine — bash 3.2 compatible — but unverified | report problems |

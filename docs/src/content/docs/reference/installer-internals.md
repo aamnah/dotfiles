@@ -21,7 +21,7 @@ main
 ├── confirm_plan         print plan, "Proceed? [Y/n]"
 ├── install_nano
 ├── install_tmux         + TPM, Catppuccin (git clone)
-├── install_kitty        + ensure_kitty_terminfo
+├── install_kitty        + theme files, ensure_kitty_terminfo
 ├── install_nvim
 ├── install_starship
 ├── ensure_shell_tools   less, bash-completion, notify-send

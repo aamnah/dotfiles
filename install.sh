@@ -567,6 +567,14 @@ install_starship() {
     backup_if_exists "$dest"
     cp "$src" "$dest"
     echo "installed: $dest"
+
+    # Theme files. kitty.conf loads themes/lasik.conf — without these, kitty
+    # silently falls back to its default colours. Listed by name (not the
+    # whole folder) because --remote fetches files one by one and can't list
+    # a folder on GitHub. Add new themes here.
+    install_home_files \
+        .config/kitty/themes/lasik.conf \
+        .config/kitty/themes/catppucin-mocha.conf
 }
 
 install_nvim() {
@@ -797,6 +805,9 @@ install_home_files() {
             continue
         fi
 
+        # Nested paths (e.g. .config/kitty/themes/…) need their folder first;
+        # without this, cp fails on a fresh machine where it doesn't exist yet
+        mkdir -p "$(dirname "$dest")"
         backup_if_exists "$dest"
         cp "$src" "$dest"
         echo "installed: $dest"

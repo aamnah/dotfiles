@@ -121,8 +121,14 @@ The server doesn't know kitty. Run the installer there (it adds `kitty-terminfo`
 
 ### kitty uses default colours, not Lasik
 
-The theme files aren't installed. Copy `.config/kitty/themes/` to `~/.config/kitty/themes/` —
-see [kitty](/dotfiles/terminal/kitty/#theme).
+The theme file is missing from `~/.config/kitty/themes/`. Installs before October 2026 didn't
+copy it — run the installer again, or copy it by hand:
+
+```sh
+mkdir -p ~/.config/kitty/themes && cp .config/kitty/themes/* ~/.config/kitty/themes/
+```
+
+See [kitty](/dotfiles/terminal/kitty/#theme).
 
 ### Icons in the prompt or tmux show as boxes
 

@@ -18,6 +18,7 @@ The installer grew up. It now asks two questions (your login shell and your loca
 - `install.sh` asks for your locale (`en_US.UTF-8` by default) and generates it if it's missing. Your choice is saved to `~/.config/locale.conf`.
 - `-y` skips all questions. `--shell=` and `--locale=` answer them up front. With no terminal (Docker builds, CI) the defaults are used automatically.
 - The installer shows a plan and asks `Proceed? [Y/n]` before changing anything.
+- kitty's theme files (Lasik and Catppuccin Mocha) are installed with `kitty.conf`, so kitty starts with the Lasik colours.
 - Missing tools are installed: zsh, `less`, `bash-completion`, `notify-send` (desktops only) and kitty's terminfo (servers, so SSH from kitty works).
 - Bash support: `install.sh` installs `.bash_profile`, `.inputrc` and a small `.bashrc` that loads `.bash_profile`, so new terminal tabs get your aliases too.
 - Ubuntu's useful defaults in both shells: `lesspipe` (read archives and PDFs with `less`), `dircolors`, coloured zsh completion, bash-completion and the `alert` alias.
@@ -49,7 +50,6 @@ The installer grew up. It now asks two questions (your login shell and your loca
 
 **Known**
 
-- kitty's theme files aren't copied by the installer yet, so a fresh install uses kitty's default colours.
 - The installer hasn't been tested as a normal user with `sudo`, or on macOS since these changes.
 - More on the docs site's [Known issues](https://aamnah.github.io/dotfiles/reference/known-issues/) page.
 
