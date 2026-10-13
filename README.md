@@ -12,11 +12,23 @@ Cross-platform: aliases that wrap commands with Linux/macOS differences (GNU vs 
 git clone https://github.com/aamnah/dotfiles && cd dotfiles && ./install.sh
 ```
 
-Or without cloning:
+Or run it remotely, without cloning (handy on a fresh server):
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/aamnah/dotfiles/main/install.sh | bash -s -- --remote
 ```
+
+With every option given up front, so it doesn't ask anything (these values are the defaults):
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/aamnah/dotfiles/main/install.sh | bash -s -- --remote -y --shell=zsh --locale=en_US.UTF-8 --font=Hasklig
+```
+
+- `--remote`: download the configs from GitHub, since there's no local copy
+- `-y`: don't ask questions; use the values below (or the defaults for anything left out)
+- `--shell=zsh`: login shell: `zsh`, `bash`, or `keep` your current one
+- `--locale=en_US.UTF-8`: language and formats for dates and numbers, e.g. `fi_FI` or `ja_JP`
+- `--font=Hasklig`: Nerd Font for the terminal, desktops only (installs as "Hasklug"): `JetBrainsMono`, `FiraCode`, `Meslo`, `CascadiaCode`, `Hack`, or `none`
 
 The installer asks for your login shell (zsh by default), locale (`en_US.UTF-8` by default) and, on desktops, a Nerd Font for the terminal (Hasklug by default), shows a plan, and backs up every file it replaces. `-y` skips the questions. Details: [Install](https://aamnah.github.io/dotfiles/start/install/) · [What gets installed](https://aamnah.github.io/dotfiles/start/what-gets-installed/).
 

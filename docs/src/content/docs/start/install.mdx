@@ -99,8 +99,8 @@ Press **Enter** at any question to take the default. Typing something invalid ju
 |---|---|
 | `-y`, `--yes` | Don't ask anything — use the defaults (or the values from the flags below). |
 | `--shell=zsh\|bash\|keep` | Login shell. Default: `zsh`. Configs for both shells are installed either way. |
-| `--font=FONT` | Nerd Font for the terminal (desktops only): `Hasklig` (default, installs as "Hasklug"), `JetBrainsMono`, `FiraCode`, `Meslo`, `CascadiaCode`, `Hack`, or `none`. |
 | `--locale=LOCALE` | UTF-8 locale to generate and use, e.g. `fi_FI` or `ja_JP.UTF-8`. Default: `en_US.UTF-8`. |
+| `--font=FONT` | Nerd Font for the terminal (desktops only): `Hasklig` (default, installs as "Hasklug"), `JetBrainsMono`, `FiraCode`, `Meslo`, `CascadiaCode`, `Hack`, or `none`. |
 | `--remote` | Fetch configs from GitHub instead of the local checkout. |
 | `-h`, `--help` | Show all options. |
 
@@ -110,7 +110,32 @@ Press **Enter** at any question to take the default. Typing something invalid ju
 curl -fsSL https://raw.githubusercontent.com/aamnah/dotfiles/main/install.sh | bash -s -- --remote -y
 ```
 
-A wrong value (for example `--shell=fish` or `--locale=japanese`) stops the script with an error
+### Every option at once
+
+Run remotely without cloning, with every answer given up front — nothing is asked. The values
+here are the defaults; swap in your own:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/aamnah/dotfiles/main/install.sh | bash -s -- --remote -y --shell=zsh --locale=en_US.UTF-8 --font=Hasklig
+```
+
+| Part | Meaning |
+|---|---|
+| `curl -fsSL <url>` | download `install.sh` from GitHub |
+| `\| bash -s --` | run it with bash; `-s` reads the script from the pipe, `--` passes everything after it to the script |
+| `--remote` | download the configs from GitHub too (there's no local copy) |
+| `-y` | don't ask anything |
+| `--shell=zsh` | make zsh the login shell |
+| `--locale=en_US.UTF-8` | US English with UTF-8 |
+| `--font=Hasklig` | install Hasklug Nerd Font (only on a desktop; skipped on servers) |
+
+From a clone, the same without `curl` and `--remote`:
+
+```sh
+./install.sh -y --shell=zsh --locale=en_US.UTF-8 --font=Hasklig
+```
+
+A wrong value (for example `--shell=fish`, `--locale=japanese` or `--font=comic`) stops the script with an error
 **before** anything is changed.
 
 <Aside title="No terminal? Defaults are used automatically">
