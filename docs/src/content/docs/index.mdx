@@ -61,17 +61,42 @@ replaces is backed up first.
 
 ## Configs
 
+### Shell
+
 <CardGrid>
+	<LinkCard title="Shell overview" href="/dotfiles/shell/overview/" description="Which file loads when, in bash and zsh" />
 	<LinkCard title="zsh" href="/dotfiles/shell/zsh/" description=".zshenv, .zprofile, .zshrc" />
 	<LinkCard title="bash" href="/dotfiles/shell/bash/" description=".bash_profile, .bashrc, .inputrc" />
 	<LinkCard title="Aliases" href="/dotfiles/shell/aliases/" description="Shortcuts shared by both shells" />
-	<LinkCard title="Functions" href="/dotfiles/shell/functions/" description="take, ii, spy, t, getwebsite" />
-	<LinkCard title="kitty" href="/dotfiles/terminal/kitty/" description="Terminal: splits, Lasik theme" />
+	<LinkCard title="Functions" href="/dotfiles/shell/functions/" description="take, ii, spy, t, myip, getwebsite" />
+	<LinkCard title="Locale" href="/dotfiles/shell/locale/" description="Language and formats, with a safe fallback" />
+	<LinkCard title="Colours & Ubuntu defaults" href="/dotfiles/shell/colours/" description="lesspipe, dircolors, coloured completion" />
+	<LinkCard title="Local files & secrets" href="/dotfiles/shell/local-files/" description="Your own settings and API keys, outside the repo" />
+</CardGrid>
+
+### Terminal
+
+<CardGrid>
+	<LinkCard title="kitty" href="/dotfiles/terminal/kitty/" description="Terminal: splits, Lasik theme, Nerd Font" />
 	<LinkCard title="tmux" href="/dotfiles/terminal/tmux/" description="Multiplexer: TPM, Catppuccin, Lasik" />
 	<LinkCard title="Starship" href="/dotfiles/terminal/starship/" description="Two-line prompt for both shells" />
+</CardGrid>
+
+### Editors
+
+<CardGrid>
 	<LinkCard title="nano" href="/dotfiles/editors/nano/" description="Line numbers, colours, spell check" />
-	<LinkCard title="Neovim" href="/dotfiles/editors/neovim/" description="init.lua basics" />
-	<LinkCard title="Git" href="/dotfiles/tools/git/" description="lg log alias, global ignore" />
+	<LinkCard title="Vim" href="/dotfiles/editors/vim/" description="Sublime Monokai, tabs, smart search" />
+	<LinkCard title="Neovim" href="/dotfiles/editors/neovim/" description="init.lua basics, system clipboard" />
+	<LinkCard title="VS Code" href="/dotfiles/editors/vscode/" description="Syntax highlighting for dotfiles without a file extension" />
+</CardGrid>
+
+### Tools
+
+<CardGrid>
+	<LinkCard title="Git" href="/dotfiles/tools/git/" description="Defaults, lg log alias, global ignore" />
+	<LinkCard title="tmuxp" href="/dotfiles/tools/tmuxp/" description="6-pane tmux layout with a clock and the weather" />
+	<LinkCard title="peaclock" href="/dotfiles/tools/peaclock/" description="Binary clock, timer and stopwatch" />
 </CardGrid>
 
 Something not working? See [Troubleshooting](/dotfiles/reference/troubleshooting/) and
