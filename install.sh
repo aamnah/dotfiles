@@ -342,8 +342,9 @@ Plan:
   login shell  $shell_line
   locale       $LOCALE (saved to $HOME/.config/locale.conf)
   font         $font_line
-  configs      nano, tmux, kitty, nvim, starship, zsh, bash
+  configs      nano, vim, nvim, tmux, tmuxp, kitty, peaclock, starship, zsh, bash
                (existing files are backed up as <file>.bak.<timestamp>)
+  git          missing settings only; your name, email and own settings are kept
   source       $MODE
 PLAN
 
@@ -682,6 +683,14 @@ install_kitty() {
         cp "$src" "$dest"
     fi
     echo "installed: $dest${family:+ (font: $family)}"
+
+    # Theme files. kitty.conf loads themes/lasik.conf — without these, kitty
+    # silently falls back to its default colours. Listed by name (not the
+    # whole folder) because --remote fetches files one by one and can't list
+    # a folder on GitHub. Add new themes here.
+    install_home_files \
+        .config/kitty/themes/lasik.conf \
+        .config/kitty/themes/catppuccin-mocha.conf
 }
 
 install_starship() {
@@ -708,14 +717,6 @@ install_starship() {
     backup_if_exists "$dest"
     cp "$src" "$dest"
     echo "installed: $dest"
-
-    # Theme files. kitty.conf loads themes/lasik.conf — without these, kitty
-    # silently falls back to its default colours. Listed by name (not the
-    # whole folder) because --remote fetches files one by one and can't list
-    # a folder on GitHub. Add new themes here.
-    install_home_files \
-        .config/kitty/themes/lasik.conf \
-        .config/kitty/themes/catppucin-mocha.conf
 }
 
 install_nvim() {
@@ -739,6 +740,73 @@ install_nvim() {
     backup_if_exists "$dest"
     cp "$src" "$dest"
     echo "installed: $dest"
+}
+
+install_vim() {
+    if ! command -v vim >/dev/null 2>&1; then
+        if [[ "$SYSTEM" == macos-* ]]; then
+            echo "warning: vim not found. Install with: brew install vim" >&2
+        else
+            echo "warning: vim not found. Install with your package manager (e.g. apt install vim)" >&2
+        fi
+    fi
+    install_home_files .vimrc
+}
+
+# Git: the global ignore list, plus the defaults and aliases from the repo's
+# .gitconfig, applied one setting at a time with `git config --global`.
+# ~/.gitconfig is NOT replaced: it holds your name, email and credential
+# settings, and a copy would wipe them. Settings you've already set yourself
+# are kept; only missing ones are added.
+install_git() {
+    if ! command -v git >/dev/null 2>&1; then
+        echo "warning: git not found — git settings skipped. Install git, then re-run" >&2
+        return 0
+    fi
+
+    local src; src="$(fetch_source ".gitconfig")"
+    if [[ ! -f "$src" ]]; then
+        echo "error: $src not found" >&2
+        return 1
+    fi
+
+    install_home_files .gitignore_global
+
+    # Without core.excludesfile git never reads ~/.gitignore_global
+    local key value current
+    current="$(git config --global --get core.excludesfile || true)"
+    if [[ -z "$current" ]]; then
+        git config --global core.excludesfile "$HOME/.gitignore_global"
+        echo "installed: git core.excludesfile = $HOME/.gitignore_global"
+    elif [[ "$current" != "$HOME/.gitignore_global" ]]; then
+        echo "kept: git core.excludesfile = $current (yours — $HOME/.gitignore_global is installed but not used)"
+    fi
+
+    # `--list` prints every setting in the repo's .gitconfig as key=value,
+    # e.g. pull.rebase=true. `read` splits at the first "=" only, so values
+    # containing "=" stay whole.
+    while IFS='=' read -r key value; do
+        # user.name / user.email are empty placeholders in the repo
+        [[ "$key" == user.* ]] && continue
+        current="$(git config --global --get "$key" || true)"
+        if [[ -z "$current" ]]; then
+            git config --global "$key" "$value"
+            echo "installed: git $key = $value"
+        elif [[ "$current" != "$value" ]]; then
+            echo "kept: git $key = $current (yours; the dotfiles use $value)"
+        fi
+    done < <(git config --file "$src" --list)
+}
+
+# tmuxp layout used by the `t` function (.functions). Without it, `t` falls
+# back to a plain tmux session.
+install_tmuxp() {
+    install_home_files .config/tmuxp/default.yaml
+}
+
+# peaclock colours and layout, read by the `peaclock` alias (.aliases)
+install_peaclock() {
+    install_home_files .config/peaclock/config
 }
 
 # Run a command as root: directly if we already are, else through sudo.
@@ -937,12 +1005,17 @@ ensure_locale() {
 # Copy repo-relative files to the same path under $HOME, backing up each.
 # Shared by the shell installers, which all install a flat list of dotfiles.
 install_home_files() {
+    # 1 if any file was missing. The other files are still installed, but the
+    # step then shows up in the "these steps failed" list at the end instead
+    # of looking like it worked.
+    local missing=0
     for f in "$@"; do
         local src; src="$(fetch_source "$f")"
         local dest="$HOME/$f"
 
         if [[ ! -f "$src" ]]; then
             echo "error: $src not found" >&2
+            missing=1
             continue
         fi
 
@@ -953,6 +1026,7 @@ install_home_files() {
         cp "$src" "$dest"
         echo "installed: $dest"
     done
+    return "$missing"
 }
 
 # Files sourced by both .zshrc and .bash_profile (shell-specific bits are
@@ -978,6 +1052,30 @@ install_bash() {
     install_home_files .bash_profile .bashrc .inputrc
 }
 
+# Steps that failed, listed at the end of the install
+FAILED_STEPS=()
+
+# Run one install step. If it fails, warn and carry on with the next one.
+# Without this, `set -e` stops the whole install at the first failure — a
+# network hiccup while cloning a tmux plugin would skip everything after it
+# (locale, shell configs, login shell).
+# The step runs in a subshell ( … ) with its own `set -e`, so it still stops
+# at its own first error. It can't be written as `step || warn`: bash ignores
+# `set -e` inside anything on the left of `||`, so a broken step would carry
+# on and report success. Side effect of the subshell: a step can't set
+# variables for later steps (none do).
+run_step() {
+    local status
+    set +e
+    ( set -e; "$@" )
+    status=$?
+    set -e
+    if (( status != 0 )); then
+        echo "warning: '$1' failed — carrying on with the next step" >&2
+        FAILED_STEPS+=("$1")
+    fi
+}
+
 # Everything runs from main, called on the very last line. With
 # `curl … | bash`, bash runs the script while it's still downloading.
 # Wrapped like this, nothing runs until the whole file has arrived — a
@@ -988,24 +1086,37 @@ main() {
     ask_questions
     confirm_plan
 
-    install_nano
-    install_tmux
-    ensure_nerd_font
-    install_kitty
-    install_nvim
-    install_starship
-    ensure_shell_tools
-    ensure_locale
-    write_locale_conf
+    run_step install_nano
+    run_step install_tmux
+    run_step install_tmuxp
+    run_step install_peaclock
+    run_step ensure_nerd_font
+    run_step install_kitty
+    run_step install_vim
+    run_step install_nvim
+    run_step install_starship
+    run_step install_git
+    run_step ensure_shell_tools
+    run_step ensure_locale
+    run_step write_locale_conf
     # zsh binary only when it's the chosen login shell; its configs are
     # installed either way (install_zsh)
     if [[ "$SHELL_CHOICE" == "zsh" ]]; then
-        ensure_zsh
+        run_step ensure_zsh
     fi
-    install_shell_common
-    install_zsh
-    install_bash
-    set_login_shell
+    run_step install_shell_common
+    run_step install_zsh
+    run_step install_bash
+    run_step set_login_shell
+
+    # Exit non-zero so scripts and CI notice; everything else was installed
+    if (( ${#FAILED_STEPS[@]} > 0 )); then
+        echo >&2
+        echo "Done, but these steps failed: ${FAILED_STEPS[*]}" >&2
+        echo "Fix the cause (often the network) and run the installer again —" >&2
+        echo "steps that already worked are skipped or safely redone." >&2
+        exit 1
+    fi
 }
 
 main "$@"

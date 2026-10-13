@@ -49,7 +49,8 @@ Otherwise a simple fallback prompt is used (handy on minimal servers):
   Needs the `bash-completion` package (the installer adds it on Linux).
 - `~/bin` and `~/.local/bin` added to `PATH` if they exist. Ubuntu does this in `~/.profile`,
   but bash stops reading `~/.profile` once `~/.bash_profile` exists.
-- Android SDK folders added to `PATH` (`$HOME/Android/Sdk/…`) — harmless if you don't have it.
+- Android SDK folders added to `PATH` (`$HOME/Android/Sdk/…`), only when that folder exists.
+- `~/.zsh_secrets` loaded, so bash gets your API keys too. See [Local files](/dotfiles/shell/local-files/#secrets).
 - **`~/.bash_profile.local`**, loaded last, for machine-specific lines — see
   [Local files](/dotfiles/shell/local-files/).
 

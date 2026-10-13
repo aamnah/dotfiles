@@ -6,7 +6,7 @@
 #        Author: Aamnah
 #          Link: https://aamnah.com
 #          Date: 2026-04-14
-#       Lastmod: 2026-05-21
+#       Lastmod: 2026-10-13
 #-------------------------------------------------------------------------------
 # https://www.nano-editor.org/dist/latest/nanorc.5.html
 
@@ -15,8 +15,10 @@
 
 # -- DEFAULTS ------------------------------------------------------------------
 set linenumbers
+# Indent with real tab characters, shown 4 columns wide (same as Vim and
+# Neovim). Tabs are simpler to reformat, and each person sees their own width.
+# YAML doesn't allow tabs: in YAML files, indent with spaces by hand.
 set tabsize 4
-set tabstospaces
 set autoindent           # new lines will keep previous line's indent
 set mouse                # click to move cursor, select with drag
 set constantshow         # always show cursor position in status bar

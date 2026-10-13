@@ -38,12 +38,6 @@ include themes/lasik.conf
 A Catppuccin Mocha theme is in the repo too — swap the comment to use it. The installer copies
 both theme files to `~/.config/kitty/themes/`.
 
-:::caution[Catppuccin file name]
-The Catppuccin file is named `catppucin-mocha.conf` (one `p`), but the commented-out line says
-`catppuccin-mocha.conf`. Fix one or the other before switching. See
-[Known issues](/dotfiles/reference/known-issues/).
-:::
-
 Reload after editing: **Ctrl+Shift+F5**.
 
 ## Splits (like tmux)

@@ -1,6 +1,6 @@
 ---
 title: nano
-description: nano config — line numbers, 4-space tabs, mouse, syntax highlighting, spell check and muted Lasik colours.
+description: nano config — line numbers, tabs shown 4 wide, mouse, syntax highlighting, spell check and muted Lasik colours.
 ---
 
 [nano](https://www.nano-editor.org/) is the simple terminal editor that's on almost every Linux
@@ -15,7 +15,7 @@ system. The config is installed to `~/.nanorc`.
 | Setting | Effect |
 |---|---|
 | `linenumbers` | line numbers on the left |
-| `tabsize 4`, `tabstospaces` | Tab inserts 4 spaces |
+| `tabsize 4` | Tab inserts a real tab character, shown 4 wide (same as Vim and Neovim) |
 | `autoindent` | new lines keep the previous line's indent |
 | `mouse` | click to move the cursor, drag to select |
 | `constantshow` | always show the cursor position at the bottom |
@@ -67,6 +67,10 @@ Line numbers are dim grey; the help shortcuts at the bottom are cyan and green.
 - **Colour names like `slate` and `grey`** need a recent nano (6.0+). Older versions report
   unknown colours.
 - **The installer doesn't install nano** — only the config.
+- **YAML doesn't allow tabs.** Vim and Neovim switch to spaces for YAML files automatically;
+  nano doesn't, so indent YAML with spaces by hand. (nano can do it per file type with
+  `extendsyntax yaml tabgives "  "`, but that line errors on start-up wherever nano's syntax
+  files are missing, so it isn't in the config.)
 - **`/usr/share/nano does not exist`** warning: nano (or its syntax files) isn't installed.
   Highlighting won't load until it is; everything else works.
 - **Installed to `~/.nanorc`, not `~/.config/nano/nanorc`.** The repo keeps the file under

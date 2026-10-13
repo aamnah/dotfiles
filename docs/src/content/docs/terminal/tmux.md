@@ -59,7 +59,7 @@ clones TPM into `~/.config/tmux/plugins/tpm` (if `git` is installed).
 | `tmux-plugins/tmux-cpu` | CPU and RAM use in the status bar |
 | `xamut/tmux-weather` | temperature and an icon for **Jyväskylä** — change `@tmux-weather-location` |
 
-After the first install, open tmux and press **Prefix I** (capital I) to download the plugins. The comment in `tmux.conf` says "prefix + i" — TPM's key is the capital one.
+After the first install, open tmux and press **Prefix I** (capital I, so Shift+i) to download the plugins.
 
 ## Themes
 

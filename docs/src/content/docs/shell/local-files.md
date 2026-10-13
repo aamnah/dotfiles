@@ -16,7 +16,7 @@ committed, and never touched by the installer.
 | `~/.zshrc.local` | zsh, interactive | zsh-only prompt/completion tweaks |
 | `~/.zshenv.local` | every zsh | machine-specific `PATH` and environment variables |
 | `~/.bash_profile.local` | every bash (login and new tabs) | the same for bash. Loaded last, so it can override anything |
-| `~/.zsh_secrets` | every zsh | API keys and tokens |
+| `~/.zsh_secrets` | every zsh and every bash | API keys and tokens |
 
 Each one is loaded **after** the shared file, so it can override anything — including removing
 an alias you don't want:
@@ -50,16 +50,19 @@ echo 'export OPENAI_API_KEY="sk-…"' >> ~/.zsh_secrets
 
 `chmod 600` means: the owner can read and write, nobody else can do anything.
 
-:::caution
-`~/.zsh_secrets` is only read by **zsh**. In bash, put secrets in `~/.functions.local` or
-`~/.aliases.local` (with the same `chmod 600`), or source the secrets file from there:
-`[ -f "$HOME/.zsh_secrets" ] && . "$HOME/.zsh_secrets"`.
-:::
+Despite the name, **bash reads it too**, so both shells get your keys. Keep it to plain
+`export NAME="value"` lines: both shells understand those, but zsh-only syntax would print errors
+in bash.
 
 ## The example file
 
-`.zshrc.local.example` in the repo is an older template (Homebrew and nvm setup). Both of those
-now live in `.zshenv` — you don't need to copy them. Use it as a reference for the file's shape.
+`.zshrc.local.example` in the repo is a short template for `~/.zshrc.local`: what belongs there,
+which other file to use for `PATH`, aliases and keys, and a couple of commented examples. Copy
+it and edit:
+
+```sh
+cp .zshrc.local.example ~/.zshrc.local
+```
 
 ## Old file names
 

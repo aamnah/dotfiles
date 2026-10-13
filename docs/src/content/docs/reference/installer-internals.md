@@ -89,10 +89,21 @@ has_tty() {
 
 ### Why failures warn instead of exit
 
-Under `set -e` any failing command stops the script. Package installs and other optional steps
-use `pkg_install … || echo "warning: …"` so a missing package never prevents the config files
-from being installed. (A few older steps don't do this yet — see
-[Known issues](/dotfiles/reference/known-issues/).)
+Under `set -e` any failing command stops the script. So `main` runs every step through
+`run_step`: if a step fails (no network, a file that couldn't be downloaded…), it prints a
+warning and goes on with the next step. At the end the script lists the failed steps and
+exits with `1`, so scripts and CI notice:
+
+```
+Done, but these steps failed: install_tmux install_starship
+```
+
+Each step runs in a subshell, `( set -e; step )`, so it still stops at its own first error.
+It can't be written as `step || warn`: bash ignores `set -e` inside anything on the left of
+`||`, so a broken step would carry on and look successful.
+
+Inside a step, optional parts like package installs use `pkg_install … || echo "warning: …"`,
+so a missing package doesn't fail the whole step.
 
 ## Platform differences
 

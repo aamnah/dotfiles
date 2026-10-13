@@ -35,7 +35,19 @@ set t_Co=256 " Use 256 colors in Terminals that support them (xterm does)
 						 " in `~/.config/tmux/tmux.conf` 
 syntax on 
 syntax enable
-colorscheme sublimemonokai
+" sublimemonokai isn't part of these dotfiles: put sublimemonokai.vim in
+" ~/.vim/colors/ to use it. Without this try/catch, a machine that doesn't
+" have it shows "E185: Cannot find color scheme" on every Vim start. Falls
+" back to habamax (built in since Vim 9), then desert (built into every Vim).
+try
+  colorscheme sublimemonokai
+catch /E185/
+  try
+    colorscheme habamax
+  catch /E185/
+    colorscheme desert
+  endtry
+endtry
 filetype on " syntax-highlighting based on file names
 
 
@@ -88,11 +100,17 @@ set timeout timeoutlen=1000 ttimeoutlen=50
 
 " -- Tabs & Spacing -------------------------------------------------------
 
-set tabstop=4 		" a tab is 4 spaces (same as the nano config)
+" Indent with real tab characters, shown 4 columns wide (same as nano and
+" Neovim). Tabs are simpler to reformat, and each person sees their own width.
+set tabstop=4 		" a tab is shown 4 columns wide
 set softtabstop=4 	" when hitting <BS>, pretend like a tab is removed, even if spaces
-set shiftwidth=4 	" no. of spaces to use for auto-indenting
-set expandtab 		" convert Tabs to Spaces (e.g. Python)
+set shiftwidth=4 	" auto-indent by 4 columns (= one tab)
+set noexpandtab 	" keep Tab as a real tab character, don't convert to spaces
 set smarttab 		" insert tabs on the start of a line according to shiftwidth, not tabstop
+
+" Exception: YAML doesn't allow tabs, so YAML files (like the tmuxp layouts)
+" get 2 spaces. Without this, saving a YAML file indented with tabs breaks it.
+autocmd FileType yaml setlocal expandtab tabstop=2 softtabstop=2 shiftwidth=2
 
 
 " -- Folding --------------------------------------------------------------

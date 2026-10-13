@@ -22,7 +22,7 @@ The installer copies the config but **doesn't install Neovim**:
 | Mouse & clipboard | `mouse = "a"` | mouse everywhere |
 | | `clipboard = "unnamedplus"` | copy/paste uses the **system clipboard** |
 | Indent | `tabstop`, `shiftwidth`, `softtabstop` = 4 | indent width 4 |
-| | `expandtab = false` | **real tab characters**, not spaces |
+| | `expandtab = false` | **real tab characters**, not spaces (YAML and Python files still get spaces, from Neovim's built-in file-type rules) |
 | | `autoindent`, `smartindent` | keep and guess indentation |
 | Scrolling | `wrap = false` | long lines scroll sideways |
 | | `scrolloff = 5`, `sidescrolloff = 8` | keep some lines/columns visible around the cursor |
@@ -36,8 +36,7 @@ The installer copies the config but **doesn't install Neovim**:
 - **Clipboard on Linux needs a helper program.** `unnamedplus` uses `wl-copy` (Wayland) or
   `xclip` / `xsel` (X11). Without one, yanking only fills Neovim's own register. Over SSH there's
   usually no clipboard at all. Check with `:checkhealth provider`.
-- **Tabs, not spaces.** The comment next to `expandtab` says "Use spaces instead of tabs", but
-  the value is `false`, which means **tabs**. Set it to `true` for spaces. Vim and nano in this
-  repo use spaces — see [Vim](/dotfiles/editors/vim/#edge-cases).
+- **Tabs, not spaces**, the same as [Vim](/dotfiles/editors/vim/) and
+  [nano](/dotfiles/editors/nano/). For spaces, set `expandtab = true`.
 - **The cursor shape** only changes in terminals that support it (kitty does). The
   `guicursor` block in `init.lua` has a long comment explaining every mode letter.

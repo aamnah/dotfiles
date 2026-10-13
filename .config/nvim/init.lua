@@ -48,7 +48,7 @@ vim.opt.clipboard = "unnamedplus"
 vim.opt.tabstop = 4			-- Display width of tab characters (default: 8)
 vim.opt.shiftwidth = 4		-- Width for auto indents (default: 8)
 vim.opt.softtabstop = 4		-- Width for <Tab> and <Back> (default: 0)
-vim.opt.expandtab = false	-- Use spaces instead of tabs (default: false)
+vim.opt.expandtab = false	-- Indent with real tabs, like Vim and nano (true = spaces). YAML and Python still get spaces from their filetype plugins
 vim.opt.autoindent = true	-- Copy indent from current line 
 vim.opt.smartindent = true  -- Copy indent from code context (default: false)
 

@@ -1,39 +1,25 @@
 #!/usr/bin/env zsh
 
 # File: ~/.zshrc.local
-# Sourced by: ~/.zshrc
+# Sourced by: ~/.zshrc (at the end, so it can override anything)
 
-# Keep machine-specific stuff here, anything that does not need to be synced.
-# For example, not all machines will have Java or HuggingFace installed
-# Paths also change based on OS
+# Keep machine-specific, interactive-only settings here: anything that isn't
+# the same on every machine and only matters at the prompt. For example, not
+# every machine has Java, conda or HuggingFace installed.
+#
+# Where other things go:
+#   PATH and environment variables  → ~/.zshenv.local (scripts and cron see them too)
+#   aliases shared with bash         → ~/.aliases.local
+#   functions shared with bash       → ~/.functions.local
+#   API keys and tokens              → ~/.zsh_secrets (chmod 600)
+#
+# Homebrew and nvm are already set up by the dotfiles (.zshenv), so they
+# don't need to be added here.
 
-# Homebrew (cross-platform)
-# Load Homebrew from the same dotfiles on different operating systems
-# Homebrew / Linuxbrew shellenv (sets PATH/MANPATH/INFOPATH for brew-installed packages)
-for brewbin in /home/linuxbrew/.linuxbrew/bin/brew /opt/homebrew/bin/brew /usr/local/bin/brew; do
-    if [[ -x "$brewbin" ]]; then
-        eval "$($brewbin shellenv)"
-        break
-    fi
-done
+# Examples:
 
-# NVM 
-export NVM_DIR="$HOME/.nvm"
-# nvm.sh is lazy-loaded here (instead of .zshenv) to keep startup fast
-# Stubs source nvm.sh on first invocation, then re-exec the
-# real command. Was the biggest startup cost (~150–300ms eager source).
-nvm()  { unset -f nvm node npm npx 2>/dev/null; . "$NVM_DIR/nvm.sh"; nvm "$@"; }
-node() { unset -f nvm node npm npx 2>/dev/null; . "$NVM_DIR/nvm.sh"; node "$@"; }
-npm()  { unset -f nvm node npm npx 2>/dev/null; . "$NVM_DIR/nvm.sh"; npm "$@"; }
-npx()  { unset -f nvm node npm npx 2>/dev/null; . "$NVM_DIR/nvm.sh"; npx "$@"; }
-# Put default node's bin on PATH so quick `node -v` works without firing the lazy load.
-# Resolve the alias chain (default → lts/iron → 20.18.0) so PATH gets a real version dir.
-if [[ -s "$NVM_DIR/alias/default" ]]; then
-  _nvm_default="$(<"$NVM_DIR/alias/default")"
-  while [[ -s "$NVM_DIR/alias/$_nvm_default" ]]; do
-    _nvm_default="$(<"$NVM_DIR/alias/$_nvm_default")"
-  done
-  [[ -d "$NVM_DIR/versions/node/v$_nvm_default" ]] && \
-    export PATH="$NVM_DIR/versions/node/v$_nvm_default/bin:$PATH"
-  unset _nvm_default
-fi
+# A completion that only exists on this machine
+# command -v kubectl >/dev/null && source <(kubectl completion zsh)
+
+# A key binding you only want here
+# bindkey '^ ' autosuggest-accept

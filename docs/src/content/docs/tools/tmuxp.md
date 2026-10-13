@@ -1,6 +1,6 @@
 ---
 title: tmuxp
-description: A default 6-pane tmux layout (with a clock and the weather) loaded by the t function. Not installed automatically.
+description: A default 6-pane tmux layout (with a clock and the weather) loaded by the t function.
 ---
 
 [tmuxp](https://github.com/tmux-python/tmuxp) opens tmux sessions from a layout file — which
@@ -37,12 +37,12 @@ code. The file also has a commented example of running several commands in one p
 
 ## Setup
 
-The installer doesn't install tmuxp or this layout.
+The installer copies the layout to `~/.config/tmuxp/default.yaml`, but doesn't install tmuxp
+itself:
 
 ```sh
 curl -LsSf https://astral.sh/uv/install.sh | sh     # uv: a fast Python tool installer
 uv tool install tmuxp
-mkdir -p ~/.config/tmuxp && cp .config/tmuxp/default.yaml ~/.config/tmuxp/
 ```
 
 Then in any project folder:

@@ -141,8 +141,8 @@ Edge cases:
   names): `my.app` → `my_app`.
 - **A session with that name already exists** → tmux refuses to create a second one. Attach
   with `tmux attach -t <name>` instead.
-- `~/.config/tmuxp/default.yaml` **isn't installed by the installer** — copy it from the repo
-  (see [tmuxp](/dotfiles/tools/tmuxp/)).
+- **No `~/.config/tmuxp/default.yaml`** (the installer copies it, so only if you deleted it) →
+  plain tmux session. See [tmuxp](/dotfiles/tools/tmuxp/).
 
 ## Removed functions
 

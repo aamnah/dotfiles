@@ -163,12 +163,20 @@ for _dir in "$HOME/bin" "$HOME/.local/bin"; do
 done
 unset _dir
 
-# Android
-export ANDROID_HOME=$HOME/Android/Sdk
-export PATH=$PATH:$ANDROID_HOME/emulator
-export PATH=$PATH:$ANDROID_HOME/tools
-export PATH=$PATH:$ANDROID_HOME/tools/bin
-export PATH=$PATH:$ANDROID_HOME/platform-tools
+# Android SDK — only when it's installed. Without the check, every machine
+# gets four PATH entries pointing at folders that don't exist.
+if [ -d "$HOME/Android/Sdk" ]; then
+  export ANDROID_HOME=$HOME/Android/Sdk
+  export PATH=$PATH:$ANDROID_HOME/emulator
+  export PATH=$PATH:$ANDROID_HOME/tools
+  export PATH=$PATH:$ANDROID_HOME/tools/bin
+  export PATH=$PATH:$ANDROID_HOME/platform-tools
+fi
+
+# API keys and tokens (not tracked in dotfiles). Same file zsh loads from
+# .zshenv: despite the name it's plain `export NAME="value"` lines, which
+# both shells understand. Without this, bash sessions have no API keys.
+[ -f "$HOME/.zsh_secrets" ] && . "$HOME/.zsh_secrets"
 
 # Machine-specific PATH and environment for THIS computer (bash's counterpart
 # of ~/.zshenv.local). Never committed. Tools' installers append lines to

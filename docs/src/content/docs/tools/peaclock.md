@@ -1,6 +1,6 @@
 ---
 title: peaclock
-description: A binary clock, timer and stopwatch for the terminal. Config not installed automatically.
+description: A binary clock, timer and stopwatch for the terminal.
 ---
 
 [peaclock](https://github.com/octobanana/peaclock) shows a big clock in the terminal — nice in a
@@ -18,11 +18,11 @@ The config, `.config/peaclock/config`, sets:
 
 ## Setup
 
-Not installed by the installer. peaclock is built from source — see its
-[README](https://github.com/octobanana/peaclock#build). Then:
+The installer copies the config to `~/.config/peaclock/config`, but doesn't install peaclock
+itself: it's built from source, see its [README](https://github.com/octobanana/peaclock#build).
+Then run:
 
 ```sh
-mkdir -p ~/.config/peaclock && cp .config/peaclock/config ~/.config/peaclock/
 peaclock
 ```
 

@@ -1,10 +1,23 @@
 ---
 title: Git
-description: .gitconfig aliases (lg, s) and a global ignore list for OS and editor clutter. Not installed automatically.
+description: Git defaults, aliases (lg, s) and a global ignore list for OS and editor clutter, added to your own git settings.
 ---
 
-Two files, **neither installed by the installer** — your `~/.gitconfig` usually holds your name,
-email and credentials, and overwriting it would lose them.
+Two files: `.gitconfig` (defaults and aliases) and `.gitignore_global` (files to ignore
+everywhere).
+
+## What the installer does
+
+Your `~/.gitconfig` holds your name, email and credentials, so the installer **doesn't replace
+it**. Instead it adds the repo's settings one at a time with `git config --global`:
+
+- A setting you **don't have yet** is added: `installed: git pull.rebase = true`
+- A setting you **already have** is kept, even if it's different:
+  `kept: git pull.rebase = false (yours; the dotfiles use true)`
+- `.gitignore_global` is copied to `~/.gitignore_global`, and `core.excludesfile` is set to it,
+  unless you already point git at another ignore file.
+
+Nothing happens if git isn't installed (you get a warning).
 
 ## `.gitconfig` defaults
 
@@ -14,7 +27,7 @@ email and credentials, and overwriting it would lose them.
 | `core.autocrlf` | `input` | Windows line endings (CRLF) become LF when you commit, never the other way. Stops files edited on Windows from showing every line as changed |
 | `pull.rebase` | `true` | `git pull` puts your local commits on top of the remote ones instead of making a merge commit, so history stays a straight line |
 
-To use them without replacing your own `~/.gitconfig`:
+To set them by hand instead:
 
 ```sh
 git config --global init.defaultBranch main
@@ -34,7 +47,7 @@ git config --global pull.rebase true
 
 The `[user]` section is empty on purpose — don't commit your email to a public repo.
 
-### Use the aliases without replacing your config
+### Set the aliases by hand
 
 ```sh
 git config --global alias.s status
@@ -49,11 +62,11 @@ A list of files git should ignore in **every** repo: macOS and Windows clutter (
 `Thumbs.db`, `._*`), Python and C++ build output (`*.pyc`, `*.out`), `node_modules`, `venv`,
 `.vscode` and cache folders.
 
-Git only uses it if you point to it — the repo's `.gitconfig` doesn't, so set it up:
+Git only uses it if `core.excludesfile` points to it. The installer sets that up; by hand:
 
 ```sh
 cp .gitignore_global ~/.gitignore_global
-git config --global core.excludesfile ~/.gitignore_global
+git config --global core.excludesfile "$HOME/.gitignore_global"
 ```
 
 :::caution[It ignores `.vscode` and `*.out` everywhere]

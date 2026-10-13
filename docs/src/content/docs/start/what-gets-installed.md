@@ -18,7 +18,12 @@ backed up first as `<file>.bak.<timestamp>`.
 | `.config/tmux/*.tmux`, `tmux.conf` | `~/.config/tmux/` | [tmux](/dotfiles/terminal/tmux/) |
 | `.config/kitty/kitty.conf` | `~/.config/kitty/kitty.conf` | [kitty](/dotfiles/terminal/kitty/) |
 | `.config/kitty/themes/*.conf` | `~/.config/kitty/themes/` (Lasik, Catppuccin Mocha) | [kitty](/dotfiles/terminal/kitty/#theme) |
+| `.vimrc` | `~/.vimrc` | [Vim](/dotfiles/editors/vim/) |
 | `.config/nvim/init.lua` | `~/.config/nvim/init.lua` | [Neovim](/dotfiles/editors/neovim/) |
+| `.config/tmuxp/default.yaml` | `~/.config/tmuxp/default.yaml` | [tmuxp](/dotfiles/tools/tmuxp/) |
+| `.config/peaclock/config` | `~/.config/peaclock/config` | [peaclock](/dotfiles/tools/peaclock/) |
+| `.gitignore_global` | `~/.gitignore_global` | [Git](/dotfiles/tools/git/#gitignore_global) |
+| `.gitconfig` | **not copied**: its settings are added to yours one by one, and settings you already have are kept | [Git](/dotfiles/tools/git/#what-the-installer-does) |
 | `.config/starship.toml` | `~/.config/starship.toml` | [Starship](/dotfiles/terminal/starship/) |
 | *(generated)* | `~/.config/locale.conf` | [Locale](/dotfiles/shell/locale/) |
 
@@ -56,23 +61,14 @@ A *desktop* here means macOS, or Linux with a graphical session running (`$DISPL
 
 ## Not installed
 
-These are in the repo but the installer doesn't copy them (yet):
+These are in the repo but the installer doesn't copy them:
 
 | File | Why it matters | Page |
 |---|---|---|
-| `.vimrc` | Vim config | [Vim](/dotfiles/editors/vim/) |
-| `.gitconfig`, `.gitignore_global` | Git aliases, global ignore list | [Git](/dotfiles/tools/git/) |
-| `.config/tmuxp/default.yaml` | the [`t`](/dotfiles/shell/functions/#t) function's default layout | [tmuxp](/dotfiles/tools/tmuxp/) |
-| `.config/peaclock/config` | terminal clock config | [peaclock](/dotfiles/tools/peaclock/) |
 | `.zshrc.local.example` | template for machine-specific settings | [Local files](/dotfiles/shell/local-files/) |
 | `docs/` | this site | [Contributing](/dotfiles/reference/contributing/) |
 
-Copy any of them by hand if you want them, for example:
-
-```sh
-mkdir -p ~/.config/tmuxp && cp .config/tmuxp/default.yaml ~/.config/tmuxp/
-```
-
-`kitty`, `tmux` and `nvim` themselves are **not** installed — only their configs. You get a
+`kitty`, `tmux`, `vim`, `nvim`, `tmuxp` and `peaclock` themselves are **not** installed, only
+their configs. You get a
 warning with the install command if they're missing (the kitty warning only appears on desktops,
 since kitty is a desktop app).

@@ -33,7 +33,12 @@ The installer grew up. It now asks two questions (your login shell and your loca
 
 **Changed**
 
-- Vim indents with 4 spaces (was 2), matching nano.
+- Vim, Neovim and nano all indent with tabs, shown 4 wide (Vim used 2 spaces, nano 4 spaces). YAML files get spaces in Vim and Neovim, because YAML doesn't allow tabs.
+- The installer also installs `.vimrc`, the tmuxp layout, the peaclock config and `.gitignore_global`.
+- The installer adds the Git defaults and aliases to your own git settings, one at a time. Your `~/.gitconfig` isn't replaced, and settings you already have are kept.
+- bash loads `~/.zsh_secrets` too, so your API keys work in both shells.
+- The Android SDK is only added to `PATH` when it's installed.
+- `.zshrc.local.example` is a short, up-to-date template.
 - The README is now a short intro that links to the docs site.
 - The "kitty not found" warning only appears on desktops. On a server kitty isn't needed.
 - Remote installs use the `main` branch.
@@ -49,6 +54,10 @@ The installer grew up. It now asks two questions (your login shell and your loca
 - A cut-off download of `install.sh` through `curl | bash` could run half an install. Now nothing runs until the whole script has arrived.
 - On Fedora the login shell was set to an odd path (`/usr/sbin/zsh`).
 - Some "is it installed?" checks could wrongly answer no on systems with a lot of output (many fonts or locales).
+- One failed step (for example no network while installing starship) no longer stops the whole installer. The other steps still run, and the failed ones are listed at the end.
+- Vim no longer shows an error when the `sublimemonokai` colour scheme is missing. It uses a built-in one instead.
+- kitty's Catppuccin theme file had a typo in its name (`catppucin`), so switching to it failed.
+- The tmux comment about installing plugins now says the right key: Prefix + Shift+I.
 
 **Theme**
 
