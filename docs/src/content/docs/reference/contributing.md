@@ -72,3 +72,50 @@ npm run build        # production build into docs/dist/, including the search in
   column widths, so the layout keeps working at 150%.
 - Search (Pagefind) only works in a **build** (`npm run build && npm run preview`), not in
   `npm run dev`.
+
+### Screenshots
+
+The terminal screenshots (peaclock, Vim, Neovim, `git lg`) are made by
+`docs/scripts/shot.py`. It runs a program in a virtual terminal and draws the screen with the
+Lasik colours and Hasklug Nerd Font, so every screenshot looks the same and none depend on your
+own terminal setup.
+
+Needs: [uv](https://docs.astral.sh/uv/), headless Google Chrome and the Hasklug Nerd Font
+(the installer adds it on desktops). `uv run --with pyte --with pillow` fetches the two Python
+libraries for that one run, without installing them.
+
+**Keep personal details out.** Programs run with a throwaway home folder (`HOME=$(mktemp -d)`)
+holding only the repo's configs, so no history, hostname or username shows. Look at every
+image before committing it: once pushed, it's public.
+
+Run from the repo root. Each command overwrites the image on the docs site:
+
+```sh
+S="uv run --with pyte --with pillow python3 docs/scripts/shot.py"
+IMG=docs/src/assets/screenshots
+
+# peaclock, with the repo's config in a temporary folder (peaclock writes files next to it)
+P=$(mktemp -d) && cp .config/peaclock/config "$P/"
+$S $IMG/peaclock.png 70 18 3 -- peaclock --config-dir "$P"
+
+# Vim and Neovim: a throwaway home with only the repo's configs, opened at run_step() in install.sh
+H=$(mktemp -d) && mkdir -p "$H/.vim/colors" "$H/.config/nvim"
+cp .vimrc "$H/" && cp .vim/colors/sublimemonokai.vim "$H/.vim/colors/" && cp .config/nvim/init.lua "$H/.config/nvim/"
+L=$(( $(grep -n '^run_step()' install.sh | cut -d: -f1) - 12 ))
+HOME=$H $S $IMG/vim-monokai.png 100 28 3.5 --keys "2.5:\x0c" -- vim -n "+set t_ut=" "+$L" "+normal zt" install.sh
+HOME=$H XDG_CONFIG_HOME=$H/.config XDG_DATA_HOME=$H/.local/share XDG_STATE_HOME=$H/.local/state \
+  $S $IMG/neovim.png 100 28 3.5 --keys "2.5:\x0c" -- nvim -n "+$L" "+normal zt" install.sh
+
+# git lg, using only the repo's .gitconfig
+GIT_CONFIG_GLOBAL=$PWD/.gitconfig $S $IMG/git-lg.png 150 17 2 -- git -c color.ui=always --no-pager lg -n 17
+```
+
+- `--keys "2.5:\x0c"` presses Ctrl+L after 2.5 seconds, a redraw, so the picture is clean.
+- `"+set t_ut="` makes Vim paint every cell itself. Without it, the virtual terminal leaves
+  gaps in Monokai's grey background.
+- `HOME=$(mktemp -d)` uses a new empty folder as the home folder for that one command.
+- `vim -n` / `nvim -n`: no swap file. The editor is stopped, not closed, after the picture, so it would leave a `.install.sh.swp` behind.
+
+`docs/scripts/tmux_preview.py` draws two tmux themes side by side (each in its own throwaway
+tmux server), for comparing theme changes. Its status bar shows the machine's hostname, so it's
+for previews, not for the docs.

@@ -19,7 +19,7 @@ Personal dotfiles — shell, editor, and terminal configs intended to be deploye
 - Tools: `.gitconfig`, `.gitignore_global`, `.config/tmuxp/default.yaml`, `.config/peaclock/config`
 - Deployment: `install.sh`
 - `CHANGELOG.md` — every user-facing change, newest first, in date-versioned releases
-- `docs/` — documentation site (Starlight), one page per config; deployed to GitHub Pages by `.github/workflows/docs.yml`. Screenshots live in `docs/src/assets/screenshots/`. Not installed by `install.sh`.
+- `docs/` — documentation site (Starlight), one page per config; deployed to GitHub Pages by `.github/workflows/docs.yml`. Screenshots live in `docs/src/assets/screenshots/`; the terminal ones are made with `docs/scripts/shot.py` (commands on the docs Contributing page). Not installed by `install.sh`.
 
 XDG-style configs (kitty, nvim) live under `.config/<tool>/` in the repo, mirroring their destination at `$HOME/.config/<tool>/`. New configs that follow the XDG convention should use this layout rather than a dot-prefixed file at the repo root.
 
