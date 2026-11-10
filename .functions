@@ -222,14 +222,15 @@ myip() {
 
 
 # getwebsite: wget a whole website (mirror for offline reading)
-#   -r              recursive
-#   -p              page-requisites: images, CSS, JS, etc.
-#   -k              convert links to point to local copies (offline-browsable)
-#   -np             no-parent: don't crawl above the starting URL
-#   -l 5            max recursion depth 5 (safety; prevents crawling forever)
-#   -e robots=off   ignore robots.txt
-#   -U mozilla      pretend to be a browser
-#   --random-wait   randomise wait between requests (avoids tripping rate limiters)
+#   --random-wait             randomise wait between requests (avoids tripping rate limiters)
+#   -m, --mirror              shortcut for -N -r -l inf --no-remove-listing
+#   -p, --page-requisites     images, CSS, JS, etc.
+#   -k, --convert-links       convert links to point to local copies (offline-browsable)
+#   -np, --no-parent          don't crawl above the starting URL
+#   -e, --adjust-extension    save HTML/CSS documents with proper extensions 
+#   -U, --user-agent=AGENT    pretend to be a browser
+#   -l, --level               max recursion depth 5 (safety; prevents crawling forever) --mirror sets this as inf
+#   robots=off                ignore robots.txt https://www.gnu.org/software/wget/manual/html_node/Robot-Exclusion.html
 #
 #   Other useful flags worth knowing about:
 #   --limit-rate=20k   throttle download speed
@@ -237,11 +238,14 @@ myip() {
 #   -o ~/wget.log      log to file
 #
 #   Note: only handles static HTML. Modern JS-heavy / SPA sites won't render —
-#   for those, try `httrack`, `monolith` (single-file snapshot), or browser
-#   DevTools "Save Page As → Webpage, Complete".
+#   for those, try: 
+#     `httrack` https://www.httrack.com/page/1/en/index.html
+#     `monolith` (single-file snapshot) https://github.com/y2z/monolith
+#     browser DevTools "Save Page As → Webpage, Complete".
 #   ---------------------------------------------------------
 getwebsite () {
-  wget --random-wait -r -p -k -np -l 5 -e robots=off -U mozilla "$1"
+  wget --random-wait --mirror --page-requisites --convert-links --no-parent \
+       --adjust-extension robots=off -U mozilla "$1"
 }
 
 
